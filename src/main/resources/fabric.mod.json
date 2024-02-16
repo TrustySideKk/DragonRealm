@@ -3,20 +3,23 @@
 	"id": "dragonrealm",
 	"version": "${version}",
 	"name": "DragonRealm",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "This is Fabric mod for Minecraft",
 	"authors": [
-		"Me!"
+		"trustysidekick","siegehammer"
 	],
 	"contact": {
 		"homepage": "https://fabricmc.net/",
 		"sources": "https://github.com/FabricMC/fabric-example-mod"
 	},
 	"license": "CC0-1.0",
-	"icon": "assets/dragonrealm/icon.png",
+	"icon": "assets/dragonrealm/DragonRealm_icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
 			"com.trustysidekick.dragonrealm.DragonRealm"
+		],
+		"client": [
+			"com.trustysidekick.dragonrealm.DragonRealmClient"
 		],
 		"fabric-datagen": [
 			"com.trustysidekick.dragonrealm.DragonRealmDataGenerator"
