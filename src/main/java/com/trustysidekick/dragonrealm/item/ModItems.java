@@ -12,10 +12,15 @@ import net.minecraft.util.Identifier;
 
 public class ModItems {
 
-    public static final Item RUBY = registerItem("ruby", new Item(new FabricItemSettings()));
+    public static final Item DRAGON_PICKAXE = registerItem("dragon_pickaxe", new Item(new FabricItemSettings()));
+    public static final Item DRAGON_SHOVEL = registerItem("dragon_shovel", new Item(new FabricItemSettings()));
+    public static final Item DRAGON_AXE = registerItem("dragon_axe", new Item(new FabricItemSettings()));
 
     private static void addItemsToIngredientItemGroup(FabricItemGroupEntries entries) {
-        entries.add(RUBY);
+        // USE THIS TO ADD ITEMS TO CREATIVE TABS
+        //entries.add(DRAGON_PICKAXE);
+        //entries.add(DRAGON_SHOVEL);
+        //entries.add(DRAGON_AXE);
     }
 
     private static Item registerItem(String name, Item item) {

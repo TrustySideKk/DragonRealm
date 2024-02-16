@@ -1,5 +1,7 @@
 {
-  "item.dragonrealm.ruby": "Ruby",
+  "item.dragonrealm.dragon_pickaxe": "Dragon Pickaxe",
+  "item.dragonrealm.dragon_shovel": "Dragon Shovel",
+  "item.dragonrealm.dragon_axe": "Dragon Axe",
 
-  "itemgroup.ruby": "Ruby Tut Group"
+  "itemgroup.pickaxe": "DragonRealm"
 }
