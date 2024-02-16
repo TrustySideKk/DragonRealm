@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 public class DragonRealm implements ModInitializer {
 
 	public static final String MOD_ID = "dragonrealm";
-    public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
 	public static final Item CUSTOM_ITEM = new Item(new FabricItemSettings());
 
