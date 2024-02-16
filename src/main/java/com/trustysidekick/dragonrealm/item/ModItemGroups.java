@@ -21,7 +21,7 @@ public class ModItemGroups {
                         entries.add(ModItems.DRAGON_AXE);
                         entries.add(ModItems.DRAGON_SHOVEL);
                         //Blocks
-                        entries.add(ModBlocks.RUBY_BLOCK);
+                        entries.add(ModBlocks.DRAGON_ALTAR_BLOCK);
                     }).build());
     public static void registerItemGroups() {
         DragonRealm.LOGGER.info("Registering Item Groups for " + DragonRealm.MOD_ID);
