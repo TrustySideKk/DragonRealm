@@ -1,5 +1,6 @@
 package com.trustysidekick.dragonrealm;
 
+import com.trustysidekick.dragonrealm.block.ModBlocks;
 import com.trustysidekick.dragonrealm.item.ModItemGroups;
 import com.trustysidekick.dragonrealm.item.ModItems;
 import net.fabricmc.api.ModInitializer;
@@ -14,8 +15,8 @@ public class DragonRealm implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		ModItemGroups.registerItemGroups();
-		ModItems.registerModItems();
 
-		LOGGER.info("Hello Fabric world!");
+		ModItems.registerModItems();
+		ModBlocks.registerModBlocks();
 	}
 }

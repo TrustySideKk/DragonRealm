@@ -2,6 +2,7 @@ package com.trustysidekick.dragonrealm.item;
 
 import com.trustysidekick.dragonrealm.DragonRealm;
 
+import com.trustysidekick.dragonrealm.block.ModBlocks;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -16,6 +17,11 @@ public class ModItemGroups {
                     FabricItemGroup.builder().displayName(Text.translatable("itemgroup.ruby"))
                     .icon(() -> new ItemStack(ModItems.RUBY)).entries((displayContext, entries) -> {
                         entries.add(ModItems.RUBY);
+
+                        entries.add(ModBlocks.RUBY_BLOCK);
+
+
+
                     }).build());
     public static void registerItemGroups() {
         DragonRealm.LOGGER.info("Registering Item Groups for " + DragonRealm.MOD_ID);

@@ -1,5 +1,7 @@
 {
   "item.dragonrealm.ruby": "Ruby",
 
-  "itemgroup.ruby": "Ruby Tut Group"
+  "itemgroup.ruby": "Ruby Tut Group",
+
+  "block.dragonrealm.ruby_block": "Block of Ruby"
 }
