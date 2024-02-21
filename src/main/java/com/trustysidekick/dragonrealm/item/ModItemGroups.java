@@ -20,6 +20,11 @@ public class ModItemGroups {
                         entries.add(ModItems.DRAGON_PICKAXE);
                         entries.add(ModItems.DRAGON_AXE);
                         entries.add(ModItems.DRAGON_SHOVEL);
+                        //Armor
+                        entries.add(ModItems.DRAGON_HELMET);
+                        entries.add(ModItems.DRAGON_CHESTPLATE);
+                        entries.add(ModItems.DRAGON_LEGGINGS);
+                        entries.add(ModItems.DRAGON_BOOTS);
                         //Blocks
                         entries.add(ModBlocks.DRAGON_ALTAR_BLOCK);
                     }).build());
