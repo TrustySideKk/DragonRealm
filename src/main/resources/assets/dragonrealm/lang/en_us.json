@@ -1,14 +1,48 @@
 {
+  "itemgroup.pickaxe": "DragonRealm",
   "item.dragonrealm.dragon_pickaxe": "Dragon Pickaxe",
   "item.dragonrealm.dragon_shovel": "Dragon Shovel",
   "item.dragonrealm.dragon_axe": "Dragon Axe",
+
+  "item.dragonrealm.dragon_horn_torch": "Dragon Horn Torch",
+  "item.dragonrealm.dragon_backpack": "Dragon Backpack",
+  "item.dragonrealm.dragon_ingot": "Dragon Ingot",
+  "item.dragonrealm.dragon_head": "Dragon Head",
+  "item.dragonrealm.dragon_talon": "Dragon Talon",
+  "item.dragonrealm.dragon_meat": "Dragon Meat",
+  "item.dragonrealm.dragon_hide": "Dragon Hide",
+  "item.dragonrealm.dragon_scale": "Dragon Scale",
+  "item.dragonrealm.dragon_bone": "Dragon Bone",
+  "item.dragonrealm.dragon_horn": "Dragon Horn",
+  "item.dragonrealm.dragon_tooth": "Dragon Tooth",
+  "item.dragonrealm.dragon_eye": "Dragon Eye",
+  "item.dragonrealm.dragon_ingot_blade": "Dragon Ingot Blade",
+  "item.dragonrealm.dragon_ingot_spearhead": "Dragon Ingot Spearhead",
+  "item.dragonrealm.dragon_bone_shaft": "Dragon Bone Shaft",
+  "item.dragonrealm.dragon_bone_hilt": "Dragon Bone Hilt",
+
+  "item.dragonrealm.dragon_pickaxe": "Dragon Pickaxe",
+  "item.dragonrealm.dragon_axe": "Dragon Axe",
+  "item.dragonrealm.dragon_shovel": "Dragon Shovel",
+  "item.dragonrealm.dragon_hoe": "Dragon Hoe",
+
+  "item.dragonrealm.dragon_club": "Dragon Club",
+  "item.dragonrealm.dragon_spear": "Dragon Spear",
+  "item.dragonrealm.dragon_bow": "Dragon Bow",
+  "item.dragonrealm.dragon_crossbow": "Dragon Crossbow",
+  "item.dragonrealm.dragon_sword": "Dragon Sword",
+  "item.dragonrealm.dragon_shield": "Dragon Shield",
+  "item.dragonrealm.dragon_battleaxe": "Dragon Battleaxe",
 
   "item.dragonrealm.dragon_helmet": "Dragon Helmet",
   "item.dragonrealm.dragon_chestplate": "Dragon Chestplate",
   "item.dragonrealm.dragon_leggings": "Dragon Leggings",
   "item.dragonrealm.dragon_boots": "Dragon Boots",
-
-  "itemgroup.pickaxe": "DragonRealm",
+  "item.dragonrealm.dragon_hide_armor": "Dragon Hide Armor",
+  "item.dragonrealm.dragon_hide_cap": "Dragon Hide Cap",
+  "item.dragonrealm.dragon_hide_pants": "Dragon Hide Pants",
+  "item.dragonrealm.dragon_hide_boots": "Dragon Hide Boots",
+  "item.dragonrealm.dragon_hide_cape": "Dragon Hide Cape",
 
   "block.dragonrealm.dragon_altar_block": "Dragon Altar"
 }

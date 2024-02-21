@@ -3,7 +3,9 @@ package com.trustysidekick.dragonrealm.item;
 import com.trustysidekick.dragonrealm.DragonRealm;
 
 import com.trustysidekick.dragonrealm.block.ModBlocks;
+import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
@@ -16,16 +18,52 @@ public class ModItemGroups {
             new Identifier(DragonRealm.MOD_ID, "dragon_pickaxe"),
                     FabricItemGroup.builder().displayName(Text.translatable("itemgroup.pickaxe"))
                     .icon(() -> new ItemStack(ModItems.DRAGON_PICKAXE)).entries((displayContext, entries) -> {
-                        //Items
+
+                        //ITEMS
+                        entries.add(ModItems.DRAGON_HORN_TORCH);
+                        entries.add(ModItems.DRAGON_BACKPACK);
+                        entries.add(ModItems.DRAGON_INGOT);
+                        entries.add(ModItems.DRAGON_HEAD);
+                        entries.add(ModItems.DRAGON_TALON);
+                        entries.add(ModItems.DRAGON_MEAT);
+                        entries.add(ModItems.DRAGON_HIDE);
+                        entries.add(ModItems.DRAGON_SCALE);
+                        entries.add(ModItems.DRAGON_BONE);
+                        entries.add(ModItems.DRAGON_HORN);
+                        entries.add(ModItems.DRAGON_TOOTH);
+                        entries.add(ModItems.DRAGON_EYE);
+                        entries.add(ModItems.DRAGON_INGOT_BLADE);
+                        entries.add(ModItems.DRAGON_INGOT_SPEARHEAD);
+                        entries.add(ModItems.DRAGON_BONE_SHAFT);
+                        entries.add(ModItems.DRAGON_BONE_HILT);
+
+                        // TOOLS
                         entries.add(ModItems.DRAGON_PICKAXE);
                         entries.add(ModItems.DRAGON_AXE);
                         entries.add(ModItems.DRAGON_SHOVEL);
-                        //Armor
+                        entries.add(ModItems. DRAGON_HOE);
+
+                        //WEAPONS
+                        entries.add(ModItems.DRAGON_CLUB);
+                        entries.add(ModItems.DRAGON_SPEAR);
+                        entries.add(ModItems.DRAGON_BOW);
+                        entries.add(ModItems.DRAGON_CROSSBOW);
+                        entries.add(ModItems.DRAGON_SWORD);
+                        entries.add(ModItems.DRAGON_SHIELD);
+                        entries.add(ModItems.DRAGON_BATTLEAXE);
+
+                        //ARMOR
                         entries.add(ModItems.DRAGON_HELMET);
                         entries.add(ModItems.DRAGON_CHESTPLATE);
                         entries.add(ModItems.DRAGON_LEGGINGS);
                         entries.add(ModItems.DRAGON_BOOTS);
-                        //Blocks
+                        entries.add(ModItems.DRAGON_HIDE_ARMOR);
+                        entries.add(ModItems.DRAGON_HIDE_CAP);
+                        entries.add(ModItems.DRAGON_HIDE_PANTS);
+                        entries.add(ModItems.DRAGON_HIDE_BOOTS);
+                        entries.add(ModItems.DRAGON_HIDE_CAPE);
+
+                        //BLOCKS
                         entries.add(ModBlocks.DRAGON_ALTAR_BLOCK);
                     }).build());
     public static void registerItemGroups() {
