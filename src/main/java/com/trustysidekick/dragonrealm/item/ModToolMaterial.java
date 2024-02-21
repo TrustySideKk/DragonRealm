@@ -1,15 +1,17 @@
 package com.trustysidekick.dragonrealm.item;
 
 import net.fabricmc.yarn.constants.MiningLevels;
+import net.minecraft.item.Item;
 import net.minecraft.item.PickaxeItem;
 import net.minecraft.item.ToolMaterial;
+import net.minecraft.item.ToolMaterials;
 import net.minecraft.recipe.Ingredient;
 
 import java.util.function.Supplier;
 
 public enum ModToolMaterial implements ToolMaterial {
     DRAGON_INGOT(5, 650, 4.5f, 3.5f, 26, () -> Ingredient.ofItems(ModItems.DRAGON_INGOT)),
-    NULL_MATERIAL(MiningLevels.IRON,1562, 4.5f, 3.5f, 26, () -> Ingredient.ofItems(ModItems.NULL_MATERIAL));
+    NULL_TOOL_MATERIAL(MiningLevels.DIAMOND,1562, ToolMaterials.DIAMOND.getMiningSpeedMultiplier(), ToolMaterials.DIAMOND.getAttackDamage(), ToolMaterials.DIAMOND.getEnchantability(), () -> Ingredient.ofItems(ModItems.NULL_TOOL_MATERIAL));
 
 
 
@@ -21,6 +23,13 @@ public enum ModToolMaterial implements ToolMaterial {
     private final float attackDamage;
     private final int enchantability;
     private final Supplier<Ingredient> repairIngredient;
+
+
+
+
+
+
+
 
     ModToolMaterial(int miningLevel, int itemDurability, float miningSpeed, float attackDamage, int enchantability, Supplier<Ingredient> repairIngredient) {
         this.miningLevel = miningLevel;
