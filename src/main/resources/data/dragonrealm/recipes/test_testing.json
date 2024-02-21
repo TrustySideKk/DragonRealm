@@ -1,0 +1,14 @@
+{
+ "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "dragonrealm:dragon_axe"
+    }
+  ],
+  "result": {
+    "item": "dragonrealm:dragon_shovel",
+    "count": 9
+  }
+
+}

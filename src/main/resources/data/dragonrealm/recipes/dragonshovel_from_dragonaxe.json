@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "dragonrealm:dragon_axe"
+    }
+  },
+  "result": {
+    "item": "dragonrealm:dragon_shovel"
+  }
+}
