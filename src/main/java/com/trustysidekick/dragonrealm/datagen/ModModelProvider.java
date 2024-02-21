@@ -23,5 +23,7 @@ public class ModModelProvider extends FabricModelProvider {
         itemModelGenerator.register(ModItems.DRAGON_CHESTPLATE, Models.GENERATED);
         itemModelGenerator.register(ModItems.DRAGON_LEGGINGS, Models.GENERATED);
         itemModelGenerator.register(ModItems.DRAGON_BOOTS, Models.GENERATED);
+
+        itemModelGenerator.register(ModItems.DRAGON_PICKAXE, Models.HANDHELD);
     }
 }

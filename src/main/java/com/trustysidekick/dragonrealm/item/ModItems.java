@@ -5,9 +5,7 @@ import com.trustysidekick.dragonrealm.item.custom.DragonArmorItem;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroupEntries;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroups;
+import net.minecraft.item.*;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
@@ -31,12 +29,16 @@ public class ModItems {
     public static final Item DRAGON_INGOT_SPEARHEAD = registerItem("dragon_ingot_spearhead", new Item(new FabricItemSettings()));
     public static final Item DRAGON_BONE_SHAFT = registerItem("dragon_bone_shaft", new Item(new FabricItemSettings()));
     public static final Item DRAGON_BONE_HILT = registerItem("dragon_bone_hilt", new Item(new FabricItemSettings()));
+    public static final Item DRAGON_STEAK = registerItem("dragon_steak", new Item(new FabricItemSettings()));
+    public static final Item NULL_MATERIAL = registerItem("null_material", new Item(new FabricItemSettings()));
 
     // TOOLS
-    public static final Item DRAGON_PICKAXE = registerItem("dragon_pickaxe", new Item(new FabricItemSettings()));
-    public static final Item DRAGON_SHOVEL = registerItem("dragon_shovel", new Item(new FabricItemSettings()));
-    public static final Item DRAGON_AXE = registerItem("dragon_axe", new Item(new FabricItemSettings()));
-    public static final Item DRAGON_HOE = registerItem("dragon_hoe", new Item(new FabricItemSettings()));
+    public static final Item DRAGON_HORN_PICKAXE = registerItem("dragon_horn_pickaxe", new PickaxeItem(ModToolMaterial.NULL_MATERIAL, 2, 2f, new FabricItemSettings()));
+
+    public static final Item DRAGON_PICKAXE = registerItem("dragon_pickaxe", new PickaxeItem(ModToolMaterial.DRAGON_INGOT, 2, 2f, new FabricItemSettings()));
+    public static final Item DRAGON_SHOVEL = registerItem("dragon_shovel", new ShovelItem(ModToolMaterial.DRAGON_INGOT, 2, 2f, new FabricItemSettings()));
+    public static final Item DRAGON_AXE = registerItem("dragon_axe", new AxeItem(ModToolMaterial.DRAGON_INGOT, 2, 2f, new FabricItemSettings()));
+    public static final Item DRAGON_HOE = registerItem("dragon_hoe", new HoeItem(ModToolMaterial.DRAGON_INGOT, 2, 2f, new FabricItemSettings()));
 
     // WEAPONS
     public static final Item DRAGON_CLUB = registerItem("dragon_club", new Item(new FabricItemSettings()));
@@ -48,7 +50,7 @@ public class ModItems {
     public static final Item DRAGON_BATTLEAXE = registerItem("dragon_battleaxe", new Item(new FabricItemSettings()));
 
     // ARMORS
-    public static final Item DRAGON_HIDE_ARMOR = registerItem("dragon_hide_armor", new Item(new FabricItemSettings()));
+    public static final Item DRAGON_HIDE_TUNIC = registerItem("dragon_hide_tunic", new Item(new FabricItemSettings()));
     public static final Item DRAGON_HIDE_CAP = registerItem("dragon_hide_cap", new Item(new FabricItemSettings()));
     public static final Item DRAGON_HIDE_PANTS = registerItem("dragon_hide_pants", new Item(new FabricItemSettings()));
     public static final Item DRAGON_HIDE_BOOTS = registerItem("dragon_hide_boots", new Item(new FabricItemSettings()));

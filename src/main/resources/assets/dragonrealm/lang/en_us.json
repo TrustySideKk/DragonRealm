@@ -1,9 +1,10 @@
 {
   "itemgroup.pickaxe": "DragonRealm",
+
   "item.dragonrealm.dragon_pickaxe": "Dragon Pickaxe",
   "item.dragonrealm.dragon_shovel": "Dragon Shovel",
   "item.dragonrealm.dragon_axe": "Dragon Axe",
-
+  "item.dragonrealm.dragon_steak": "Dragon Steak",
   "item.dragonrealm.dragon_horn_torch": "Dragon Horn Torch",
   "item.dragonrealm.dragon_backpack": "Dragon Backpack",
   "item.dragonrealm.dragon_ingot": "Dragon Ingot",
@@ -38,7 +39,7 @@
   "item.dragonrealm.dragon_chestplate": "Dragon Chestplate",
   "item.dragonrealm.dragon_leggings": "Dragon Leggings",
   "item.dragonrealm.dragon_boots": "Dragon Boots",
-  "item.dragonrealm.dragon_hide_armor": "Dragon Hide Armor",
+  "item.dragonrealm.dragon_hide_tunic": "Dragon Hide Tunic",
   "item.dragonrealm.dragon_hide_cap": "Dragon Hide Cap",
   "item.dragonrealm.dragon_hide_pants": "Dragon Hide Pants",
   "item.dragonrealm.dragon_hide_boots": "Dragon Hide Boots",

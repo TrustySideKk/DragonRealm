@@ -1,11 +1,7 @@
 package com.trustysidekick.dragonrealm.item;
-
 import com.trustysidekick.dragonrealm.DragonRealm;
-
 import com.trustysidekick.dragonrealm.block.ModBlocks;
-import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
@@ -36,9 +32,12 @@ public class ModItemGroups {
                         entries.add(ModItems.DRAGON_INGOT_SPEARHEAD);
                         entries.add(ModItems.DRAGON_BONE_SHAFT);
                         entries.add(ModItems.DRAGON_BONE_HILT);
+                        entries.add(ModItems.DRAGON_STEAK);
+                        //entries.add(ModItems.NULL_MATERIAL);
 
                         // TOOLS
                         entries.add(ModItems.DRAGON_PICKAXE);
+                        entries.add(ModItems.DRAGON_HORN_PICKAXE);
                         entries.add(ModItems.DRAGON_AXE);
                         entries.add(ModItems.DRAGON_SHOVEL);
                         entries.add(ModItems. DRAGON_HOE);
@@ -57,7 +56,7 @@ public class ModItemGroups {
                         entries.add(ModItems.DRAGON_CHESTPLATE);
                         entries.add(ModItems.DRAGON_LEGGINGS);
                         entries.add(ModItems.DRAGON_BOOTS);
-                        entries.add(ModItems.DRAGON_HIDE_ARMOR);
+                        entries.add(ModItems.DRAGON_HIDE_TUNIC);
                         entries.add(ModItems.DRAGON_HIDE_CAP);
                         entries.add(ModItems.DRAGON_HIDE_PANTS);
                         entries.add(ModItems.DRAGON_HIDE_BOOTS);
