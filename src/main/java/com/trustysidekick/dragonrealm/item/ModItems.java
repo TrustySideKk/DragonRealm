@@ -34,12 +34,12 @@ public class ModItems {
 
     // TOOLS
     public static final Item DRAGON_HORN_PICKAXE = registerItem("dragon_horn_pickaxe", new PickaxeItem(ModToolMaterial.NULL_TOOL_MATERIAL, 1, -2.8f, new FabricItemSettings()));
-
-
-    public static final Item DRAGON_PICKAXE = registerItem("dragon_pickaxe", new PickaxeItem(ModToolMaterial.DRAGON_INGOT, 2, 2f, new FabricItemSettings()));
-    public static final Item DRAGON_SHOVEL = registerItem("dragon_shovel", new ShovelItem(ModToolMaterial.DRAGON_INGOT, 2, 2f, new FabricItemSettings()));
-    public static final Item DRAGON_AXE = registerItem("dragon_axe", new AxeItem(ModToolMaterial.DRAGON_INGOT, 2, 2f, new FabricItemSettings()));
-    public static final Item DRAGON_HOE = registerItem("dragon_hoe", new HoeItem(ModToolMaterial.DRAGON_INGOT, 2, 2f, new FabricItemSettings()));
+    public static final Item DRAGON_HORN_AXE = registerItem("dragon_horn_axe", new AxeItem(ModToolMaterial.NULL_TOOL_MATERIAL, 5, -3.0f, new FabricItemSettings()));
+    public static final Item DRAGON_HORN_SHOVEL = registerItem("dragon_horn_shovel", new ShovelItem(ModToolMaterial.NULL_TOOL_MATERIAL, 1.5f, -3.0f, new FabricItemSettings()));
+    public static final Item DRAGON_PICKAXE = registerItem("dragon_pickaxe", new PickaxeItem(ModToolMaterial.DRAGON_INGOT, 1, -2.8f, new FabricItemSettings()));
+    public static final Item DRAGON_SHOVEL = registerItem("dragon_shovel", new ShovelItem(ModToolMaterial.DRAGON_INGOT, 1.5f, -3.0f, new FabricItemSettings()));
+    public static final Item DRAGON_AXE = registerItem("dragon_axe", new AxeItem(ModToolMaterial.DRAGON_INGOT, 5, -3.0f, new FabricItemSettings()));
+    public static final Item DRAGON_HOE = registerItem("dragon_hoe", new HoeItem(ModToolMaterial.DRAGON_INGOT, -4, 0.0f, new FabricItemSettings()));
 
     // WEAPONS
     public static final Item DRAGON_CLUB = registerItem("dragon_club", new Item(new FabricItemSettings()));

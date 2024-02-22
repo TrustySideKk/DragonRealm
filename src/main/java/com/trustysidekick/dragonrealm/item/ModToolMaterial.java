@@ -10,8 +10,8 @@ import net.minecraft.recipe.Ingredient;
 import java.util.function.Supplier;
 
 public enum ModToolMaterial implements ToolMaterial {
-    DRAGON_INGOT(5, 650, 4.5f, 3.5f, 26, () -> Ingredient.ofItems(ModItems.DRAGON_INGOT)),
-    NULL_TOOL_MATERIAL(MiningLevels.DIAMOND,1562, ToolMaterials.DIAMOND.getMiningSpeedMultiplier(), ToolMaterials.DIAMOND.getAttackDamage(), ToolMaterials.DIAMOND.getEnchantability(), () -> Ingredient.ofItems(ModItems.NULL_TOOL_MATERIAL));
+    DRAGON_INGOT(MiningLevels.NETHERITE, ToolMaterials.NETHERITE.getDurability(), ToolMaterials.NETHERITE.getMiningSpeedMultiplier(), ToolMaterials.NETHERITE.getAttackDamage(), ToolMaterials.NETHERITE.getEnchantability(), () -> Ingredient.ofItems(ModItems.DRAGON_INGOT)),
+    NULL_TOOL_MATERIAL(MiningLevels.DIAMOND,ToolMaterials.DIAMOND.getDurability(), ToolMaterials.DIAMOND.getMiningSpeedMultiplier(), ToolMaterials.DIAMOND.getAttackDamage(), ToolMaterials.DIAMOND.getEnchantability(), () -> Ingredient.ofItems(ModItems.NULL_TOOL_MATERIAL));
 
 
 

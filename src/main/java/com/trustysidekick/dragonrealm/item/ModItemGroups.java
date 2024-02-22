@@ -33,11 +33,13 @@ public class ModItemGroups {
                         entries.add(ModItems.DRAGON_BONE_SHAFT);
                         entries.add(ModItems.DRAGON_BONE_HILT);
                         entries.add(ModItems.DRAGON_STEAK);
-                        //entries.add(ModItems.NULL_MATERIAL);
+                        //entries.add(ModItems.NULL_MATERIAL); // To not allow repair dragon horn tools.
 
                         // TOOLS
                         entries.add(ModItems.DRAGON_PICKAXE);
                         entries.add(ModItems.DRAGON_HORN_PICKAXE);
+                        entries.add(ModItems.DRAGON_HORN_AXE);
+                        entries.add(ModItems.DRAGON_HORN_SHOVEL);
                         entries.add(ModItems.DRAGON_AXE);
                         entries.add(ModItems.DRAGON_SHOVEL);
                         entries.add(ModItems. DRAGON_HOE);
