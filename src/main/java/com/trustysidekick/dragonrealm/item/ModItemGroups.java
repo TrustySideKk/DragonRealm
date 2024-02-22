@@ -19,6 +19,7 @@ public class ModItemGroups {
                         entries.add(ModItems.DRAGON_HORN_TORCH);
                         entries.add(ModItems.DRAGON_BACKPACK);
                         entries.add(ModItems.DRAGON_INGOT);
+                        entries.add(ModItems.SCORCHING_IRON_INGOT);
                         entries.add(ModItems.DRAGON_HEAD);
                         entries.add(ModItems.DRAGON_TALON);
                         entries.add(ModItems.DRAGON_MEAT);
@@ -33,16 +34,16 @@ public class ModItemGroups {
                         entries.add(ModItems.DRAGON_BONE_SHAFT);
                         entries.add(ModItems.DRAGON_BONE_HILT);
                         entries.add(ModItems.DRAGON_STEAK);
-                        //entries.add(ModItems.NULL_MATERIAL); // To not allow repair dragon horn tools.
+                        //entries.add(ModItems.NULL_MATERIAL); // To not allow repair dragon horn/bone/scale tools.
 
                         // TOOLS
                         entries.add(ModItems.DRAGON_PICKAXE);
                         entries.add(ModItems.DRAGON_HORN_PICKAXE);
-                        entries.add(ModItems.DRAGON_HORN_AXE);
-                        entries.add(ModItems.DRAGON_HORN_SHOVEL);
+                        entries.add(ModItems.DRAGON_BONE_AXE);
+                        entries.add(ModItems.DRAGON_SCALE_SHOVEL);
                         entries.add(ModItems.DRAGON_AXE);
                         entries.add(ModItems.DRAGON_SHOVEL);
-                        entries.add(ModItems. DRAGON_HOE);
+                        entries.add(ModItems.DRAGON_HOE);
 
                         //WEAPONS
                         entries.add(ModItems.DRAGON_CLUB);
@@ -66,6 +67,7 @@ public class ModItemGroups {
 
                         //BLOCKS
                         entries.add(ModBlocks.DRAGON_ALTAR_BLOCK);
+                        entries.add(ModBlocks.DRAGON_FORGE);
                     }).build());
     public static void registerItemGroups() {
         DragonRealm.LOGGER.info("Registering Item Groups for " + DragonRealm.MOD_ID);
