@@ -68,6 +68,7 @@ public class ModItemGroups {
                         //BLOCKS
                         entries.add(ModBlocks.DRAGON_ALTAR_BLOCK);
                         entries.add(ModBlocks.DRAGON_FORGE);
+
                     }).build());
     public static void registerItemGroups() {
         DragonRealm.LOGGER.info("Registering Item Groups for " + DragonRealm.MOD_ID);
