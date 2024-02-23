@@ -1,8 +1,8 @@
 package com.trustysidekick.dragonrealm.block.custom;
 
-
-import com.trustysidekick.dragonrealm.block.entity.DragonForgeBlockEntity;
+import com.mojang.serialization.MapCodec;
 import com.trustysidekick.dragonrealm.block.entity.ModBlockEntities;
+import com.trustysidekick.dragonrealm.block.entity.DragonForgeBlockEntity;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
@@ -20,12 +20,19 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 public class DragonForgeBlock extends BlockWithEntity implements BlockEntityProvider {
-
-    private static final VoxelShape SHAPE = DragonForgeBlock.createCuboidShape(0,0,0,16,16,16);
+    private static final VoxelShape SHAPE = Block.createCuboidShape(0, 0, 0, 16, 12, 16);
 
     public DragonForgeBlock(Settings settings) {
         super(settings);
     }
+
+
+    // LOOK AT HIS VVVVV
+    @Override
+    protected MapCodec<? extends BlockWithEntity> getCodec() {
+        return null;
+    }
+    // LOOK AT THIS ^^^^
 
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
