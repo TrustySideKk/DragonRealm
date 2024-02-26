@@ -68,6 +68,7 @@ public class ModItemGroups {
                         //BLOCKS
                         entries.add(ModBlocks.DRAGON_ALTAR_BLOCK);
                         entries.add(ModBlocks.DRAGON_FORGE);
+                        entries.add(ModBlocks.TEST_BLOCK);
 
                     }).build());
     public static void registerItemGroups() {
