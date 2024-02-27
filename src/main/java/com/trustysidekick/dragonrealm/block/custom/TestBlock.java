@@ -1,63 +1,89 @@
 package com.trustysidekick.dragonrealm.block.custom;
 
-import com.mojang.brigadier.LiteralMessage;
-import com.mojang.brigadier.Message;
+
 import com.mojang.serialization.MapCodec;
+import com.trustysidekick.dragonrealm.block.entity.ModBlockEntities;
 import com.trustysidekick.dragonrealm.block.entity.TestBlockEntity;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.BlockWithEntity;
-import net.minecraft.block.JukeboxBlock;
+import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.JukeboxBlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.Properties;
-import net.minecraft.text.Text;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public class TestBlock extends BlockWithEntity {
-    public static final MapCodec<TestBlock> CODEC = createCodec(TestBlock::new);
-    //public static final BooleanProperty CRAFTING;
+public class TestBlock extends BlockWithEntity implements BlockEntityProvider {
+    private static final VoxelShape SHAPE = TestBlock.createCuboidShape(0,0,0,16,16,16);
+
+    public TestBlock(Settings settings) {
+        super(settings);
+    }
 
     @Override
-    public MapCodec<TestBlock> getCodec() {
-        return CODEC;
+    protected MapCodec<? extends BlockWithEntity> getCodec() {
+        return null;
     }
 
-
-    public TestBlock(AbstractBlock.Settings settings) {
-        super(settings);
-        this.setDefaultState((BlockState)((BlockState)this.stateManager.getDefaultState()));
+    @Override
+    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+        return SHAPE;
     }
 
-    //@Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-        if(!world.isClient()) {
-            //if(state.get(CRAFTING)){
-
-            //}
-            player.sendMessage(Text.literal("Message"));
-        }
-
-        return ActionResult.PASS;
+    @Override
+    public BlockRenderType getRenderType(BlockState state) {
+        return BlockRenderType.MODEL;
     }
 
-
+    @Nullable
+    @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
         return new TestBlockEntity(pos, state);
     }
 
+    @Override
+    public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
+        if (state.getBlock() != newState.getBlock()) {
+            BlockEntity blockEntity = world.getBlockEntity(pos);
+            if (blockEntity instanceof TestBlockEntity) {
+                //ItemScatterer.spawn(world, pos, (TestBlockEntity)blockEntity);
+                ItemScatterer.spawn(world, pos, (Inventory) blockEntity);
+                world.updateComparators(pos, this);
+            }
+            super.onStateReplaced(state, world, pos, newState, moved);
+        }
+    }
+
+    @Override
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+        if (!world.isClient()) {
+            if (player.getStackInHand(hand).getItem() == Items.IRON_INGOT) {
+                System.out.println("IRON INGOT");
+            }
+
+        }
+
+        return ActionResult.SUCCESS;
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
+        return validateTicker(type, ModBlockEntities.TEST_BLOCK_ENTITY, (world1, pos, state1, blockEntity) -> blockEntity.tick(world1, pos, state1));
+    }
 
 
-    //static {
-    //    CRAFTING = Properties.CRAFTING;
-    //}
+
+
 
 
 }

@@ -1,124 +1,77 @@
 package com.trustysidekick.dragonrealm.block.entity;
 
-import com.google.common.annotations.VisibleForTesting;
-import com.trustysidekick.dragonrealm.block.custom.TestBlock;
+
 import net.minecraft.block.BlockState;
-import net.minecraft.block.JukeboxBlock;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.SingleStackInventory;
-import net.minecraft.item.Item;
+import net.minecraft.inventory.Inventories;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.MusicDiscItem;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.registry.tag.ItemTags;
-import net.minecraft.util.Clearable;
+import net.minecraft.screen.PropertyDelegate;
+import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.event.GameEvent;
-import org.jetbrains.annotations.Nullable;
 
-public class TestBlockEntity extends BlockEntity implements Clearable, SingleStackInventory {
-    private ItemStack inputStack;
-    private long burnStartTick;
-    private long tickCount;
-    private boolean isBurning;
-    private int ticksThisSecond;
 
+public class TestBlockEntity extends BlockEntity{
+    private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(2,ItemStack.EMPTY);
+    private static final int INPUT_SLOT = 0;
+    private static final int OUTPUT_SLOT = 1;
+    protected final PropertyDelegate propertyDelegate;
+    private int progress = 0;
+    private int maxProgress = 72;
 
     public TestBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.TEST_BLOCK_ENTITY, pos, state);
-        this.inputStack = ItemStack.EMPTY;
+        this.propertyDelegate = new PropertyDelegate() {
+            @Override
+            public int get(int index) {
+                return switch (index) {
+                    case 0 -> TestBlockEntity.this.progress;
+                    case 1 -> TestBlockEntity.this.maxProgress;
+                    default -> 0;
+                };
+            }
+
+            @Override
+            public void set(int index, int value) {
+                switch (index) {
+                    case 0 -> TestBlockEntity.this.progress = value;
+                    case 1 -> TestBlockEntity.this.maxProgress = value;
+                }
+            }
+
+            @Override
+            public int size() {
+                return 2;
+            }
+        };
     }
-
-
-
 
     @Override
-    public ItemStack decreaseStack(int count) {
-        return null;
-    }
-
-
-
-
-    @Override
-    public BlockEntity asBlockEntity() {
-        return null;
-    }
-
-
-    public void readNbt(NbtCompound nbt) {
-        super.readNbt(nbt);
-        if (nbt.contains("InputItem", 10)) {
-            this.inputStack = ItemStack.fromNbt(nbt.getCompound("InputItem"));
-        }
-
-        this.isBurning = nbt.getBoolean("IsBurning");
-        this.burnStartTick = nbt.getLong("BurnStartTick");
-        this.tickCount = nbt.getLong("TickCount");
-    }
-
     protected void writeNbt(NbtCompound nbt) {
         super.writeNbt(nbt);
-        if (!this.getStack().isEmpty()) {
-            nbt.put("InputItem", this.getStack().writeNbt(new NbtCompound()));
-        }
-
-        nbt.putBoolean("IsBurning", this.isBurning);
-        nbt.putLong("burnStartTick", this.burnStartTick);
-        nbt.putLong("TickCount", this.tickCount);
-    }
-
-    public boolean isBurningIngot() {
-        return !this.getStack().isEmpty() && this.isBurning;
+        Inventories.writeNbt(nbt, inventory);
+        nbt.putInt("test_block.progress", progress);
     }
 
     @Override
-    public ItemStack getStack() {
-        return this.inputStack;
+    public void readNbt(NbtCompound nbt) {
+        super.readNbt(nbt);
+        Inventories.readNbt(nbt, inventory);
+        progress = nbt.getInt("test_block.progress");
     }
 
-    @Override
-    public void setStack(ItemStack stack) {
-        if (stack.isIn(ItemTags.IRON_ORES) && this.world != null) {
-            this.inputStack = stack;
-            this.updateState((Entity)null, true);
-            this.startPlaying();
-        } else if (stack.isEmpty()) {
-            this.decreaseStack(1);
+    public void tick(World world, BlockPos pos, BlockState state) {
+        if (world.isClient()) {
+            return;
         }
 
-    }
 
-    private void updateState(@Nullable Entity entity, boolean hasIngot) {
-        if (this.world.getBlockState(this.getPos()) == this.getCachedState()) {
-            //this.world.setBlockState(this.getPos(), (BlockState)this.getCachedState().with(TestBlock.CRAFTING, crafting), 2);
-            this.world.emitGameEvent(GameEvent.BLOCK_CHANGE, this.getPos(), GameEvent.Emitter.of(entity, this.getCachedState()));
-        }
+            //System.out.println("TICK");
 
     }
 
 
-    @VisibleForTesting
-    public void startPlaying() {
-        this.burnStartTick = this.tickCount;
-        this.isBurning = true;
-        this.world.updateNeighborsAlways(this.getPos(), this.getCachedState().getBlock());
-        this.world.syncWorldEvent((PlayerEntity)null, 1010, this.getPos(), Item.getRawId(this.getStack().getItem()));
-        this.markDirty();
-    }
-
-
-
-    private void tick(World world, BlockPos pos, BlockState state) {
-        //++this.ticksThisSecond;
-        System.out.print("TICK!");
-
-        ++this.tickCount;
-    }
 
 
 }

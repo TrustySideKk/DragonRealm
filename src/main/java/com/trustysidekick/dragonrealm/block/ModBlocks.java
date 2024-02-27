@@ -20,7 +20,10 @@ public class ModBlocks {
     public static final Block DRAGON_FORGE = registerBlock("dragon_forge",
             new DragonForgeBlock(FabricBlockSettings.copyOf(Blocks.IRON_BLOCK).nonOpaque()));
     public static final Block TEST_BLOCK = registerBlock("test_block",
-            new TestBlock(FabricBlockSettings.create().nonOpaque()));
+            new TestBlock(FabricBlockSettings.copyOf(Blocks.IRON_BLOCK).nonOpaque()));
+
+
+
 
 
     private static Block registerBlock(String name, Block block){
