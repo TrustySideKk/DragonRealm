@@ -10,6 +10,7 @@ import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.ActionResult;
@@ -65,13 +66,24 @@ public class TestBlock extends BlockWithEntity implements BlockEntityProvider {
 
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-        if (!world.isClient()) {
-            if (player.getStackInHand(hand).getItem() == Items.IRON_INGOT) {
-                System.out.println("IRON INGOT");
+        Inventory blockEntity = (Inventory) world.getBlockEntity(pos);
+
+        if (world.isClient()) { return ActionResult.SUCCESS; }
+
+        if (player.getStackInHand(hand).getItem() == Items.IRON_INGOT) {
+            if (blockEntity.getStack(0).isEmpty()) {
+                ItemStack test = new ItemStack(Items.IRON_INGOT, 1);
+                blockEntity.setStack(0, test);
+                player.getStackInHand(hand).decrement(1);
+            } else {
+                System.out.println("Inventory full.");
             }
-
+        } else {
+            if (!blockEntity.getStack(0).isEmpty()) {
+                player.getInventory().offerOrDrop(blockEntity.getStack(0));
+                blockEntity.removeStack(0);
+            }
         }
-
         return ActionResult.SUCCESS;
     }
 

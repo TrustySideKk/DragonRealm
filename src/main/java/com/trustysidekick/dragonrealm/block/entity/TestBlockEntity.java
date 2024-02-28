@@ -2,6 +2,7 @@ package com.trustysidekick.dragonrealm.block.entity;
 
 
 import net.minecraft.block.BlockState;
+import net.minecraft.block.BlockWithEntity;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.item.ItemStack;
@@ -12,13 +13,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 
-public class TestBlockEntity extends BlockEntity{
-    private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(2,ItemStack.EMPTY);
+public class TestBlockEntity extends BlockEntity implements ImplementedInventory{
+    private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(1,ItemStack.EMPTY);
     private static final int INPUT_SLOT = 0;
-    private static final int OUTPUT_SLOT = 1;
+    //private static final int OUTPUT_SLOT = 1;
     protected final PropertyDelegate propertyDelegate;
     private int progress = 0;
     private int maxProgress = 72;
+
 
     public TestBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.TEST_BLOCK_ENTITY, pos, state);
@@ -62,16 +64,25 @@ public class TestBlockEntity extends BlockEntity{
     }
 
     public void tick(World world, BlockPos pos, BlockState state) {
-        if (world.isClient()) {
-            return;
+        if (!world.isClient()) {
+            //System.out.println("TICK");
+
         }
 
 
-            //System.out.println("TICK");
+
 
     }
 
 
 
 
+
+
+
+
+    @Override
+    public DefaultedList<ItemStack> getItems() {
+        return inventory;
+    }
 }
