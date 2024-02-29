@@ -2,7 +2,6 @@ package com.trustysidekick.dragonrealm.block;
 
 import com.trustysidekick.dragonrealm.DragonRealm;
 import com.trustysidekick.dragonrealm.block.custom.DragonForgeBlock;
-import com.trustysidekick.dragonrealm.block.custom.TestBlock;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
@@ -19,11 +18,6 @@ public class ModBlocks {
             new Block(FabricBlockSettings.create()));
     public static final Block DRAGON_FORGE = registerBlock("dragon_forge",
             new DragonForgeBlock(FabricBlockSettings.copyOf(Blocks.IRON_BLOCK).nonOpaque()));
-    public static final Block TEST_BLOCK = registerBlock("test_block",
-            new TestBlock(FabricBlockSettings.copyOf(Blocks.IRON_BLOCK).nonOpaque()));
-
-
-
 
 
     private static Block registerBlock(String name, Block block){
