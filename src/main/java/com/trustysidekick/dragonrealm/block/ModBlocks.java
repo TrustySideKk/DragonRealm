@@ -16,7 +16,7 @@ public class ModBlocks {
 
     public static final Block DRAGON_ALTAR_BLOCK = registerBlock("dragon_altar_block",
             new Block(FabricBlockSettings.create()));
-    public static final Block DRAGON_FORGE = registerBlock("dragon_forge",
+    public static final Block DRAGON_FORGE_BLOCK = registerBlock("dragon_forge_block",
             new DragonForgeBlock(FabricBlockSettings.copyOf(Blocks.IRON_BLOCK).nonOpaque()));
 
 

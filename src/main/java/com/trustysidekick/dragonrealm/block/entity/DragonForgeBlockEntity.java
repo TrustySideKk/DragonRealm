@@ -1,5 +1,6 @@
 package com.trustysidekick.dragonrealm.block.entity;
 
+import com.trustysidekick.dragonrealm.item.ModItems;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntity;
@@ -10,21 +11,18 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Position;
+import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 
 public class DragonForgeBlockEntity extends BlockEntity implements ImplementedInventory {
     private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(1,ItemStack.EMPTY);
-    private static final int INPUT_SLOT = 0;
+    //private static final int INPUT_SLOT = 0;
 
     protected final PropertyDelegate propertyDelegate;
     public int progress = 0;
     public int maxProgress = 160;
-    //private int maxProgress = 72;
-    //private int startCook = 0;
-    //private int finishCook = 160;
-
 
     public DragonForgeBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.DRAGON_FORGE_BLOCK_ENTITY, pos, state);
@@ -47,9 +45,8 @@ public class DragonForgeBlockEntity extends BlockEntity implements ImplementedIn
             }
 
             @Override
-            public int size() {
-                return 2;
-            }
+            //public int size() { return 2; }
+            public int size() { return 1; }
         };
     }
 
@@ -83,16 +80,24 @@ public class DragonForgeBlockEntity extends BlockEntity implements ImplementedIn
 
             }
             if (this.progress >= 160 && this.inventory.get(0).getItem() != Items.GOLD_INGOT) {
-                this.inventory.set(0, new ItemStack(Items.GOLD_INGOT, 1));
+                this.inventory.set(0, new ItemStack(ModItems.SEARING_IRON_INGOT, 1));
             }
             this.progress++;
-            //System.out.println("Progress: " + this.progress);
         } else {
             this.progress = 0;
-            //System.out.println("Progress: " + this.progress);
         }
     }
 
     @Override
     public DefaultedList<ItemStack> getItems() { return inventory; }
+
+    @Override
+    public boolean canInsert(int slot, ItemStack stack, @Nullable Direction side) {
+        if (inventory.get(0).getCount() == 0) {
+            setStack(slot, stack);
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

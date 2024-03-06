@@ -2,6 +2,7 @@ package com.trustysidekick.dragonrealm.item;
 
 import com.trustysidekick.dragonrealm.DragonRealm;
 import com.trustysidekick.dragonrealm.item.custom.*;
+import com.trustysidekick.dragonrealm.item.entity.SearingIronIngot;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroupEntries;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
@@ -16,7 +17,7 @@ public class ModItems {
     public static final Item DRAGON_HORN_TORCH = registerItem("dragon_horn_torch", new Item(new FabricItemSettings()));
     public static final Item DRAGON_BACKPACK = registerItem("dragon_backpack", new Item(new FabricItemSettings()));
     public static final Item DRAGON_INGOT = registerItem("dragon_ingot", new Item(new FabricItemSettings()));
-    public static final Item SCORCHING_IRON_INGOT = registerItem("scorching_iron_ingot", new Item(new FabricItemSettings()));
+    public static final Item SEARING_IRON_INGOT = registerItem("searing_iron_ingot", new SearingIronIngot(new FabricItemSettings()));
     public static final Item DRAGON_HEAD = registerItem("dragon_head", new Item(new FabricItemSettings()));
     public static final Item DRAGON_TALON = registerItem("dragon_talon", new Item(new FabricItemSettings()));
     public static final Item DRAGON_MEAT = registerItem("dragon_meat", new Item(new FabricItemSettings()));

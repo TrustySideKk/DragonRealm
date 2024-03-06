@@ -19,7 +19,7 @@ public class ModItemGroups {
                         entries.add(ModItems.DRAGON_HORN_TORCH);
                         entries.add(ModItems.DRAGON_BACKPACK);
                         entries.add(ModItems.DRAGON_INGOT);
-                        entries.add(ModItems.SCORCHING_IRON_INGOT);
+                        entries.add(ModItems.SEARING_IRON_INGOT);
                         entries.add(ModItems.DRAGON_HEAD);
                         entries.add(ModItems.DRAGON_TALON);
                         entries.add(ModItems.DRAGON_MEAT);
@@ -67,7 +67,7 @@ public class ModItemGroups {
 
                         //BLOCKS
                         entries.add(ModBlocks.DRAGON_ALTAR_BLOCK);
-                        entries.add(ModBlocks.DRAGON_FORGE);
+                        entries.add(ModBlocks.DRAGON_FORGE_BLOCK);
 
                     }).build());
     public static void registerItemGroups() {
