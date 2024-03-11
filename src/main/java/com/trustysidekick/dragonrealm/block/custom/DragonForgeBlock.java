@@ -65,7 +65,7 @@ public class DragonForgeBlock extends BlockWithEntity implements BlockEntityProv
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         Inventory blockEntity = (Inventory) world.getBlockEntity(pos);
 
-        if (world.isClient()) { return ActionResult.SUCCESS; }
+        //if (world.isClient()) { return ActionResult.SUCCESS; }
 
         if (player.getStackInHand(hand).getItem() == Items.IRON_INGOT) {
             if (blockEntity.getStack(0).isEmpty()) {
