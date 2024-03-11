@@ -10,6 +10,8 @@ import net.minecraft.client.util.ModelIdentifier;
 public class DragonRealmModelLoadingPlugin implements ModelLoadingPlugin {
     public static final ModelIdentifier DRAGON_FORGE_BLOCK_MODEL = new ModelIdentifier("dragonrealm", "dragon_forge_block", "");
 
+
+
     @Override
     public void onInitializeModelLoader(Context pluginContext) {
         // We want to add our model when the models are loaded

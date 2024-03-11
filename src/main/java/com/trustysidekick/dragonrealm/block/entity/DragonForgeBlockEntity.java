@@ -5,11 +5,15 @@ import com.trustysidekick.dragonrealm.item.ModItems;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.Entity;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleType;
 import net.minecraft.particle.ParticleTypes;
@@ -96,6 +100,8 @@ public class DragonForgeBlockEntity extends BlockEntity implements ImplementedIn
             } else {
                 this.progress = 0;
             }
+
+
     }
 
     @Override
@@ -118,5 +124,30 @@ public class DragonForgeBlockEntity extends BlockEntity implements ImplementedIn
         } else {
             return false;
         }
+    }
+
+    public ItemStack getRenderStack() {
+        if (this.getStack(0).isEmpty()) {
+            return this.getStack(0);
+        } else {
+            return this.getStack(0);
+        }
+    }
+
+    @Override
+    public void markDirty() {
+        world.updateListeners(pos, getCachedState(), getCachedState(), 3);
+        super.markDirty();
+    }
+
+    @Nullable
+    @Override
+    public Packet<ClientPlayPacketListener> toUpdatePacket() {
+        return BlockEntityUpdateS2CPacket.create(this);
+    }
+
+    @Override
+    public NbtCompound toInitialChunkDataNbt() {
+        return createNbt();
     }
 }

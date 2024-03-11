@@ -17,12 +17,14 @@ import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 public class DragonForgeBlock extends BlockWithEntity implements BlockEntityProvider {
     private static final VoxelShape SHAPE = DragonForgeBlock.createCuboidShape(0,0,0,16,16,16);
+
 
     public DragonForgeBlock(Settings settings) {
         super(settings);

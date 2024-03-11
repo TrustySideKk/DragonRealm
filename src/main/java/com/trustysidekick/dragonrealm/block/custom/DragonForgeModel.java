@@ -35,8 +35,8 @@ public class DragonForgeModel implements UnbakedModel, BakedModel, FabricBakedMo
     private Mesh mesh;
 
     private static final SpriteIdentifier[] SPRITE_IDS = new SpriteIdentifier[]{
-        new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, new Identifier("dragonrealm:block/dragon_forge_block")),
-        new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, new Identifier("dragonrealm:block/dragon_forge_block"))
+        new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, new Identifier("dragonrealm:block/dragon_forge_block_texture")),
+        new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, new Identifier("dragonrealm:block/dragon_forge_block_texture"))
     };
     private final Sprite[] sprites = new Sprite[SPRITE_IDS.length];
 
