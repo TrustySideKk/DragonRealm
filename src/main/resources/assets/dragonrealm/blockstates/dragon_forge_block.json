@@ -1,7 +1,8 @@
 {
   "variants": {
     "": {
-      "model": "dragonrealm:block/dragon_forge"
+      "unlit": "dragonrealm:block/dragon_forge_block_unlit",
+      "model": "dragonrealm:block/dragon_forge_block_lit"
     }
   }
 }
