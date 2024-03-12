@@ -17,12 +17,14 @@ import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 public class DragonForgeBlock extends BlockWithEntity implements BlockEntityProvider {
     private static final VoxelShape SHAPE = DragonForgeBlock.createCuboidShape(0,0,0,16,16,16);
+
 
     public DragonForgeBlock(Settings settings) {
         super(settings);
@@ -65,7 +67,7 @@ public class DragonForgeBlock extends BlockWithEntity implements BlockEntityProv
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         Inventory blockEntity = (Inventory) world.getBlockEntity(pos);
 
-        if (world.isClient()) { return ActionResult.SUCCESS; }
+        //if (world.isClient()) { return ActionResult.SUCCESS; }
 
         if (player.getStackInHand(hand).getItem() == Items.IRON_INGOT) {
             if (blockEntity.getStack(0).isEmpty()) {
