@@ -11,6 +11,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.state.StateManager;
+import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ItemScatterer;
@@ -24,10 +26,12 @@ import org.jetbrains.annotations.Nullable;
 
 public class DragonForgeBlock extends BlockWithEntity implements BlockEntityProvider {
     private static final VoxelShape SHAPE = DragonForgeBlock.createCuboidShape(0,0,0,16,16,16);
+    public static final BooleanProperty BURNING = BooleanProperty.of("burning");
 
 
     public DragonForgeBlock(Settings settings) {
         super(settings);
+        setDefaultState(getDefaultState().with(BURNING, false));
     }
 
     @Override
@@ -74,13 +78,14 @@ public class DragonForgeBlock extends BlockWithEntity implements BlockEntityProv
                 ItemStack ironStack = new ItemStack(Items.IRON_INGOT, 1);
                 blockEntity.setStack(0, ironStack);
                 player.getStackInHand(hand).decrement(1);
+                //world.setBlockState(pos, state.with(BURNING, true));
             }
         }
 
         if (player.getStackInHand(hand).isEmpty()) {
             player.getInventory().offerOrDrop(blockEntity.getStack(0));
             blockEntity.removeStack(0);
-
+            //world.setBlockState(pos, state.with(BURNING, false));
         }
         return ActionResult.SUCCESS;
     }
@@ -89,5 +94,10 @@ public class DragonForgeBlock extends BlockWithEntity implements BlockEntityProv
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
         return validateTicker(type, ModBlockEntities.DRAGON_FORGE_BLOCK_ENTITY, (world1, pos, state1, blockEntity) -> blockEntity.tick(world1, pos, state1));
+    }
+
+    @Override
+    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+        builder.add(BURNING);
     }
 }
