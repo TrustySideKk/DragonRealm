@@ -1,6 +1,7 @@
 package com.trustysidekick.dragonrealm.item;
 
 import com.trustysidekick.dragonrealm.DragonRealm;
+import com.trustysidekick.dragonrealm.entity.ModEntities;
 import com.trustysidekick.dragonrealm.item.custom.*;
 import com.trustysidekick.dragonrealm.item.entity.SearingIronIngot;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
@@ -59,7 +60,8 @@ public class ModItems {
     public static final Item DRAGON_HIDE_BOOTS = registerItem("dragon_hide_boots", new Item(new FabricItemSettings().maxCount(1)));
     public static final Item DRAGON_HIDE_CAPE = registerItem("dragon_hide_cape", new Item(new FabricItemSettings().maxCount(1)));
 
-
+    public static final Item PORCUPINE_SPAWN_EGG = registerItem("porcupine_spawn_egg",
+            new SpawnEggItem(ModEntities.PORCUPINE, 0xa86518, 0x3b260f, new FabricItemSettings()));
 
 
 
