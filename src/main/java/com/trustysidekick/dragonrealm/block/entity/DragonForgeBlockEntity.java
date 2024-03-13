@@ -1,12 +1,18 @@
 package com.trustysidekick.dragonrealm.block.entity;
 
-import com.mojang.datafixers.types.templates.Tag;
 import com.trustysidekick.dragonrealm.block.custom.DragonForgeBlock;
+import com.trustysidekick.dragonrealm.entity.ModEntities;
+import com.trustysidekick.dragonrealm.entity.client.PorcupineModel;
+import com.trustysidekick.dragonrealm.entity.custom.PorcupineEntity;
 import com.trustysidekick.dragonrealm.item.ModItems;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.ai.brain.task.Tasks;
+import net.minecraft.entity.ai.goal.GoalSelector;
+import net.minecraft.entity.passive.PassiveEntity;
+import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
@@ -15,17 +21,14 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
-import net.minecraft.particle.ParticleEffect;
-import net.minecraft.particle.ParticleType;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.state.property.Property;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
-
+import java.util.List;
 import java.util.Random;
 
 
@@ -65,6 +68,8 @@ public class DragonForgeBlockEntity extends BlockEntity implements ImplementedIn
         checkDragon2 = new BlockPos(pos.getX() - 4, pos.getY(), pos.getZ());
         checkDragon3 = new BlockPos(pos.getX(), pos.getY(), pos.getZ() - 4);
         checkDragon4 = new BlockPos(pos.getX(), pos.getY(), pos.getZ() + 4);
+
+        /*
         Inventory inv = (Inventory) world.getBlockEntity(pos);
         Random random = new Random();
         //double ranParticleSpot = -1 + random.nextFloat() * (1 - -1);
@@ -73,7 +78,7 @@ public class DragonForgeBlockEntity extends BlockEntity implements ImplementedIn
 
         if (world.isClient) {
             if (world.getBlockState(pos).get(DragonForgeBlock.BURNING)) {
-                System.out.println("Client: " + world.getBlockState(pos));
+                //System.out.println("Client: " + world.getBlockState(pos));
 
                 if (world.getBlockState(checkDragon1).getBlock() == Blocks.COBBLESTONE) {world.addParticle(ParticleTypes.CAMPFIRE_SIGNAL_SMOKE, checkDragon1.getX(), checkDragon1.getY() + 0.5, checkDragon1.getZ() + 0.5,  -ranParticleVelocity + 0.0, ranSpread + 0.0, ranSpread + 0.0); }
                 if (world.getBlockState(checkDragon1).getBlock() == Blocks.COBBLESTONE) {world.addParticle(ParticleTypes.FLAME, checkDragon1.getX(), checkDragon1.getY() + 0.5, checkDragon1.getZ() + 0.5, -ranParticleVelocity + 0.0, ranSpread + 0.0, ranSpread + 0.0); }
@@ -88,6 +93,37 @@ public class DragonForgeBlockEntity extends BlockEntity implements ImplementedIn
                 if (world.getBlockState(checkDragon4).getBlock() == Blocks.COBBLESTONE) {world.addParticle(ParticleTypes.FLAME, checkDragon4.getX() + 0.5, checkDragon4.getY() + 0.5, checkDragon4.getZ(),  ranSpread + 0.0,  ranSpread + 0.0, -ranParticleVelocity + 0.0); }
             }
         }
+
+         */
+        if (inventory.get(0).getItem() == Items.IRON_INGOT) {
+            Box box = new Box(pos.getX() + 5, pos.getY() + 5, pos.getZ() + 5, pos.getX() - 5, pos.getY() - 5, pos.getZ() - 5);
+            List<Entity> nearbyEntities = world.getOtherEntities(null, box);
+
+            for (Entity entity : nearbyEntities) {
+                if (entity instanceof PorcupineEntity) {
+                    world.setBlockState(pos, state.with(DragonForgeBlock.BURNING, true));
+
+
+
+                    if (this.progress >= 160) {
+                        this.inventory.set(0, new ItemStack(ModItems.SEARING_IRON_INGOT, 1));
+                        this.progress = 0;
+                        world.setBlockState(pos, state.with(DragonForgeBlock.BURNING, false));
+                    } else {
+                        this.progress++;
+                    }
+                }
+            }
+        } else {
+            this.progress = 0;
+            world.setBlockState(pos, state.with(DragonForgeBlock.BURNING, false));
+        }
+
+
+
+
+        /*
+        //// WORKS
 
         if (inventory.get(0).getItem() == Items.IRON_INGOT) {
             if (world.getBlockState(checkDragon1).getBlock() == Blocks.COBBLESTONE || world.getBlockState(checkDragon2).getBlock() == Blocks.COBBLESTONE || world.getBlockState(checkDragon3).getBlock() == Blocks.COBBLESTONE || world.getBlockState(checkDragon4).getBlock() == Blocks.COBBLESTONE) {
@@ -105,6 +141,8 @@ public class DragonForgeBlockEntity extends BlockEntity implements ImplementedIn
             this.progress = 0;
             world.setBlockState(pos, state.with(DragonForgeBlock.BURNING, false));
         }
+
+         */
     }
 
     @Override
