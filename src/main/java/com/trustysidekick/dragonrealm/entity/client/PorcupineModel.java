@@ -1,19 +1,13 @@
 package com.trustysidekick.dragonrealm.entity.client;
 
-import com.ibm.icu.text.Normalizer2;
 import com.trustysidekick.dragonrealm.entity.animation.ModAnimations;
 import com.trustysidekick.dragonrealm.entity.custom.PorcupineEntity;
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.client.render.entity.model.SinglePartEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
 
-// Made with Blockbench 4.8.3
-// Exported for Minecraft version 1.17+ for Yarn
-// Paste this class into your mod and generate all required imports
 public class PorcupineModel<T extends PorcupineEntity> extends SinglePartEntityModel<T> {
 	private final ModelPart porcupine;
 	private final ModelPart head;
@@ -22,6 +16,7 @@ public class PorcupineModel<T extends PorcupineEntity> extends SinglePartEntityM
 		this.porcupine = root.getChild("porcupine");
 		this.head = porcupine.getChild("body").getChild("torso").getChild("head");
 	}
+
 	public static TexturedModelData getTexturedModelData() {
 		ModelData modelData = new ModelData();
 		ModelPartData modelPartData = modelData.getRoot();
@@ -37,14 +32,14 @@ public class PorcupineModel<T extends PorcupineEntity> extends SinglePartEntityM
 
 		ModelPartData cube_r2 = tail.addChild("cube_r2", ModelPartBuilder.create().uv(11, 25).cuboid(-6.0F, 0.001F, -1.0F, 7.0F, 0.0F, 7.0F, new Dilation(0.0F)), ModelTransform.of(0.0F, 0.25F, 0.0F, 0.0F, 0.6109F, 0.0F));
 
-		ModelPartData head = torso.addChild("head", ModelPartBuilder.create(), ModelTransform.of(0.0F, -1.0F, -4.0F, 0.0F, -0.0436F, 0.0F));
+		ModelPartData head = torso.addChild("head", ModelPartBuilder.create(), ModelTransform.pivot(0.0F, -1.0F, -4.0F));
 
 		ModelPartData skull = head.addChild("skull", ModelPartBuilder.create().uv(0, 13).cuboid(-2.0F, -2.0F, -4.0F, 4.0F, 4.0F, 4.0F, new Dilation(0.0F))
-		.uv(0, 14).cuboid(1.1F, -0.75F, -3.25F, 1.0F, 1.0F, 1.0F, new Dilation(0.0F))
-		.uv(12, 13).cuboid(1.425F, -0.975F, -3.025F, 1.0F, 1.0F, 1.0F, new Dilation(-0.3F))
-		.uv(0, 14).mirrored().cuboid(-2.1F, -0.75F, -3.25F, 1.0F, 1.0F, 1.0F, new Dilation(0.0F)).mirrored(false)
-		.uv(12, 13).mirrored().cuboid(-2.425F, -0.975F, -3.025F, 1.0F, 1.0F, 1.0F, new Dilation(-0.3F)).mirrored(false)
-		.uv(16, 18).cuboid(-1.0F, -0.25F, -5.0F, 2.0F, 2.0F, 1.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+				.uv(0, 14).cuboid(1.1F, -0.75F, -3.25F, 1.0F, 1.0F, 1.0F, new Dilation(0.0F))
+				.uv(12, 13).cuboid(1.425F, -0.975F, -3.025F, 1.0F, 1.0F, 1.0F, new Dilation(-0.3F))
+				.uv(0, 14).mirrored().cuboid(-2.1F, -0.75F, -3.25F, 1.0F, 1.0F, 1.0F, new Dilation(0.0F)).mirrored(false)
+				.uv(12, 13).mirrored().cuboid(-2.425F, -0.975F, -3.025F, 1.0F, 1.0F, 1.0F, new Dilation(-0.3F)).mirrored(false)
+				.uv(16, 18).cuboid(-1.0F, -0.25F, -5.0F, 2.0F, 2.0F, 1.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
 		ModelPartData hair = skull.addChild("hair", ModelPartBuilder.create().uv(0, 16).cuboid(0.0F, -4.0F, 0.0F, 0.0F, 5.0F, 5.0F, new Dilation(0.0F)), ModelTransform.of(0.0F, -1.0F, -4.0F, 0.5236F, 0.0F, 0.0F));
 
@@ -161,13 +156,15 @@ public class PorcupineModel<T extends PorcupineEntity> extends SinglePartEntityM
 		ModelPartData left_back_leg = body.addChild("left_back_leg", ModelPartBuilder.create().uv(0, 0).cuboid(-1.0F, -1.0F, -1.0F, 2.0F, 5.0F, 2.0F, new Dilation(0.0F)), ModelTransform.pivot(3.0F, 0.0F, 2.5F));
 		return TexturedModelData.of(modelData, 32, 32);
 	}
+
 	@Override
 	public void setAngles(PorcupineEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 		this.getPart().traverse().forEach(ModelPart::resetTransform);
 		this.setHeadAngles(netHeadYaw, headPitch);
 
 		this.animateMovement(ModAnimations.PORCUPINE_WALK, limbSwing, limbSwingAmount, 2f, 2.5f);
-		//this.updateAnimation(entity.idleAnimationState, ModAnimations.PORCUPINE_IDLE, ageInTicks, 1f);
+		this.updateAnimation(entity.idleAnimationState, ModAnimations.PORCUPINE_IDLE, ageInTicks, 1f);
+		this.updateAnimation(entity.attackAnimationState, ModAnimations.PORCUPINE_ATTACK, ageInTicks, 1f);
 	}
 
 	private void setHeadAngles(float headYaw, float headPitch) {
