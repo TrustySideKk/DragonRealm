@@ -1,4 +1,4 @@
-package com.trustysidekick.dragonrealm.entity.goals;
+package com.trustysidekick.dragonrealm.entity.ai;
 
 import com.trustysidekick.dragonrealm.block.custom.DragonForgeBlock;
 import com.trustysidekick.dragonrealm.block.entity.DragonForgeBlockEntity;
