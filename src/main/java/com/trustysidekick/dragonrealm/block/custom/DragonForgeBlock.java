@@ -78,14 +78,14 @@ public class DragonForgeBlock extends BlockWithEntity implements BlockEntityProv
                 ItemStack ironStack = new ItemStack(Items.IRON_INGOT, 1);
                 blockEntity.setStack(0, ironStack);
                 player.getStackInHand(hand).decrement(1);
-                //world.setBlockState(pos, state.with(BURNING, true));
+                world.setBlockState(pos, state.with(BURNING, true));
             }
         }
 
         if (player.getStackInHand(hand).isEmpty()) {
             player.getInventory().offerOrDrop(blockEntity.getStack(0));
             blockEntity.removeStack(0);
-            //world.setBlockState(pos, state.with(BURNING, false));
+            world.setBlockState(pos, state.with(BURNING, false));
         }
         return ActionResult.SUCCESS;
     }

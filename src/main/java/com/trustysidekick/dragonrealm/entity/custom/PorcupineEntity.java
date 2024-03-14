@@ -91,12 +91,12 @@ public class PorcupineEntity extends AnimalEntity {
 
                     if (block instanceof DragonForgeBlockEntity && this.getWorld().getBlockState(block.getPos()).get(DragonForgeBlock.BURNING)) {
                         if (this.getWorld() instanceof ServerWorld serverWorld) {
-                            if (particleCoolDown < 5) {
+                            //if (particleCoolDown < 5) {
                                 faceBlock(block.getPos());
                                 shootFireballAtBlock(block.getPos());
-                            } else {
-                                particleCoolDown = particleCoolDown - 1;
-                            }
+                           // } else {
+                            //    particleCoolDown = particleCoolDown - 1;
+                            //}
                         }
                     }
                 }
@@ -190,6 +190,7 @@ public class PorcupineEntity extends AnimalEntity {
     }
 
     public void faceBlock(BlockPos targetBlock) {
+        /*
         Vec3d entityPos = new Vec3d(getX(), getEyeY(), getZ()); // Entity's position (assuming its eye level)
         Vec3d targetPos = new Vec3d(targetBlock.getX() + 0.5, targetBlock.getY() + 0.5, targetBlock.getZ() + 0.5); // Target block's position
         Vec3d direction = targetPos.subtract(entityPos).normalize(); // Calculate direction vector from entity to target block
@@ -201,6 +202,28 @@ public class PorcupineEntity extends AnimalEntity {
         // Set entity's rotation angles
         setYaw((float) yaw);
         setPitch((float) pitch);
+*/
+
+
+        float rotationSpeed = 1.0f; // Adjust the rotation speed as needed
+        float yawRotation = 0.0f;
+
+        // Update the yaw rotation
+        yawRotation += rotationSpeed;
+
+        // Ensure the yaw rotation stays within the valid range (-180 to 180 degrees)
+        if (yawRotation > 180.0f) {
+            yawRotation -= 360.0f;
+        } else if (yawRotation < -180.0f) {
+            yawRotation += 360.0f;
+        }
+
+        // Set the entity's yaw rotation
+        setYaw(yawRotation);
+
+
+
+
     }
 
 }
