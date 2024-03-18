@@ -36,6 +36,7 @@ public class ModItemGroups {
                         entries.add(ModItems.DRAGON_STEAK);
                         entries.add(ModItems.PORCUPINE_SPAWN_EGG);
                         //entries.add(ModItems.NULL_MATERIAL); // To not allow repair dragon horn/bone/scale tools.
+                        entries.add(ModItems.DRAGON_BLOOD);
 
                         // TOOLS
                         entries.add(ModItems.DRAGON_PICKAXE);
