@@ -3,6 +3,7 @@ package com.trustysidekick.dragonrealm;
 import com.trustysidekick.dragonrealm.block.ModBlocks;
 import com.trustysidekick.dragonrealm.block.entity.ModBlockEntities;
 import com.trustysidekick.dragonrealm.entity.ModEntities;
+import com.trustysidekick.dragonrealm.entity.custom.DragonWhelpEntity;
 import com.trustysidekick.dragonrealm.entity.custom.PorcupineEntity;
 import com.trustysidekick.dragonrealm.fluid.DragonBlood;
 import com.trustysidekick.dragonrealm.item.ModItemGroups;
@@ -27,9 +28,12 @@ public class DragonRealm implements ModInitializer {
 		ModBlocks.registerModBlocks();
 		ModBlockEntities.registerBlockEntities();
 		ModScreenHandlers.registerScreenHandlers();
+		ModEntities.registerModEntities();
 
 		ModelLoadingPlugin.register(new DragonRealmModelLoadingPlugin());
+
 		FabricDefaultAttributeRegistry.register(ModEntities.PORCUPINE, PorcupineEntity.createPorcupineAttributes());
+		FabricDefaultAttributeRegistry.register(ModEntities.DRAGONWHELP, DragonWhelpEntity.createDragonWhelpAttributes());
 	}
 
 }

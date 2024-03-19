@@ -6,6 +6,8 @@ import net.minecraft.client.render.entity.animation.Keyframe;
 import net.minecraft.client.render.entity.animation.Transformation;
 
 public class ModAnimations {
+
+
     public static final Animation PORCUPINE_WALK = Animation.Builder.create(2.5f).looping()
             .addBoneAnimation("torso",
                     new Transformation(Transformation.Targets.TRANSLATE,
