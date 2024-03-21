@@ -236,7 +236,7 @@ public class DragonWhelpModel<T extends DragonWhelpEntity> extends SinglePartEnt
 		this.animateMovement(ModAnimations.DRAGONWHELP_WALK, limbSwing, limbSwingAmount, 2f, 2.5f);
 
 		this.updateAnimation(entity.idleAnimationState, ModAnimations.DRAGONWHELP_IDLE, ageInTicks, 1f);
-		//this.updateAnimation(entity.attackAnimationState, ModAnimations.DRAGONWHELP_WALK, ageInTicks, 1f);
+		this.updateAnimation(entity.attackAnimationState, ModAnimations.DRAGONWHELP_ATTACKBITE, ageInTicks, 1f);
 	}
 
 	private void setHeadAngles(float headYaw, float headPitch) {

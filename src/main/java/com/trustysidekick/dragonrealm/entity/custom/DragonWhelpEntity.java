@@ -208,7 +208,7 @@ public class DragonWhelpEntity extends AnimalEntity {
 */
 
 
-        float rotationSpeed = 0.3f; // Adjust the rotation speed as needed
+        float rotationSpeed = 0.15f; // Adjust the rotation speed as needed
         float yawRotation = 0.0f;
 
         // Update the yaw rotation

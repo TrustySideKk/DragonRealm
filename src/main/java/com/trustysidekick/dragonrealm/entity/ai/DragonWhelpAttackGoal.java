@@ -46,7 +46,7 @@ public class DragonWhelpAttackGoal extends MeleeAttackGoal {
     }
 
     private boolean isEnemyWithinAttackDistance(LivingEntity pEnemy) {
-        return this.entity.distanceTo(pEnemy) <= 2f;
+        return this.entity.distanceTo(pEnemy) <= 3f;
     }
 
     protected void resetAttackCooldown() {
@@ -63,7 +63,6 @@ public class DragonWhelpAttackGoal extends MeleeAttackGoal {
 
     protected void performAttack(LivingEntity pEnemy) {
         this.resetAttackCooldown();
-        this.mob.swingHand(Hand.MAIN_HAND);
         this.mob.tryAttack(pEnemy);
     }
 
