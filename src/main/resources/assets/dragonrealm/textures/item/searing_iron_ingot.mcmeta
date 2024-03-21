@@ -1,0 +1,26 @@
+{
+	"animation": {
+		"frametime": 5,
+		"interpolate": true,
+		"frames": [
+			"dragonrealm:item/searing_iron_ingot/0",
+			"dragonrealm:item/searing_iron_ingot/1",
+			"dragonrealm:item/searing_iron_ingot/2",
+			"dragonrealm:item/searing_iron_ingot/3",
+			"dragonrealm:item/searing_iron_ingot/4",
+			"dragonrealm:item/searing_iron_ingot/5",
+			"dragonrealm:item/searing_iron_ingot/6",
+			"dragonrealm:item/searing_iron_ingot/7",
+			"dragonrealm:item/searing_iron_ingot/8",
+			"dragonrealm:item/searing_iron_ingot/9",
+			"dragonrealm:item/searing_iron_ingot/8",
+			"dragonrealm:item/searing_iron_ingot/7",
+			"dragonrealm:item/searing_iron_ingot/6",
+			"dragonrealm:item/searing_iron_ingot/5",
+			"dragonrealm:item/searing_iron_ingot/4",
+			"dragonrealm:item/searing_iron_ingot/3",
+			"dragonrealm:item/searing_iron_ingot/2",
+			"dragonrealm:item/searing_iron_ingot/1"
+		]
+	}
+}
