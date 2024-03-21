@@ -1,18 +1,11 @@
 package com.trustysidekick.dragonrealm.block.entity;
 
 import com.trustysidekick.dragonrealm.block.custom.DragonForgeBlock;
-import com.trustysidekick.dragonrealm.entity.ModEntities;
-import com.trustysidekick.dragonrealm.entity.client.PorcupineModel;
 import com.trustysidekick.dragonrealm.entity.custom.PorcupineEntity;
 import com.trustysidekick.dragonrealm.item.ModItems;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.ai.brain.task.Tasks;
-import net.minecraft.entity.ai.goal.GoalSelector;
-import net.minecraft.entity.passive.PassiveEntity;
-import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
@@ -21,7 +14,6 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
-import net.minecraft.particle.ParticleTypes;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
@@ -29,18 +21,11 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import java.util.List;
-import java.util.Random;
 
 
 public class DragonForgeBlockEntity extends BlockEntity implements ImplementedInventory {
     private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(1,ItemStack.EMPTY);
-    private BlockPos checkDragon1;
-    private BlockPos checkDragon2;
-    private BlockPos checkDragon3;
-    private BlockPos checkDragon4;
-    private int cooking;
     public int progress = 0;
-    public int maxProgress = 160;
 
     public DragonForgeBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.DRAGON_FORGE_BLOCK_ENTITY, pos, state);
@@ -55,6 +40,7 @@ public class DragonForgeBlockEntity extends BlockEntity implements ImplementedIn
         nbt.putInt("dragon_forge_block.progress", progress);
     }
 
+
     @Override
     public void readNbt(NbtCompound nbt) {
         super.readNbt(nbt);
@@ -62,39 +48,15 @@ public class DragonForgeBlockEntity extends BlockEntity implements ImplementedIn
         progress = nbt.getInt("dragon_forge_block.progress");
     }
 
+
     public void tick(World world, BlockPos pos, BlockState state) {
 
-        checkDragon1 = new BlockPos(pos.getX() + 4, pos.getY(), pos.getZ());
-        checkDragon2 = new BlockPos(pos.getX() - 4, pos.getY(), pos.getZ());
-        checkDragon3 = new BlockPos(pos.getX(), pos.getY(), pos.getZ() - 4);
-        checkDragon4 = new BlockPos(pos.getX(), pos.getY(), pos.getZ() + 4);
 
-        /*
-        Inventory inv = (Inventory) world.getBlockEntity(pos);
-        Random random = new Random();
-        //double ranParticleSpot = -1 + random.nextFloat() * (1 - -1);
-        double ranParticleVelocity = 1 + random.nextFloat() * (1.5 - 1);
-        double ranSpread = -0.05 + random.nextFloat() * (0.05 - -0.05);
+        Inventory blockInventory = (Inventory) world.getBlockEntity(pos);
+        System.out.println(blockInventory.getStack(0) );
 
-        if (world.isClient) {
-            if (world.getBlockState(pos).get(DragonForgeBlock.BURNING)) {
-                //System.out.println("Client: " + world.getBlockState(pos));
 
-                if (world.getBlockState(checkDragon1).getBlock() == Blocks.COBBLESTONE) {world.addParticle(ParticleTypes.CAMPFIRE_SIGNAL_SMOKE, checkDragon1.getX(), checkDragon1.getY() + 0.5, checkDragon1.getZ() + 0.5,  -ranParticleVelocity + 0.0, ranSpread + 0.0, ranSpread + 0.0); }
-                if (world.getBlockState(checkDragon1).getBlock() == Blocks.COBBLESTONE) {world.addParticle(ParticleTypes.FLAME, checkDragon1.getX(), checkDragon1.getY() + 0.5, checkDragon1.getZ() + 0.5, -ranParticleVelocity + 0.0, ranSpread + 0.0, ranSpread + 0.0); }
 
-                if (world.getBlockState(checkDragon2).getBlock() == Blocks.COBBLESTONE) {world.addParticle(ParticleTypes.CAMPFIRE_SIGNAL_SMOKE, checkDragon2.getX() + 1, checkDragon2.getY() + 0.5, checkDragon2.getZ() + 0.5, ranParticleVelocity + 0.0, ranSpread + 0.0,  ranSpread + 0.0); }
-                if (world.getBlockState(checkDragon2).getBlock() == Blocks.COBBLESTONE) {world.addParticle(ParticleTypes.FLAME, checkDragon2.getX() + 1, checkDragon2.getY() + 0.5, checkDragon2.getZ() + 0.5, ranParticleVelocity + 0.0, ranSpread + 0.0, ranSpread + 0.0); }
-
-                if (world.getBlockState(checkDragon3).getBlock() == Blocks.COBBLESTONE) {world.addParticle(ParticleTypes.CAMPFIRE_SIGNAL_SMOKE, checkDragon3.getX() + 0.5, checkDragon3.getY() + 0.5, checkDragon3.getZ() + 1, ranSpread + 0.0, ranSpread + 0.0, ranParticleVelocity + 0.0); }
-                if (world.getBlockState(checkDragon3).getBlock() == Blocks.COBBLESTONE) {world.addParticle(ParticleTypes.FLAME, checkDragon3.getX() + 0.5, checkDragon3.getY() + 0.5, checkDragon3.getZ() + 1, ranSpread + 0.0, ranSpread + 0.0, ranParticleVelocity + 0.0); }
-
-                if (world.getBlockState(checkDragon4).getBlock() == Blocks.COBBLESTONE) {world.addParticle(ParticleTypes.CAMPFIRE_SIGNAL_SMOKE, checkDragon4.getX() + 0.5, checkDragon4.getY() + 0.5, checkDragon4.getZ(),  ranSpread + 0.0,  ranSpread + 0.0, -ranParticleVelocity + 0.0); }
-                if (world.getBlockState(checkDragon4).getBlock() == Blocks.COBBLESTONE) {world.addParticle(ParticleTypes.FLAME, checkDragon4.getX() + 0.5, checkDragon4.getY() + 0.5, checkDragon4.getZ(),  ranSpread + 0.0,  ranSpread + 0.0, -ranParticleVelocity + 0.0); }
-            }
-        }
-
-         */
         if (inventory.get(0).getItem() == Items.IRON_INGOT) {
             Box box = new Box(pos.getX() + 5, pos.getY() + 5, pos.getZ() + 5, pos.getX() - 5, pos.getY() - 5, pos.getZ() - 5);
             List<Entity> nearbyEntities = world.getOtherEntities(null, box);
@@ -102,8 +64,6 @@ public class DragonForgeBlockEntity extends BlockEntity implements ImplementedIn
             for (Entity entity : nearbyEntities) {
                 if (entity instanceof PorcupineEntity) {
                     world.setBlockState(pos, state.with(DragonForgeBlock.BURNING, true));
-
-
 
                     if (this.progress >= 160) {
                         this.inventory.set(0, new ItemStack(ModItems.SEARING_IRON_INGOT, 1));
@@ -117,55 +77,37 @@ public class DragonForgeBlockEntity extends BlockEntity implements ImplementedIn
         } else {
             this.progress = 0;
             world.setBlockState(pos, state.with(DragonForgeBlock.BURNING, false));
+            this.markDirty();
         }
-
-
-
-
-        /*
-        //// WORKS
-
-        if (inventory.get(0).getItem() == Items.IRON_INGOT) {
-            if (world.getBlockState(checkDragon1).getBlock() == Blocks.COBBLESTONE || world.getBlockState(checkDragon2).getBlock() == Blocks.COBBLESTONE || world.getBlockState(checkDragon3).getBlock() == Blocks.COBBLESTONE || world.getBlockState(checkDragon4).getBlock() == Blocks.COBBLESTONE) {
-                world.setBlockState(pos, state.with(DragonForgeBlock.BURNING, true));
-                if (this.progress >= 160) {
-                    this.inventory.set(0, new ItemStack(ModItems.SEARING_IRON_INGOT, 1));
-                    this.progress = 0;
-                    world.setBlockState(pos, state.with(DragonForgeBlock.BURNING, false));
-                } else {
-                    this.progress++;
-                }
-            }
-
-        } else {
-            this.progress = 0;
-            world.setBlockState(pos, state.with(DragonForgeBlock.BURNING, false));
-        }
-
-         */
     }
+
 
     @Override
     public DefaultedList<ItemStack> getItems() { return inventory; }
 
+
+
     @Override
     public boolean canInsert(int slot, ItemStack stack, @Nullable Direction side) {
-        if (inventory.get(0).getCount() == 0) {
+        if (!inventory.get(0).isEmpty()) {
+            return false;
+        } else {
             setStack(slot, stack);
             return true;
-        } else {
-            return false;
         }
     }
 
+
     @Override
     public boolean canExtract(int slot, ItemStack stack, Direction side) {
-        if (inventory.get(0).getItem() == ModItems.SEARING_IRON_INGOT) {
-            return true;
-        } else {
-            return false;
-        }
+        //if (inventory.get(0).getItem() == ModItems.SEARING_IRON_INGOT) {
+        return true;
+        //} else {
+        //    return false;
+        //}
     }
+
+
 
     public ItemStack getRenderStack() {
         if (this.getStack(0).isEmpty()) {
@@ -174,6 +116,9 @@ public class DragonForgeBlockEntity extends BlockEntity implements ImplementedIn
             return this.getStack(0);
         }
     }
+
+
+
 
     @Override
     public void markDirty() {
@@ -191,4 +136,6 @@ public class DragonForgeBlockEntity extends BlockEntity implements ImplementedIn
     public NbtCompound toInitialChunkDataNbt() {
         return createNbt();
     }
+
+
 }

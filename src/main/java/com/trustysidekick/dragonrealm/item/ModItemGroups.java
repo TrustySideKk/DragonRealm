@@ -70,6 +70,7 @@ public class ModItemGroups {
                         //BLOCKS
                         entries.add(ModBlocks.DRAGON_ALTAR_BLOCK);
                         entries.add(ModBlocks.DRAGON_FORGE_BLOCK);
+                        entries.add(ModBlocks.QUENCH_TANK_BLOCK);
 
                     }).build());
     public static void registerItemGroups() {

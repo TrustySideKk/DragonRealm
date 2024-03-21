@@ -7,8 +7,8 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 
-public class DragonBlood extends Item {
-    public DragonBlood(Settings settings) {
+public class DragonBloodItem extends Item {
+    public DragonBloodItem(Settings settings) {
         super(settings);
     }
 
