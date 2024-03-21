@@ -20,7 +20,7 @@ public class DragonForgeLookGoal extends Goal {
 
     public boolean canStart() {
         BlockPos entityPos = this.mob.getBlockPos();
-        int radius = 5;
+        int radius = 4;
 
         for (int x = -radius; x <= radius; x++) {
             for (int y = -radius; y <= radius; y++) {

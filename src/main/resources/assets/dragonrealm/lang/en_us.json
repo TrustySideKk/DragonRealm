@@ -14,15 +14,16 @@
   "item.dragonrealm.dragon_horn": "Dragon Horn",
   "item.dragonrealm.dragon_tooth": "Dragon Tooth",
   "item.dragonrealm.dragon_eye": "Dragon Eye",
+  "item.dragonrealm.dragon_blood": "Dragon Blood",
   "item.dragonrealm.dragon_ingot_blade": "Dragon Ingot Blade",
   "item.dragonrealm.dragon_ingot_spearhead": "Dragon Ingot Spearhead",
   "item.dragonrealm.dragon_bone_shaft": "Dragon Bone Shaft",
   "item.dragonrealm.dragon_bone_hilt": "Dragon Bone Hilt",
   "item.dragonrealm.searing_iron_ingot": "Searing Iron Ingot",
 
-  "item.dragonrealm.dragon_pickaxe": "Dragon Pickaxe",
-  "item.dragonrealm.dragon_axe": "Dragon Axe",
-  "item.dragonrealm.dragon_shovel": "Dragon Shovel",
+  "item.dragonrealm.dragon_horn_pickaxe": "Dragon Horn Pickaxe",
+  "item.dragonrealm.dragon_bone_axe": "Dragon Bone Axe",
+  "item.dragonrealm.dragon_scale_shovel": "Dragon Scale Shovel",
   "item.dragonrealm.dragon_hoe": "Dragon Hoe",
 
   "item.dragonrealm.dragon_club": "Dragon Club",
@@ -45,5 +46,7 @@
 
   "item.dragonrealm.porcupine_spawn_egg": "Porcupine Spawn Egg",
 
-  "block.dragonrealm.dragon_altar_block": "Dragon Altar"
+  "block.dragonrealm.dragon_altar_block": "Dragon Altar",
+  "block.dragonrealm.quench_tank": "Quench Tank",
+  "block.dragonrealm.dragon_forge_block": "Dragon Forge"
 }

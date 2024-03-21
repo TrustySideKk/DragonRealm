@@ -9,6 +9,7 @@ import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.state.StateManager;
@@ -23,9 +24,10 @@ import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.IMarkerFactory;
 
 public class DragonForgeBlock extends BlockWithEntity implements BlockEntityProvider {
-    private static final VoxelShape SHAPE = DragonForgeBlock.createCuboidShape(0,0,0,16,16,16);
+    private static final VoxelShape SHAPE = DragonForgeBlock.createCuboidShape(0,0,0,15,12,15);
     public static final BooleanProperty BURNING = BooleanProperty.of("burning");
 
 
@@ -34,26 +36,31 @@ public class DragonForgeBlock extends BlockWithEntity implements BlockEntityProv
         setDefaultState(getDefaultState().with(BURNING, false));
     }
 
+
     @Override
     protected MapCodec<? extends BlockWithEntity> getCodec() {
         return null;
     }
+
 
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         return SHAPE;
     }
 
+
     @Override
     public BlockRenderType getRenderType(BlockState state) {
         return BlockRenderType.MODEL;
     }
+
 
     @Nullable
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
         return new DragonForgeBlockEntity(pos, state);
     }
+
 
     @Override
     public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
@@ -67,28 +74,28 @@ public class DragonForgeBlock extends BlockWithEntity implements BlockEntityProv
         }
     }
 
+
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+        //if (world.isClient) { return ActionResult.SUCCESS; }
+
         Inventory blockEntity = (Inventory) world.getBlockEntity(pos);
 
-        //if (world.isClient()) { return ActionResult.SUCCESS; }
-
-        if (player.getStackInHand(hand).getItem() == Items.IRON_INGOT) {
+        if (!player.getStackInHand(hand).isEmpty()) {
             if (blockEntity.getStack(0).isEmpty()) {
-                ItemStack ironStack = new ItemStack(Items.IRON_INGOT, 1);
-                blockEntity.setStack(0, ironStack);
+                blockEntity.setStack(0, player.getStackInHand(hand).copy());
                 player.getStackInHand(hand).decrement(1);
-                world.setBlockState(pos, state.with(BURNING, true));
             }
-        }
+        } else {
+            Item item = blockEntity.getStack(0).getItem();
+            ItemStack stack = new ItemStack(item, 1);
 
-        if (player.getStackInHand(hand).isEmpty()) {
-            player.getInventory().offerOrDrop(blockEntity.getStack(0));
+            player.getInventory().offerOrDrop(stack);
             blockEntity.removeStack(0);
-            world.setBlockState(pos, state.with(BURNING, false));
         }
         return ActionResult.SUCCESS;
     }
+
 
     @Nullable
     @Override
@@ -96,8 +103,10 @@ public class DragonForgeBlock extends BlockWithEntity implements BlockEntityProv
         return validateTicker(type, ModBlockEntities.DRAGON_FORGE_BLOCK_ENTITY, (world1, pos, state1, blockEntity) -> blockEntity.tick(world1, pos, state1));
     }
 
+
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
         builder.add(BURNING);
     }
+
 }

@@ -30,8 +30,6 @@ public class DragonRealm implements ModInitializer {
 		ModScreenHandlers.registerScreenHandlers();
 		ModEntities.registerModEntities();
 
-		ModelLoadingPlugin.register(new DragonRealmModelLoadingPlugin());
-
 		FabricDefaultAttributeRegistry.register(ModEntities.PORCUPINE, PorcupineEntity.createPorcupineAttributes());
 		FabricDefaultAttributeRegistry.register(ModEntities.DRAGONWHELP, DragonWhelpEntity.createDragonWhelpAttributes());
 	}

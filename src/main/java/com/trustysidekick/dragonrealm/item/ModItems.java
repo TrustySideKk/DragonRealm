@@ -34,7 +34,7 @@ public class ModItems {
     public static final Item DRAGON_BONE_HILT = registerItem("dragon_bone_hilt", new Item(new FabricItemSettings()));
     public static final Item DRAGON_STEAK = registerItem("dragon_steak", new Item(new FabricItemSettings()));
     public static final Item NULL_TOOL_MATERIAL = registerItem("null_tool_material", new Item(new FabricItemSettings()));
-    public static final Item DRAGON_BLOOD = registerItem("dragon_blood", new DragonBlood(new FabricItemSettings()));
+    public static final Item DRAGON_BLOOD = registerItem("dragon_blood", new DragonBloodItem(new FabricItemSettings()));
 
     // TOOLS
     public static final Item DRAGON_HORN_PICKAXE = registerItem("dragon_horn_pickaxe", new DragonHornPickaxeItem(ModToolMaterial.NULL_TOOL_MATERIAL, 1, -2.8f, new FabricItemSettings().maxCount(1)));
