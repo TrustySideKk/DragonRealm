@@ -26,6 +26,7 @@ import java.util.List;
 public class DragonForgeBlockEntity extends BlockEntity implements ImplementedInventory {
     private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(1,ItemStack.EMPTY);
     public int progress = 0;
+    private int dragonCount = 0;
 
     public DragonForgeBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.DRAGON_FORGE_BLOCK_ENTITY, pos, state);
@@ -50,22 +51,27 @@ public class DragonForgeBlockEntity extends BlockEntity implements ImplementedIn
 
 
     public void tick(World world, BlockPos pos, BlockState state) {
+        Box box = new Box(pos.getX() + 5, pos.getY() + 5, pos.getZ() + 5, pos.getX() - 5, pos.getY() - 5, pos.getZ() - 5);
+        List<Entity> nearbyEntities = world.getOtherEntities(null, box);
+
+        for (Entity entity : nearbyEntities) {
+            if (entity instanceof PorcupineEntity) {
+                if (this.dragonCount < 3) {
+                    this.dragonCount = this.dragonCount + 1;
+                }
+            }
+        }
+
 
 
         Inventory blockInventory = (Inventory) world.getBlockEntity(pos);
-        System.out.println(blockInventory.getStack(0) );
-
 
 
         if (inventory.get(0).getItem() == Items.IRON_INGOT) {
-            Box box = new Box(pos.getX() + 5, pos.getY() + 5, pos.getZ() + 5, pos.getX() - 5, pos.getY() - 5, pos.getZ() - 5);
-            List<Entity> nearbyEntities = world.getOtherEntities(null, box);
-
-            for (Entity entity : nearbyEntities) {
-                if (entity instanceof PorcupineEntity) {
-                    world.setBlockState(pos, state.with(DragonForgeBlock.BURNING, true));
-
-                    if (this.progress >= 160) {
+            if (dragonCount > 0) {
+                world.setBlockState(pos, state.with(DragonForgeBlock.BURNING, true));
+                if (world.getBlockState(pos).get(DragonForgeBlock.BURNING)) {
+                    if (this.progress >= (160 / this.dragonCount)) {
                         this.inventory.set(0, new ItemStack(ModItems.SEARING_IRON_INGOT, 1));
                         this.progress = 0;
                         world.setBlockState(pos, state.with(DragonForgeBlock.BURNING, false));
@@ -73,13 +79,18 @@ public class DragonForgeBlockEntity extends BlockEntity implements ImplementedIn
                         this.progress++;
                     }
                 }
-            }
+                }
         } else {
+            this.dragonCount = 0;
             this.progress = 0;
             world.setBlockState(pos, state.with(DragonForgeBlock.BURNING, false));
             this.markDirty();
         }
     }
+
+
+
+
 
 
     @Override
@@ -100,11 +111,7 @@ public class DragonForgeBlockEntity extends BlockEntity implements ImplementedIn
 
     @Override
     public boolean canExtract(int slot, ItemStack stack, Direction side) {
-        //if (inventory.get(0).getItem() == ModItems.SEARING_IRON_INGOT) {
-        return true;
-        //} else {
-        //    return false;
-        //}
+        return false;
     }
 
 
@@ -136,6 +143,9 @@ public class DragonForgeBlockEntity extends BlockEntity implements ImplementedIn
     public NbtCompound toInitialChunkDataNbt() {
         return createNbt();
     }
+
+
+
 
 
 }

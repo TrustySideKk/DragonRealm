@@ -38,12 +38,16 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class PorcupineEntity extends AnimalEntity {
     private static final TrackedData<Boolean> ATTACKING =
             DataTracker.registerData(PorcupineEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
     private int particleCoolDown = 0;
+    private boolean foundForge = false;
+    public BlockPos targetForge;
 
     public final AnimationState idleAnimationState = new AnimationState();
     private int idleAnimationTimeout = 0;
@@ -83,9 +87,10 @@ public class PorcupineEntity extends AnimalEntity {
 
     @Override
     public void tick() {
-        super.tick();
+super.tick();
         BlockPos entityPos = this.getBlockPos();
         int radius = 5;
+        ArrayList<BlockEntity> forges = new ArrayList<>();
 
         for (int x = -radius; x <= radius; x++) {
             for (int y = -radius; y <= radius; y++) {
@@ -93,16 +98,28 @@ public class PorcupineEntity extends AnimalEntity {
                     BlockPos blockPos = entityPos.add(x, y, z);
                     BlockEntity block = this.getWorld().getBlockEntity(blockPos);
 
-                    if (block instanceof DragonForgeBlockEntity && this.getWorld().getBlockState(block.getPos()).get(DragonForgeBlock.BURNING)) {
-                        if (this.getWorld() instanceof ServerWorld serverWorld) {
-                            //if (particleCoolDown < 5) {
-                                faceBlock(block.getPos());
-                                shootFireballAtBlock(block.getPos());
-                           // } else {
-                            //    particleCoolDown = particleCoolDown - 1;
-                            //}
+                    if (block instanceof DragonForgeBlockEntity) {
+                        if (this.getWorld().getBlockState(block.getPos()).get(DragonForgeBlock.BURNING)) {
+                            forges.add(block);
                         }
                     }
+                }
+            }
+        }
+
+        if (forges.size() > 0 && this.targetForge == null) {
+            this.targetForge = forges.get(0).getPos();
+        } else {
+            this.targetForge = null;
+        }
+
+        System.out.println("Dragon target is: " + targetForge);
+
+        if (targetForge != null) {
+            if (this.getWorld().getBlockState(targetForge).get(DragonForgeBlock.BURNING)) {
+                if (this.getWorld() instanceof ServerWorld serverWorld) {
+                    faceBlock(targetForge);
+                    shootFireballAtBlock(targetForge);
                 }
             }
         }

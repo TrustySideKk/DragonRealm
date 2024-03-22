@@ -7,6 +7,10 @@ import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.decoration.LeashKnotEntity;
+import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.entity.passive.HorseEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.Item;
@@ -14,6 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
+import net.minecraft.state.property.IntProperty;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ItemScatterer;
@@ -26,14 +31,19 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.IMarkerFactory;
 
+import java.util.List;
+
 public class DragonForgeBlock extends BlockWithEntity implements BlockEntityProvider {
     private static final VoxelShape SHAPE = DragonForgeBlock.createCuboidShape(0,0,0,15,12,15);
     public static final BooleanProperty BURNING = BooleanProperty.of("burning");
+    public static final IntProperty DRAGON_COUNT = IntProperty.of("dragon_count",0, 3);
+    public int attachedDragons = 0;
 
 
     public DragonForgeBlock(Settings settings) {
         super(settings);
         setDefaultState(getDefaultState().with(BURNING, false));
+        setDefaultState(getDefaultState().with(DRAGON_COUNT,0));
     }
 
 
@@ -93,6 +103,9 @@ public class DragonForgeBlock extends BlockWithEntity implements BlockEntityProv
             player.getInventory().offerOrDrop(stack);
             blockEntity.removeStack(0);
         }
+
+
+
         return ActionResult.SUCCESS;
     }
 
@@ -107,6 +120,10 @@ public class DragonForgeBlock extends BlockWithEntity implements BlockEntityProv
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
         builder.add(BURNING);
+        builder.add(DRAGON_COUNT);
     }
+
+
+
 
 }
