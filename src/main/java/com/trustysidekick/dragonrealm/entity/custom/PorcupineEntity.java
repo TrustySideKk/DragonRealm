@@ -6,6 +6,7 @@ import com.trustysidekick.dragonrealm.entity.ai.DragonForgeLookGoal;
 import com.trustysidekick.dragonrealm.entity.ai.PorcupineAttackGoal;
 import com.trustysidekick.dragonrealm.entity.ModEntities;
 import com.trustysidekick.dragonrealm.entity.client.PorcupineModel;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.AnimationState;
 import net.minecraft.entity.EntityPose;
@@ -20,6 +21,7 @@ import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
+import net.minecraft.entity.decoration.LeashKnotEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.passive.AnimalEntity;
@@ -34,6 +36,7 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -87,7 +90,7 @@ public class PorcupineEntity extends AnimalEntity {
 
     @Override
     public void tick() {
-super.tick();
+        super.tick();
         BlockPos entityPos = this.getBlockPos();
         int radius = 5;
         ArrayList<BlockEntity> forges = new ArrayList<>();
@@ -97,10 +100,25 @@ super.tick();
                 for (int z = -radius; z <= radius; z++) {
                     BlockPos blockPos = entityPos.add(x, y, z);
                     BlockEntity block = this.getWorld().getBlockEntity(blockPos);
-
                     if (block instanceof DragonForgeBlockEntity) {
                         if (this.getWorld().getBlockState(block.getPos()).get(DragonForgeBlock.BURNING)) {
                             forges.add(block);
+
+
+                            for (int i = 0; i < DragonForgeBlockEntity.attachedDragons.length; i++) {
+                                for (int j = i-1; j >= 0; j--) {
+                                    if (DragonForgeBlockEntity.attachedDragons[j] != this) {
+                                        boolean isUnique = true;
+                                    }
+                                }
+                                if (DragonForgeBlockEntity.attachedDragons[i] == null && DragonForgeBlockEntity.attachedDragons[i] != this && isUnique) {
+                                    DragonForgeBlockEntity.attachedDragons[i] = this;
+                                }
+
+
+                            }
+
+
                         }
                     }
                 }
@@ -112,6 +130,8 @@ super.tick();
         } else {
             this.targetForge = null;
         }
+
+
 
         System.out.println("Dragon target is: " + targetForge);
 

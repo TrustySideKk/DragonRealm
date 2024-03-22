@@ -16,9 +16,11 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.item.LeadItem;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.IntProperty;
+import net.minecraft.state.property.Property;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ItemScatterer;
@@ -31,13 +33,16 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.IMarkerFactory;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class DragonForgeBlock extends BlockWithEntity implements BlockEntityProvider {
-    private static final VoxelShape SHAPE = DragonForgeBlock.createCuboidShape(0,0,0,15,12,15);
+    private static final VoxelShape SHAPE = DragonForgeBlock.createCuboidShape(0,0,0,16,12,16);
     public static final BooleanProperty BURNING = BooleanProperty.of("burning");
     public static final IntProperty DRAGON_COUNT = IntProperty.of("dragon_count",0, 3);
     public int attachedDragons = 0;
+
 
 
     public DragonForgeBlock(Settings settings) {
@@ -89,9 +94,10 @@ public class DragonForgeBlock extends BlockWithEntity implements BlockEntityProv
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         //if (world.isClient) { return ActionResult.SUCCESS; }
 
+
         Inventory blockEntity = (Inventory) world.getBlockEntity(pos);
 
-        if (!player.getStackInHand(hand).isEmpty()) {
+        if (!player.getStackInHand(hand).isEmpty() && (player.getStackInHand(hand).getItem() != Items.LEAD)) {
             if (blockEntity.getStack(0).isEmpty()) {
                 blockEntity.setStack(0, player.getStackInHand(hand).copy());
                 player.getStackInHand(hand).decrement(1);
@@ -102,6 +108,10 @@ public class DragonForgeBlock extends BlockWithEntity implements BlockEntityProv
 
             player.getInventory().offerOrDrop(stack);
             blockEntity.removeStack(0);
+        }
+
+        if (player.getStackInHand(hand).getItem() == Items.LEAD) {
+            LeadItem.attachHeldMobsToBlock(player, world, pos);
         }
 
 

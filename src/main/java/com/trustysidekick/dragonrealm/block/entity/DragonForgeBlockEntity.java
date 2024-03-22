@@ -27,6 +27,7 @@ public class DragonForgeBlockEntity extends BlockEntity implements ImplementedIn
     private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(1,ItemStack.EMPTY);
     public int progress = 0;
     private int dragonCount = 0;
+    public static Entity[] attachedDragons = new Entity[4];
 
     public DragonForgeBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.DRAGON_FORGE_BLOCK_ENTITY, pos, state);
@@ -51,6 +52,17 @@ public class DragonForgeBlockEntity extends BlockEntity implements ImplementedIn
 
 
     public void tick(World world, BlockPos pos, BlockState state) {
+        System.out.println(attachedDragons.length);
+
+        if (!world.isClient) {
+            for (Entity dragon : attachedDragons) {
+                if (dragon != null) {
+                    //System.out.println(dragon.getUuidAsString());
+                }
+            }
+        }
+
+
         Box box = new Box(pos.getX() + 5, pos.getY() + 5, pos.getZ() + 5, pos.getX() - 5, pos.getY() - 5, pos.getZ() - 5);
         List<Entity> nearbyEntities = world.getOtherEntities(null, box);
 
