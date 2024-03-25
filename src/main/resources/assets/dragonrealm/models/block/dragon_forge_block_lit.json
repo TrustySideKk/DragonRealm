@@ -4844,6 +4844,7 @@
 			"name": "stand",
 			"origin": [24.5, -16, 31],
 			"color": 0,
+			"nbt": "{}",
 			"children": [
 				0,
 				1,
@@ -4957,6 +4958,7 @@
 			"name": "coal",
 			"origin": [-1.5, 16, -4.5],
 			"color": 0,
+			"nbt": "{}",
 			"children": [
 				106,
 				107,

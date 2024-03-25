@@ -5,8 +5,6 @@ import com.trustysidekick.dragonrealm.block.entity.DragonForgeBlockEntity;
 import com.trustysidekick.dragonrealm.entity.ai.DragonForgeLookGoal;
 import com.trustysidekick.dragonrealm.entity.ai.PorcupineAttackGoal;
 import com.trustysidekick.dragonrealm.entity.ModEntities;
-import com.trustysidekick.dragonrealm.entity.client.PorcupineModel;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.AnimationState;
 import net.minecraft.entity.EntityPose;
@@ -15,14 +13,9 @@ import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.damage.DamageSources;
-import net.minecraft.entity.damage.DamageType;
-import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.decoration.LeashKnotEntity;
-import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.PassiveEntity;
@@ -34,15 +27,12 @@ import net.minecraft.recipe.Ingredient;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 public class PorcupineEntity extends AnimalEntity {
@@ -111,7 +101,7 @@ public class PorcupineEntity extends AnimalEntity {
                                         boolean isUnique = true;
                                     }
                                 }
-                                if (DragonForgeBlockEntity.attachedDragons[i] == null && DragonForgeBlockEntity.attachedDragons[i] != this && isUnique) {
+                                if (DragonForgeBlockEntity.attachedDragons[i] == null && DragonForgeBlockEntity.attachedDragons[i] != this) {
                                     DragonForgeBlockEntity.attachedDragons[i] = this;
                                 }
 

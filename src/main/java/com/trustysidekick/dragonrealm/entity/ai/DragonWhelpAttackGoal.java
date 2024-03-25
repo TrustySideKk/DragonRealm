@@ -4,7 +4,6 @@ import com.trustysidekick.dragonrealm.entity.custom.DragonWhelpEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.entity.mob.PathAwareEntity;
-import net.minecraft.util.Hand;
 
 public class DragonWhelpAttackGoal extends MeleeAttackGoal {
     private final DragonWhelpEntity entity;
@@ -46,7 +45,7 @@ public class DragonWhelpAttackGoal extends MeleeAttackGoal {
     }
 
     private boolean isEnemyWithinAttackDistance(LivingEntity pEnemy) {
-        return this.entity.distanceTo(pEnemy) <= 3f;
+        return this.entity.distanceTo(pEnemy) <= 5f;
     }
 
     protected void resetAttackCooldown() {
