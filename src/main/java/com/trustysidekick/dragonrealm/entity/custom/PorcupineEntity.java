@@ -1,11 +1,8 @@
 package com.trustysidekick.dragonrealm.entity.custom;
 
-import com.trustysidekick.dragonrealm.block.custom.DragonForgeBlock;
-import com.trustysidekick.dragonrealm.block.entity.DragonForgeBlockEntity;
 import com.trustysidekick.dragonrealm.entity.ai.DragonForgeLookGoal;
 import com.trustysidekick.dragonrealm.entity.ai.PorcupineAttackGoal;
 import com.trustysidekick.dragonrealm.entity.ModEntities;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.AnimationState;
 import net.minecraft.entity.EntityPose;
 import net.minecraft.entity.EntityType;
@@ -31,26 +28,20 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
 import java.util.Random;
 
 public class PorcupineEntity extends AnimalEntity {
-    private static final TrackedData<Boolean> ATTACKING =
-            DataTracker.registerData(PorcupineEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
-    private int particleCoolDown = 0;
-    private boolean foundForge = false;
+    private static final TrackedData<Boolean> ATTACKING = DataTracker.registerData(PorcupineEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
     public BlockPos targetForge;
-
     public final AnimationState idleAnimationState = new AnimationState();
     private int idleAnimationTimeout = 0;
-
     public final AnimationState attackAnimationState = new AnimationState();
     public int attackAnimationTimeout = 0;
 
     public PorcupineEntity(EntityType<? extends AnimalEntity> entityType, World world) {
         super(entityType, world);
     }
+
 
     private void setupAnimationStates() {
         if (this.idleAnimationTimeout <= 0) {
@@ -72,72 +63,28 @@ public class PorcupineEntity extends AnimalEntity {
         }
     }
 
+
     @Override
     protected void updateLimbs(float posDelta) {
         float f = this.getPose() == EntityPose.STANDING ? Math.min(posDelta * 6.0f, 1.0f) : 0.0f;
         this.limbAnimator.updateLimbs(f, 0.2f);
     }
 
+
     @Override
     public void tick() {
         super.tick();
-        BlockPos entityPos = this.getBlockPos();
-        int radius = 5;
-        ArrayList<BlockEntity> forges = new ArrayList<>();
-
-        for (int x = -radius; x <= radius; x++) {
-            for (int y = -radius; y <= radius; y++) {
-                for (int z = -radius; z <= radius; z++) {
-                    BlockPos blockPos = entityPos.add(x, y, z);
-                    BlockEntity block = this.getWorld().getBlockEntity(blockPos);
-                    if (block instanceof DragonForgeBlockEntity) {
-                        if (this.getWorld().getBlockState(block.getPos()).get(DragonForgeBlock.BURNING)) {
-                            forges.add(block);
-
-
-                            for (int i = 0; i < DragonForgeBlockEntity.attachedDragons.length; i++) {
-                                for (int j = i-1; j >= 0; j--) {
-                                    if (DragonForgeBlockEntity.attachedDragons[j] != this) {
-                                        boolean isUnique = true;
-                                    }
-                                }
-                                if (DragonForgeBlockEntity.attachedDragons[i] == null && DragonForgeBlockEntity.attachedDragons[i] != this) {
-                                    DragonForgeBlockEntity.attachedDragons[i] = this;
-                                }
-
-
-                            }
-
-
-                        }
-                    }
-                }
-            }
-        }
-
-        if (forges.size() > 0 && this.targetForge == null) {
-            this.targetForge = forges.get(0).getPos();
-        } else {
-            this.targetForge = null;
-        }
-
-
-
-        System.out.println("Dragon target is: " + targetForge);
 
         if (targetForge != null) {
-            if (this.getWorld().getBlockState(targetForge).get(DragonForgeBlock.BURNING)) {
-                if (this.getWorld() instanceof ServerWorld serverWorld) {
-                    faceBlock(targetForge);
-                    shootFireballAtBlock(targetForge);
-                }
-            }
+            faceBlock(targetForge);
+            shootFireballAtBlock(targetForge);
         }
 
-        if(this.getWorld().isClient()) {
+        if (this.getWorld().isClient) {
             setupAnimationStates();
         }
     }
+
 
     @Override
     protected void initGoals() {
@@ -153,6 +100,7 @@ public class PorcupineEntity extends AnimalEntity {
         this.targetSelector.add(1, new RevengeGoal(this));
     }
 
+
     public static DefaultAttributeContainer.Builder createPorcupineAttributes() {
         return MobEntity.createMobAttributes()
                 .add(EntityAttributes.GENERIC_MAX_HEALTH, 15)
@@ -161,14 +109,17 @@ public class PorcupineEntity extends AnimalEntity {
                 .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 2);
     }
 
+
     public void setAttacking(boolean attacking) {
         this.dataTracker.set(ATTACKING, attacking);
     }
+
 
     @Override
     public boolean isAttacking() {
         return this.dataTracker.get(ATTACKING);
     }
+
 
     @Override
     protected void initDataTracker() {
@@ -176,10 +127,12 @@ public class PorcupineEntity extends AnimalEntity {
         this.dataTracker.startTracking(ATTACKING, false);
     }
 
+
     @Override
     public boolean isBreedingItem(ItemStack stack) {
         return stack.isOf(Items.BEETROOT);
     }
+
 
     @Nullable
     @Override
@@ -187,11 +140,13 @@ public class PorcupineEntity extends AnimalEntity {
         return ModEntities.PORCUPINE.create(world);
     }
 
+
     @Nullable
     @Override
     protected SoundEvent getAmbientSound() {
         return SoundEvents.ENTITY_FOX_AMBIENT;
     }
+
 
     @Nullable
     @Override
@@ -199,13 +154,12 @@ public class PorcupineEntity extends AnimalEntity {
         return SoundEvents.ENTITY_CAT_HURT;
     }
 
+
     @Nullable
     @Override
     protected SoundEvent getDeathSound() {
         return SoundEvents.ENTITY_DOLPHIN_DEATH;
     }
-
-
 
 
     public void shootFireballAtBlock(BlockPos targetBlock) {
@@ -219,6 +173,7 @@ public class PorcupineEntity extends AnimalEntity {
         fireball.setPosition(this.getX(), this.getY(), this.getZ());
         this.getWorld().spawnEntity(fireball);
     }
+
 
     public void faceBlock(BlockPos targetBlock) {
         //TODO Make entity face block immediately.  Currently it faces it after the entity updates position (i.e. when touched).
@@ -236,6 +191,7 @@ public class PorcupineEntity extends AnimalEntity {
         setYaw((float) yaw);
         setPitch((float) pitch);
     }
+
 
     @Override
     public boolean isFireImmune() {
