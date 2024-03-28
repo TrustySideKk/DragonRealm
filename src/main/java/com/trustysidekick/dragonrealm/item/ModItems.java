@@ -3,7 +3,6 @@ package com.trustysidekick.dragonrealm.item;
 import com.trustysidekick.dragonrealm.DragonRealm;
 import com.trustysidekick.dragonrealm.entity.ModEntities;
 import com.trustysidekick.dragonrealm.item.custom.*;
-import com.trustysidekick.dragonrealm.item.entity.SearingIronIngot;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroupEntries;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;

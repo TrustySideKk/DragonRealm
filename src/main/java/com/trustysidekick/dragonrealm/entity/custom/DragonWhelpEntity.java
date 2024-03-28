@@ -28,6 +28,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -198,9 +199,37 @@ public class DragonWhelpEntity extends AnimalEntity {
         return true;
     }
 
+    @Override
+    public Box getBoundingBox(EntityPose pose) {
+        float width = 12.5f; // Increase width
+        float height = 12.0f; // Increase height
+
+        // Define the minimum and maximum coordinates of the bounding box
+        double minX = -width / 2.0; // Adjust width as needed
+        double minY = 0;
+        double minZ = -width / 2.0;
+        double maxX = width / 2.0;
+        double maxY = height;
+        double maxZ = width / 2.0;
+
+        return new Box(minX, minY, minZ, maxX, maxY, maxZ);
+    }
 
 
+    @Override
+    protected Box getHitbox() {
+        float width = 12.5f; // Increase width
+        float height = 12.0f; // Increase height
 
+        // Define the minimum and maximum coordinates of the bounding box
+        double minX = -width / 2.0; // Adjust width as needed
+        double minY = 0;
+        double minZ = -width / 2.0;
+        double maxX = width / 2.0;
+        double maxY = height;
+        double maxZ = width / 2.0;
 
+        return new Box(minX, minY, minZ, maxX, maxY, maxZ);
 
+    }
 }

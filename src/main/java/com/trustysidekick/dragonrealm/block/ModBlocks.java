@@ -3,9 +3,12 @@ package com.trustysidekick.dragonrealm.block;
 import com.trustysidekick.dragonrealm.DragonRealm;
 import com.trustysidekick.dragonrealm.block.custom.DragonForgeBlock;
 import com.trustysidekick.dragonrealm.block.custom.QuenchTankBlock;
+import com.trustysidekick.dragonrealm.block.custom.SmithingBenchBlock;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.FluidBlock;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
@@ -16,7 +19,9 @@ public class ModBlocks {
 
     public static final Block DRAGON_ALTAR_BLOCK = registerBlock("dragon_altar_block", new Block(FabricBlockSettings.create()));
     public static final Block DRAGON_FORGE_BLOCK = registerBlock("dragon_forge_block", new DragonForgeBlock(FabricBlockSettings.create().nonOpaque()));
-    public static final Block QUENCH_TANK_BLOCK = registerBlock("quench_tank", new QuenchTankBlock(FabricBlockSettings.create()));
+    public static final Block QUENCH_TANK_BLOCK = registerBlock("quench_tank_block", new QuenchTankBlock(FabricBlockSettings.create().nonOpaque()));
+    public static final Block SMITHING_BENCH_BLOCK = registerBlock("smithing_bench_block", new SmithingBenchBlock(FabricBlockSettings.create().nonOpaque()));
+
 
 
     private static Block registerBlock(String name, Block block) {
