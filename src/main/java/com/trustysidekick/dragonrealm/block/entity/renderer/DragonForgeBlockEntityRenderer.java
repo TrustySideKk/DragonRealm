@@ -27,7 +27,7 @@ public class DragonForgeBlockEntityRenderer implements BlockEntityRenderer<Drago
         ItemRenderer itemRenderer = MinecraftClient.getInstance().getItemRenderer();
         ItemStack stack = entity.getRenderStack();
         matrices.push();
-        matrices.translate(0.5f, 0.75f, 0.5f);
+        matrices.translate(0.5f, 0.8f, 0.5f);
         //matrices.translate(0.5f, 0.75f, 0.5f);  // To raise and lower the contained rendered item in the forge.
         matrices.scale(0.35f, 0.35f, 0.35f);
         matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(270));

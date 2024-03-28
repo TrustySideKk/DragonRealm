@@ -23,7 +23,6 @@ public class ModBlocks {
     public static final Block SMITHING_BENCH_BLOCK = registerBlock("smithing_bench_block", new SmithingBenchBlock(FabricBlockSettings.create().nonOpaque()));
 
 
-
     private static Block registerBlock(String name, Block block) {
         registerBlockItem(name, block);
         return Registry.register(Registries.BLOCK, new Identifier(DragonRealm.MOD_ID, name), block);
