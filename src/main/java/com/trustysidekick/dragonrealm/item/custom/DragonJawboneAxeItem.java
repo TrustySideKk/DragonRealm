@@ -8,8 +8,8 @@ import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
 
-public class DragonBoneAxeItem extends AxeItem {
-    public DragonBoneAxeItem(ToolMaterial material, float attackDamage, float attackSpeed, Settings settings) {
+public class DragonJawboneAxeItem extends AxeItem {
+    public DragonJawboneAxeItem(ToolMaterial material, float attackDamage, float attackSpeed, Settings settings) {
         super(material, attackDamage, attackSpeed, settings);
     }
 

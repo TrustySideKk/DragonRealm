@@ -41,7 +41,7 @@ public class ModItemGroups {
                         // TOOLS
                         entries.add(ModItems.DRAGON_PICKAXE);
                         entries.add(ModItems.DRAGON_HORN_PICKAXE);
-                        entries.add(ModItems.DRAGON_BONE_AXE);
+                        entries.add(ModItems.DRAGON_JAWBONE_AXE);
                         entries.add(ModItems.DRAGON_SCALE_SHOVEL);
                         entries.add(ModItems.DRAGON_AXE);
                         entries.add(ModItems.DRAGON_SHOVEL);

@@ -38,7 +38,7 @@ public class ModItems {
 
     // TOOLS
     public static final Item DRAGON_HORN_PICKAXE = registerItem("dragon_horn_pickaxe", new DragonHornPickaxeItem(ModToolMaterial.NULL_TOOL_MATERIAL, 1, -2.8f, new FabricItemSettings().maxCount(1)));
-    public static final Item DRAGON_BONE_AXE = registerItem("dragon_bone_axe", new DragonBoneAxeItem(ModToolMaterial.NULL_TOOL_MATERIAL, 5, -3.0f, new FabricItemSettings().maxCount(1)));
+    public static final Item DRAGON_JAWBONE_AXE = registerItem("dragon_jawbone_axe", new DragonJawboneAxeItem(ModToolMaterial.NULL_TOOL_MATERIAL, 5, -3.0f, new FabricItemSettings().maxCount(1)));
     public static final Item DRAGON_SCALE_SHOVEL = registerItem("dragon_scale_shovel", new DragonScaleShovelItem(ModToolMaterial.NULL_TOOL_MATERIAL, 1.5f, -3.0f, new FabricItemSettings().maxCount(1)));
     public static final Item DRAGON_PICKAXE = registerItem("dragon_pickaxe", new DragonPickaxeItem(ModToolMaterial.DRAGON_INGOT, 1, -2.8f, new FabricItemSettings().maxCount(1)));
     public static final Item DRAGON_SHOVEL = registerItem("dragon_shovel", new DragonScaleShovelItem(ModToolMaterial.DRAGON_INGOT, 1.5f, -3.0f, new FabricItemSettings().maxCount(1)));
