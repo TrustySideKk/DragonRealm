@@ -20,9 +20,9 @@ public class DragonWhelpModel<T extends DragonWhelpEntity> extends SinglePartEnt
 	public static TexturedModelData getTexturedModelData() {
 		ModelData modelData = new ModelData();
 		ModelPartData modelPartData = modelData.getRoot();
-		ModelPartData root = modelPartData.addChild("root", ModelPartBuilder.create(), ModelTransform.pivot(0.0F, -5.7F, 0.0F));
+		ModelPartData root = modelPartData.addChild("root", ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 24.0F, 28.0F));
 
-		ModelPartData body = root.addChild("body", ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+		ModelPartData body = root.addChild("body", ModelPartBuilder.create(), ModelTransform.pivot(0.0F, -29.7F, -28.0F));
 
 		ModelPartData torso = body.addChild("torso", ModelPartBuilder.create().uv(0, 57).mirrored().cuboid(-12.325F, -2.75F, -18.75F, 25.0F, 14.0F, 39.0F, new Dilation(0.0F)).mirrored(false)
 				.uv(0, 66).mirrored().cuboid(-8.425F, -8.75F, -21.25F, 16.85F, 7.0F, 42.5F, new Dilation(0.0F)).mirrored(false), ModelTransform.pivot(0.825F, 7.45F, 30.9F));
