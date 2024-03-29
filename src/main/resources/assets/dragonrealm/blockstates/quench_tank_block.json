@@ -1,8 +1,8 @@
 {
   "variants": {
-    "0": { "model": "dragonrealm:block/quench_tank_0" },
-    "1": { "model": "dragonrealm:block/quench_tank_1" },
-    "2": { "model": "dragonrealm:block/quench_tank_2" },
-    "3": { "model": "dragonrealm:block/quench_tank_3" }
+    "tank=0": { "model": "dragonrealm:block/quench_tank_0" },
+    "tank=1": { "model": "dragonrealm:block/quench_tank_1" },
+    "tank=2": { "model": "dragonrealm:block/quench_tank_2" },
+    "tank=3": { "model": "dragonrealm:block/quench_tank_3" }
   }
 }
