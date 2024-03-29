@@ -25,7 +25,7 @@ import org.jetbrains.annotations.Nullable;
 
 
 public class DragonForgeBlock extends BlockWithEntity implements BlockEntityProvider {
-    private static final VoxelShape SHAPE = DragonForgeBlock.createCuboidShape(0,0,0,16,12,16);
+    private static final VoxelShape SHAPE = DragonForgeBlock.createCuboidShape(0, 0, 0, 16, 12, 16);
     public static final BooleanProperty BURNING = BooleanProperty.of("burning");
 
 
@@ -75,31 +75,37 @@ public class DragonForgeBlock extends BlockWithEntity implements BlockEntityProv
 
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-         if (!world.isClient) {
-             BlockEntity blockEntity = world.getBlockEntity(pos);
-             if (blockEntity instanceof ImplementedInventory) {
-                 ImplementedInventory inventoryBlockEntity = (ImplementedInventory) blockEntity;
+        if (world.isClient) {
+            return ActionResult.SUCCESS;
+        }
 
-                 if (inventoryBlockEntity.isEmpty()) {
-                     if (!player.getStackInHand(hand).isEmpty()) {
-                         ItemStack heldItem = player.getStackInHand(hand);
-                         inventoryBlockEntity.setStack(0, new ItemStack(heldItem.getItem(), 1));
-                         player.getInventory().getMainHandStack().decrement(1);
-                         inventoryBlockEntity.markDirty();
-                     }
-                 } else {
-                     if (player.getStackInHand(hand).isEmpty()) {
-                         ItemStack extractedItem = inventoryBlockEntity.getStack(0);
-                         if (!player.getInventory().insertStack(extractedItem)) {
-                             player.dropItem(extractedItem, false);
-                         }
-                         inventoryBlockEntity.getStack(0).decrement(1);
-                         inventoryBlockEntity.markDirty();
-                     }
-                 }
-             }
-         }
-         return ActionResult.SUCCESS;
+        if (!world.isClient) {
+            BlockEntity blockEntity = world.getBlockEntity(pos);
+            if (blockEntity instanceof ImplementedInventory) {
+                ImplementedInventory inventoryBlockEntity = (ImplementedInventory) blockEntity;
+
+                if (inventoryBlockEntity.isEmpty()) {
+                    if (!player.getStackInHand(hand).isEmpty()) {
+                        ItemStack heldItem = player.getStackInHand(hand);
+                        inventoryBlockEntity.setStack(0, new ItemStack(heldItem.getItem(), 1));
+                        player.getInventory().getMainHandStack().decrement(1);
+                        inventoryBlockEntity.markDirty();
+                    }
+                } else {
+                    if (player.getStackInHand(hand).isEmpty()) {
+                        ItemStack extractedItem = inventoryBlockEntity.getStack(0);
+                        ((DragonForgeBlockEntity) blockEntity).progress = 0;
+                        if (!player.getInventory().insertStack(extractedItem)) {
+                            //player.dropItem(extractedItem, false);
+                            player.getInventory().offerOrDrop(extractedItem);
+                        }
+                        inventoryBlockEntity.getStack(0).decrement(1);
+                        inventoryBlockEntity.markDirty();
+                    }
+                }
+            }
+        }
+        return ActionResult.SUCCESS;
     }
 
 
@@ -114,7 +120,4 @@ public class DragonForgeBlock extends BlockWithEntity implements BlockEntityProv
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
         builder.add(BURNING);
     }
-
-
-
 }

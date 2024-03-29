@@ -5,10 +5,10 @@ import com.trustysidekick.dragonrealm.block.entity.DragonForgeBlockEntity;
 import com.trustysidekick.dragonrealm.entity.ModEntities;
 import com.trustysidekick.dragonrealm.entity.ai.DragonForgeLookGoal;
 import com.trustysidekick.dragonrealm.entity.ai.DragonWhelpAttackGoal;
+import com.trustysidekick.dragonrealm.entity.client.DragonWhelpModel;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.AnimationState;
-import net.minecraft.entity.EntityPose;
-import net.minecraft.entity.EntityType;
+import net.minecraft.client.model.ModelPart;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -23,6 +23,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.SmallFireballEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
@@ -31,6 +32,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.Heightmap;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -38,6 +40,7 @@ import software.bernie.geckolib.core.animatable.GeoAnimatable;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 
+import java.util.List;
 import java.util.Random;
 
 public class DragonWhelpEntity extends AnimalEntity {
@@ -48,6 +51,9 @@ public class DragonWhelpEntity extends AnimalEntity {
     private int idleAnimationTimeout = 0;
     public final AnimationState attackAnimationState = new AnimationState();
     public int attackAnimationTimeout = 0;
+    private Vec3d frozenMotion = Vec3d.ZERO;
+
+
     private static final float MAX_ROTATION_SPEED = 0.5f; // Adjust as needed
     private float yawSpeed = 0.1f; // Adjust as needed
     private float pitchSpeed = 0.1f; // Adjust as needed
@@ -94,12 +100,20 @@ public class DragonWhelpEntity extends AnimalEntity {
         //this.setRotation(newYaw, newPitch);
 
         if (targetForge != null) {
-            faceBlock(targetForge);
-            shootFireballAtBlock(targetForge);
-        }
+            double diffX = Math.abs(this.getPos().getX()) - Math.abs(targetForge.getX());
+            double diffY = Math.abs(this.getPos().getY()) - Math.abs(targetForge.getY());
+            double diffZ = Math.abs(this.getPos().getZ()) - Math.abs(targetForge.getZ());
 
-        if(this.getWorld().isClient()) {
-            setupAnimationStates();
+            if (diffX > Math.abs(5) || diffY > Math.abs(5) || diffZ > Math.abs(5)) {
+                targetForge = null;
+                frozenMotion = Vec3d.ZERO;
+            } else {
+                //faceBlock(targetForge);
+                shootFireballAtBlock(targetForge);
+                frozenMotion = getVelocity();
+            }
+        } else {
+            frozenMotion = Vec3d.ZERO;
         }
     }
 
@@ -171,20 +185,55 @@ public class DragonWhelpEntity extends AnimalEntity {
 
 
     public void shootFireballAtBlock(BlockPos targetBlock) {
-        Random random = new Random();
-        double ranSpread = -0.05 + random.nextFloat() * (0.05 - -0.05);
+        // Assuming you have access to the world instance and the specified block position
+        //BlockPos targetBlockPos = targetBlock;
+        //BlockPos topSurfaceBlockPos = this.getWorld().getTopPosition(Heightmap.Type.MOTION_BLOCKING, targetBlock);
 
-        Vec3d targetPosition = new Vec3d(targetBlock.getX() + 0.5, targetBlock.getY() + 0.5, targetBlock.getZ() + 0.5);
-        Vec3d direction = targetPosition.subtract(getPos()).normalize();
 
-        Vec3d spawnOffset = new Vec3d(0.0, getStandingEyeHeight() + 0.9, 0.0); // Adjust the Y offset as needed
-        Vec3d spawnPosition = getPos().add(spawnOffset);
+        // Calculate the direction vector from the entity's head position to the target block's top surface
+        //Vec3d direction = new Vec3d(topSurfaceBlockPos.getX() - this.getX(), topSurfaceBlockPos.getY() - this.getEyeY(), topSurfaceBlockPos.getZ() - this.getZ()).normalize();
+        Vec3d direction = new Vec3d(targetBlock.getX() - this.getPos().getX(), targetBlock.getY() - this.getEyePos().getY(), targetBlock.getZ() - this.getPos().getZ()).normalize();
 
-        SmallFireballEntity fireball = new SmallFireballEntity(this.getWorld(), spawnPosition.x, spawnPosition.y, spawnPosition.z, direction.x + ranSpread, direction.y + ranSpread, direction.z + ranSpread);
+        // Calculate the yaw and pitch angles based on the direction vector
+        double yaw = Math.toDegrees(Math.atan2(-direction.x, direction.z)); // Yaw is based on X and Z components
+        double pitch = Math.toDegrees(Math.asin(-direction.y)); // Pitch is based on Y component
 
-        //SmallFireballEntity fireball = new SmallFireballEntity(this.getWorld(), this, direction.x + ranSpread, direction.y + ranSpread, direction.z + ranSpread); // Change SmallFireballEntity to FireballEntity for a larger fireball
-        //fireball.setPosition(this.getX(), this.getY(), this.getZ());
-        this.getWorld().spawnEntity(fireball);
+
+        // Set the entity's rotation
+        this.setYaw((float) yaw);
+        this.setPitch((float) pitch);
+
+        // Assuming you have access to the world instance and the entity object
+        //Vec3d headPos = entity.getEyePosition(1.0F); // Get the entity's head position
+        // WORKS // Vec3d headPos = this.getEyePos(); // Get the entity's head position
+
+        double yawRadians = Math.toRadians(this.bodyYaw); // Convert yaw to radians
+        double offsetX1 = Math.sin(yawRadians); // Calculate X offset based on yaw
+        double offsetZ1 = Math.cos(yawRadians); // Calculate Z offset based on yaw
+
+        Vec3d headPos = new Vec3d(this.getX() + offsetX1, 0.0, this.getZ() + offsetZ1);
+
+
+        // Now you can use the head position to spawn fire particles towards the target block's top surface
+        // For example:
+        Vec3d velocity = direction.multiply(0.1); // Adjust the speed as needed
+
+        // Spawn fire particles
+
+        int numParticles = 10;
+        for (int i = 0; i < numParticles; i++) {
+            double offsetX = random.nextGaussian() * 0.007; // Randomize particle position
+            double offsetY = random.nextGaussian() * 0.007;
+            double offsetZ = random.nextGaussian() * 0.007;
+            //this.getWorld().addParticle(ParticleTypes.FLAME, headPos.x, headPos.y, headPos.z, velocity.x + offsetX, velocity.y + offsetY, velocity.z + offsetZ);
+            SmallFireballEntity fireball = new SmallFireballEntity(this.getWorld(), headPos.x, headPos.y - 58.5, headPos.z, velocity.x + offsetX, velocity.y + offsetY, velocity.z + offsetZ);
+            this.getWorld().spawnEntity(fireball);
+
+        }
+
+
+
+
     }
 
 
@@ -204,6 +253,8 @@ public class DragonWhelpEntity extends AnimalEntity {
         setYaw((float) yaw);
         setPitch((float) pitch);
     }
+
+
 
     @Override
     public boolean isFireImmune() {
@@ -243,4 +294,5 @@ public class DragonWhelpEntity extends AnimalEntity {
         return new Box(minX, minY, minZ, maxX, maxY, maxZ);
 
     }
+
 }
