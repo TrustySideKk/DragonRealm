@@ -29,6 +29,7 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -47,6 +48,9 @@ public class DragonWhelpEntity extends AnimalEntity {
     private int idleAnimationTimeout = 0;
     public final AnimationState attackAnimationState = new AnimationState();
     public int attackAnimationTimeout = 0;
+    private static final float MAX_ROTATION_SPEED = 0.5f; // Adjust as needed
+    private float yawSpeed = 0.1f; // Adjust as needed
+    private float pitchSpeed = 0.1f; // Adjust as needed
 
     public DragonWhelpEntity(EntityType<? extends AnimalEntity> entityType, World world) {
         super(entityType, world);
@@ -81,6 +85,13 @@ public class DragonWhelpEntity extends AnimalEntity {
     @Override
     public void tick() {
         super.tick();
+
+        // Slow down the turn rate by limiting the rotation speed
+        //float newYaw = MathHelper.clamp(this.getYaw() + yawSpeed, -MAX_ROTATION_SPEED, MAX_ROTATION_SPEED);
+        //float newPitch = MathHelper.clamp(this.getPitch() + pitchSpeed, -MAX_ROTATION_SPEED, MAX_ROTATION_SPEED);
+
+        // Update entity rotation
+        //this.setRotation(newYaw, newPitch);
 
         if (targetForge != null) {
             faceBlock(targetForge);

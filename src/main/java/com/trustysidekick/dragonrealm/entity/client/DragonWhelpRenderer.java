@@ -12,7 +12,7 @@ public class DragonWhelpRenderer extends MobEntityRenderer<DragonWhelpEntity, Dr
     private static final Identifier TEXTURE = new Identifier(DragonRealm.MOD_ID, "textures/entity/dragon_whelp.png");
 
     public DragonWhelpRenderer(EntityRendererFactory.Context context) {
-        super(context, new DragonWhelpModel<>(context.getPart(ModModelLayers.DRAGONWHELP)), 0.6f);
+        super(context, new DragonWhelpModel<>(context.getPart(ModModelLayers.DRAGONWHELP)), 0.1f);
     }
 
     @Override
