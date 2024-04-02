@@ -44,16 +44,12 @@ public class QuenchTankBlock extends BlockWithEntity implements BlockEntityProvi
             if (player.getStackInHand(hand).isEmpty()) {
                 switch (blockState.get(TANK)) {
                     case 0:
-                        System.out.println("Tank is: Empty.");
                         break;
                     case 1:
-                        System.out.println("Tank is: One third full.");
                         break;
                     case 2:
-                        System.out.println("Tank is: Two thirds full.");
                         break;
                     case 3:
-                        System.out.println("Tank is: Full.");
                         break;
                 }
             }
@@ -61,7 +57,6 @@ public class QuenchTankBlock extends BlockWithEntity implements BlockEntityProvi
             if (player.getStackInHand(hand).getItem() == ModItems.DRAGON_BLOOD) {
                 switch (blockState.get(TANK)) {
                     case 0:
-                        System.out.println("Putting in blood.");
                         world.setBlockState(pos, blockState.with(TANK, 1));
                         if (!player.getInventory().insertStack(new ItemStack(Items.GLASS_BOTTLE, 1))) {
                             player.dropItem(new ItemStack(Items.GLASS_BOTTLE, 1), false);
@@ -69,7 +64,6 @@ public class QuenchTankBlock extends BlockWithEntity implements BlockEntityProvi
                         player.getStackInHand(hand).decrement(1);
                         break;
                     case 1:
-                        System.out.println("Putting in blood.");
                         world.setBlockState(pos, blockState.with(TANK, 2));
                         if (!player.getInventory().insertStack(new ItemStack(Items.GLASS_BOTTLE, 1))) {
                             player.dropItem(new ItemStack(Items.GLASS_BOTTLE, 1), false);
@@ -77,7 +71,6 @@ public class QuenchTankBlock extends BlockWithEntity implements BlockEntityProvi
                         player.getStackInHand(hand).decrement(1);
                         break;
                     case 2:
-                        System.out.println("Putting in blood.");
                         world.setBlockState(pos, blockState.with(TANK, 3));
                         if (!player.getInventory().insertStack(new ItemStack(Items.GLASS_BOTTLE, 1))) {
                             player.dropItem(new ItemStack(Items.GLASS_BOTTLE, 1), false);
@@ -85,7 +78,6 @@ public class QuenchTankBlock extends BlockWithEntity implements BlockEntityProvi
                         player.getStackInHand(hand).decrement(1);
                         break;
                     case 3:
-                        System.out.println("Tank is full.");
                         break;
                 }
 
@@ -94,10 +86,8 @@ public class QuenchTankBlock extends BlockWithEntity implements BlockEntityProvi
             if (player.getStackInHand(hand).getItem() == Items.GLASS_BOTTLE) {
                 switch (blockState.get(TANK)) {
                     case 0:
-                        System.out.println("Tank is empty.");
                         break;
                     case 1:
-                        System.out.println("Removing a bottle of blood.");
                         world.setBlockState(pos, blockState.with(TANK, 0));
                         if (!player.getInventory().insertStack(new ItemStack(ModItems.DRAGON_BLOOD, 1))) {
                             player.dropItem(new ItemStack(ModItems.DRAGON_BLOOD, 1), false);
@@ -105,7 +95,6 @@ public class QuenchTankBlock extends BlockWithEntity implements BlockEntityProvi
                         player.getStackInHand(hand).decrement(1);
                         break;
                     case 2:
-                        System.out.println("Removing a bottle of blood.");
                         world.setBlockState(pos, blockState.with(TANK, 1));
                         if (!player.getInventory().insertStack(new ItemStack(ModItems.DRAGON_BLOOD, 1))) {
                             player.dropItem(new ItemStack(ModItems.DRAGON_BLOOD, 1), false);
@@ -113,7 +102,6 @@ public class QuenchTankBlock extends BlockWithEntity implements BlockEntityProvi
                         player.getStackInHand(hand).decrement(1);
                         break;
                     case 3:
-                        System.out.println("Removing a bottle of blood.");
                         world.setBlockState(pos, blockState.with(TANK, 2));
                         if (!player.getInventory().insertStack(new ItemStack(ModItems.DRAGON_BLOOD, 1))) {
                             player.dropItem(new ItemStack(ModItems.DRAGON_BLOOD, 1), false);
@@ -126,7 +114,6 @@ public class QuenchTankBlock extends BlockWithEntity implements BlockEntityProvi
 
             if (player.getStackInHand(hand).getItem() == ModItems.SEARING_IRON_INGOT) {
                 if (blockState.get(TANK) == 3) {
-                    System.out.println("Creating dragon ingot.");
                     world.setBlockState(pos, blockState.with(TANK, 0));
                     if (!player.getInventory().insertStack(new ItemStack(ModItems.DRAGON_INGOT, 1))) {
                         player.dropItem(new ItemStack(ModItems.DRAGON_INGOT, 1), false);
