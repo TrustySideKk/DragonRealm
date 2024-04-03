@@ -7,10 +7,14 @@ import net.minecraft.inventory.Inventories;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 public class SmithingAnvilBlockEntity extends BlockEntity implements ImplementedInventory {
     private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(9, ItemStack.EMPTY);
@@ -21,48 +25,22 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements Implemented
     }
 
     @Override
-    public DefaultedList<ItemStack> getItems() {
-        return inventory;
+    protected void writeNbt(NbtCompound nbt) {
+        super.writeNbt(nbt);
+        Inventories.writeNbt(nbt, inventory);
     }
 
     @Override
-    public void clear() {
-        inventory.clear();
-    }
-
-    @Override
-    public boolean canInsert(int slot, ItemStack stack, Direction dir) {
-        return this.getStack(slot).isEmpty();
-    }
-
-    @Override
-    public boolean canExtract(int slot, ItemStack stack, Direction dir) {
-        return !this.getStack(slot).isEmpty();
-    }
-
-    @Override
-    public void markDirty() {
-        super.markDirty();
-        // Save inventory state or perform other actions when inventory changes
-    }
-
-
-    public void insertItem(int x, int z, ItemStack stack, PlayerEntity player) {
-        int slot = x + z * 3;
-
-        if (inventory.get(slot).isEmpty()) {
-            inventory.set(slot, new ItemStack(stack.getItem(), 1));
-            //inventory.set(slot, stack.copy());
-            player.getInventory().getMainHandStack().decrement(1);
-            markDirty(); // Mark the block entity as dirty to save the changes
-        }
-
+    public void readNbt(NbtCompound nbt) {
+        super.readNbt(nbt);
+        Inventories.readNbt(nbt, inventory);
     }
 
     public void tick(World world, BlockPos pos, BlockState state) {
         if (world.isClient) { return; }
-
+/*
         if (tick >= 20) {
+
 
             System.out.println("Slot 1: " + inventory.get(0));
             System.out.println("Slot 2: " + inventory.get(1));
@@ -78,31 +56,45 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements Implemented
         } else {
             tick++;
         }
+        */
 
     }
 
     @Override
-    protected void writeNbt(NbtCompound nbt) {
-        super.writeNbt(nbt);
-        Inventories.writeNbt(nbt, inventory);
-        //nbt.putInt("dragon_forge_block.progress", this.progress);
+    public DefaultedList<ItemStack> getItems() {
+        return inventory;
     }
-
 
     @Override
-    public void readNbt(NbtCompound nbt) {
-        super.readNbt(nbt);
-        Inventories.readNbt(nbt, inventory);
-        //this.progress = nbt.getInt("dragon_forge_block.progress");
+    public boolean canInsert(int slot, ItemStack stack, Direction dir) {
+        return this.inventory.get(slot).isEmpty();
+    }
+
+    @Override
+    public boolean canExtract(int slot, ItemStack stack, Direction dir) {
+        return !this.inventory.get(slot).isEmpty();
+    }
+
+    @Override
+    public void markDirty() {
+        world.updateListeners(pos, getCachedState(), getCachedState(), 3);
+        super.markDirty();
+    }
+
+    @Nullable
+    @Override
+    public Packet<ClientPlayPacketListener> toUpdatePacket() {
+        return BlockEntityUpdateS2CPacket.create(this);
+    }
+
+    @Override
+    public NbtCompound toInitialChunkDataNbt() {
+        return createNbt();
     }
 
 
-    public ItemStack getStack(int slot) {
-        return inventory.get(slot);
-    }
-
-    public ItemStack getRenderStack() {
-        return this.getStack(0);
+    public ItemStack getRenderStack(int slot) {
+        return this.getStack(slot);
     }
 
 
