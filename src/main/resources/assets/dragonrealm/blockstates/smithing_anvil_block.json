@@ -1,0 +1,5 @@
+{
+  "variants": {
+    "": { "model": "dragonrealm:block/smithing_anvil_block" }
+  }
+}

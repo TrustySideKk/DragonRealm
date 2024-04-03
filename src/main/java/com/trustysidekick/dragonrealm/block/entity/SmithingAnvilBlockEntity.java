@@ -14,6 +14,7 @@ import net.minecraft.world.World;
 
 public class SmithingAnvilBlockEntity extends BlockEntity implements ImplementedInventory {
     private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(9, ItemStack.EMPTY);
+    private int tick = 0;
 
     public SmithingAnvilBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.SMITHING_ANVIL_BLOCK_ENTITY, pos, state);
@@ -59,18 +60,25 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements Implemented
     }
 
     public void tick(World world, BlockPos pos, BlockState state) {
-        /*
-        System.out.println("Slot 1: " + inventory.get(0));
-        System.out.println("Slot 2: " + inventory.get(1));
-        System.out.println("Slot 3: " + inventory.get(2));
-        System.out.println("Slot 4: " + inventory.get(3));
-        System.out.println("Slot 5: " + inventory.get(4));
-        System.out.println("Slot 6: " + inventory.get(5));
-        System.out.println("Slot 7: " + inventory.get(6));
-        System.out.println("Slot 8: " + inventory.get(7));
-        System.out.println("Slot 9: " + inventory.get(8));
+        if (world.isClient) { return; }
 
-         */
+        if (tick >= 20) {
+
+            System.out.println("Slot 1: " + inventory.get(0));
+            System.out.println("Slot 2: " + inventory.get(1));
+            System.out.println("Slot 3: " + inventory.get(2));
+            System.out.println("Slot 4: " + inventory.get(3));
+            System.out.println("Slot 5: " + inventory.get(4));
+            System.out.println("Slot 6: " + inventory.get(5));
+            System.out.println("Slot 7: " + inventory.get(6));
+            System.out.println("Slot 8: " + inventory.get(7));
+            System.out.println("Slot 9: " + inventory.get(8));
+
+            tick = 0;
+        } else {
+            tick++;
+        }
+
     }
 
     @Override
@@ -89,18 +97,12 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements Implemented
     }
 
 
-    public ItemStack getRenderStack() {
-        if (this.inventory.get(0).isEmpty()) {
-            return new ItemStack(Items.AIR, 1);
-        } else {
-            return this.inventory.get(0);
-        }
-    }
-
-
-
     public ItemStack getStack(int slot) {
         return inventory.get(slot);
+    }
+
+    public ItemStack getRenderStack() {
+        return this.getStack(0);
     }
 
 

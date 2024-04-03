@@ -22,12 +22,15 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 
 public class QuenchTankBlock extends BlockWithEntity implements BlockEntityProvider {
     public static final IntProperty TANK = IntProperty.of("tank", 0, 3);
+    private static final VoxelShape SHAPE = QuenchTankBlock.createCuboidShape(0, 0, 0, 16, 12, 16);
 
     public QuenchTankBlock(Settings settings) {
         super(settings);
@@ -152,5 +155,10 @@ public class QuenchTankBlock extends BlockWithEntity implements BlockEntityProvi
     @Override
     public BlockRenderType getRenderType(BlockState state) {
         return BlockRenderType.MODEL;
+    }
+
+    @Override
+    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+        return SHAPE;
     }
 }
