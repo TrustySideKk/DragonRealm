@@ -21,8 +21,6 @@ public class ModEntities {
             new Identifier(DragonRealm.MOD_ID, "dragonwhelp"),
             FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, DragonWhelpEntity::new)
                     .dimensions(EntityDimensions.fixed(3.0f,3.0f)).build());
-                    //.dimensions(EntityDimensions.fixed(0.7f,0.7f)).build());
-                    //.dimensions(EntityDimensions.fixed(10.7f,10.7f)).build());
 
     public static void registerModEntities() {
         DragonRealm.LOGGER.info("Registering Entities for " + DragonRealm.MOD_ID);
