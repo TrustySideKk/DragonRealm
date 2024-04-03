@@ -2,7 +2,7 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [32, 32],
 	"textures": {
-		"1": "dragonrealm:block/smithing_anvil_block",
+		"1": "dragonrealm:block/smithing_anvil_block1",
 		"particle": "dragonrealm:block/smithing_anvil_block"
 	},
 	"elements": [
