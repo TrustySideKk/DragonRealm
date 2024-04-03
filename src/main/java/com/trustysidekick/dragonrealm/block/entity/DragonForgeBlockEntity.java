@@ -160,5 +160,13 @@ public class DragonForgeBlockEntity extends BlockEntity implements ImplementedIn
         return createNbt();
     }
 
+    public ItemStack getRenderStack() {
+        if(this.getStack(0).isEmpty()) {
+            return this.getStack(0);
+        } else {
+            return this.getStack(0);
+        }
+    }
+
 
 }

@@ -20,11 +20,11 @@ import net.minecraft.util.math.RotationAxis;
 import net.minecraft.world.LightType;
 import net.minecraft.world.World;
 
-@Environment(EnvType.CLIENT)
 public class DragonForgeBlockEntityRenderer implements BlockEntityRenderer<DragonForgeBlockEntity> {
     public DragonForgeBlockEntityRenderer(BlockEntityRendererFactory.Context context) {
-        super();
+
     }
+
 
 /*
     @Override
@@ -44,12 +44,7 @@ public class DragonForgeBlockEntityRenderer implements BlockEntityRenderer<Drago
     }
     */
 
-    private int getLightLevel(World world, BlockPos pos) {
-        int bLight = world.getLightLevel(LightType.BLOCK, pos);
-        int sLight = world.getLightLevel(LightType.SKY, pos);
-        return LightmapTextureManager.pack(bLight, sLight);
-    }
-
+    /*
     @Override
     public void render(DragonForgeBlockEntity entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
         ItemStack itemStack = entity.getStack(0); // Assuming the item is in the first slot
@@ -62,4 +57,30 @@ public class DragonForgeBlockEntityRenderer implements BlockEntityRenderer<Drago
             matrices.pop();
         }
     }
+
+     */
+
+    @Override
+    public void render(DragonForgeBlockEntity entity, float tickDelta, MatrixStack matrices,
+                       VertexConsumerProvider vertexConsumers, int light, int overlay) {
+        ItemRenderer itemRenderer = MinecraftClient.getInstance().getItemRenderer();
+        ItemStack stack = entity.getRenderStack();
+        matrices.push();
+        matrices.translate(0.5f, 0.8f, 0.5f);
+        matrices.scale(0.35f, 0.35f, 0.35f);
+        matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(270));
+
+        itemRenderer.renderItem(stack, ModelTransformationMode.GUI, getLightLevel(entity.getWorld(),
+                entity.getPos()), OverlayTexture.DEFAULT_UV, matrices, vertexConsumers, entity.getWorld(), 1);
+        matrices.pop();
+    }
+
+
+    private int getLightLevel(World world, BlockPos pos) {
+        int bLight = world.getLightLevel(LightType.BLOCK, pos);
+        int sLight = world.getLightLevel(LightType.SKY, pos);
+        return LightmapTextureManager.pack(bLight, sLight);
+    }
+
+
 }

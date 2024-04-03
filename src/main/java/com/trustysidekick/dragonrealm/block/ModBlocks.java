@@ -15,7 +15,6 @@ import net.minecraft.util.Identifier;
 
 public class ModBlocks {
 
-    public static final Block DRAGON_ALTAR_BLOCK = registerBlock("dragon_altar_block", new Block(FabricBlockSettings.create()));
     public static final Block DRAGON_FORGE_BLOCK = registerBlock("dragon_forge_block", new DragonForgeBlock(FabricBlockSettings.create().nonOpaque()));
     public static final Block QUENCH_TANK_BLOCK = registerBlock("quench_tank_block", new QuenchTankBlock(FabricBlockSettings.create().nonOpaque()));
     public static final Block SMITHING_ANVIL_BLOCK = registerBlock("smithing_anvil_block", new SmithingAnvilBlock(FabricBlockSettings.create().nonOpaque()));

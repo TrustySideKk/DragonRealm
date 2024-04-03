@@ -68,7 +68,6 @@ public class ModItemGroups {
                         entries.add(ModItems.DRAGON_HIDE_CAPE);
 
                         //BLOCKS
-                        entries.add(ModBlocks.DRAGON_ALTAR_BLOCK);
                         entries.add(ModBlocks.DRAGON_FORGE_BLOCK);
                         entries.add(ModBlocks.QUENCH_TANK_BLOCK);
                         entries.add(ModBlocks.SMITHING_ANVIL_BLOCK);
