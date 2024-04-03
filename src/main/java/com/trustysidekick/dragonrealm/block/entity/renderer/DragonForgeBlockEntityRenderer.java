@@ -1,6 +1,8 @@
 package com.trustysidekick.dragonrealm.block.entity.renderer;
 
 import com.trustysidekick.dragonrealm.block.entity.DragonForgeBlockEntity;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.LightmapTextureManager;
 import net.minecraft.client.render.OverlayTexture;
@@ -18,9 +20,10 @@ import net.minecraft.util.math.RotationAxis;
 import net.minecraft.world.LightType;
 import net.minecraft.world.World;
 
+@Environment(EnvType.CLIENT)
 public class DragonForgeBlockEntityRenderer implements BlockEntityRenderer<DragonForgeBlockEntity> {
     public DragonForgeBlockEntityRenderer(BlockEntityRendererFactory.Context context) {
-
+        super();
     }
 
 /*
@@ -49,15 +52,13 @@ public class DragonForgeBlockEntityRenderer implements BlockEntityRenderer<Drago
 
     @Override
     public void render(DragonForgeBlockEntity entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
-        ItemRenderer itemRenderer = MinecraftClient.getInstance().getItemRenderer();
-        ItemStack stack = entity.getStack();
-
-        if (!stack.isEmpty()) { // Only render if the stack is not empty
+        ItemStack itemStack = entity.getStack(0); // Assuming the item is in the first slot
+        if (!itemStack.isEmpty()) {
             matrices.push();
             matrices.translate(0.5f, 0.8f, 0.5f); // Adjust the translation as needed for render height
             matrices.scale(0.35f, 0.35f, 0.35f);
             matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(270));
-            itemRenderer.renderItem(stack, ModelTransformationMode.GUI, getLightLevel(entity.getWorld(), entity.getPos()), OverlayTexture.DEFAULT_UV, matrices, vertexConsumers, entity.getWorld(), 1);
+            MinecraftClient.getInstance().getItemRenderer().renderItem(itemStack, ModelTransformationMode.GUI, getLightLevel(entity.getWorld(), entity.getPos()), OverlayTexture.DEFAULT_UV, matrices, vertexConsumers, entity.getWorld(), 1);
             matrices.pop();
         }
     }
