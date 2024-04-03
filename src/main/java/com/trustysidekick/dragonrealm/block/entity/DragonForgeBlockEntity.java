@@ -29,7 +29,6 @@ public class DragonForgeBlockEntity extends BlockEntity implements ImplementedIn
     private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(1,ItemStack.EMPTY);
     public int progress = 0;
     private boolean foundDragon;
-    private ItemStack stack = ItemStack.EMPTY;
 
 
     public DragonForgeBlockEntity(BlockPos pos, BlockState state) {
@@ -55,7 +54,7 @@ public class DragonForgeBlockEntity extends BlockEntity implements ImplementedIn
 
 
     public void tick(World world, BlockPos pos, BlockState state) {
-        //if (world.isClient) { return; }
+        if (world.isClient) { return; }
 
         //if (!world.isClient) {
             if (!inventory.get(0).isEmpty() && inventory.get(0).getItem() != ModItems.SEARING_IRON_INGOT) {
@@ -66,6 +65,7 @@ public class DragonForgeBlockEntity extends BlockEntity implements ImplementedIn
                 for (Entity entity : nearbyEntities) {
                     if (entity instanceof DragonWhelpEntity && ((DragonWhelpEntity) entity).targetForge == this.getPos()) {
                         foundDragon = true;
+                        this.markDirty();
                         break;
                     }
                 }
@@ -76,6 +76,7 @@ public class DragonForgeBlockEntity extends BlockEntity implements ImplementedIn
                             if (((DragonWhelpEntity) entity).targetForge == null) {
                                 foundDragon = true;
                                 ((DragonWhelpEntity) entity).targetForge = this.getPos();
+                                this.markDirty();
                                 break;
                             }
                         }
@@ -84,22 +85,19 @@ public class DragonForgeBlockEntity extends BlockEntity implements ImplementedIn
                     if (this.progress >= 160) {
                         if (inventory.get(0).getItem() == Items.IRON_INGOT) {
                             this.inventory.set(0, new ItemStack(ModItems.SEARING_IRON_INGOT, 1));
+                            this.markDirty();
                         } else {
-                            this.removeStack(0);
-                            //this.inventory.set(0, new ItemStack(Items.AIR, 1));
-                            //this.inventory.clear();
-                            //this.getRenderStack();
-                            //markDirty();
-                            //markDirty(world, pos, state);
+                            this.removeStack(0, 1);
+                            this.markDirty();
                         }
 
                         this.getWorld().setBlockState(this.getPos(), state.with(DragonForgeBlock.BURNING, false));
                         this.progress = 0;
-                        //this.markDirty();
+                        this.markDirty();
                     } else {
                         this.getWorld().setBlockState(this.getPos(), state.with(DragonForgeBlock.BURNING, true));
                         this.progress++;
-                        //this.markDirty();
+                        this.markDirty();
                     }
                 }
             } else {
@@ -126,13 +124,6 @@ public class DragonForgeBlockEntity extends BlockEntity implements ImplementedIn
 
 
     @Override
-    public void clear() {
-        inventory.clear();
-        markDirty();
-    }
-
-
-    @Override
     public boolean canInsert(int slot, ItemStack stack, @Nullable Direction side) {
         return this.inventory.get(0).isEmpty();
     }
@@ -143,23 +134,13 @@ public class DragonForgeBlockEntity extends BlockEntity implements ImplementedIn
         return !this.inventory.get(0).isEmpty();
     }
 
-/*
-    public ItemStack getRenderStack() {
-        if (this.inventory.get(0).isEmpty()) {
-            return new ItemStack(Items.AIR, 1);
-        } else {
-            return this.inventory.get(0);
-        }
-    }
-
- */
-
 
     @Override
     public void markDirty() {
         world.updateListeners(pos, getCachedState(), getCachedState(), 3);
         super.markDirty();
     }
+
 
 
     @Nullable
@@ -169,32 +150,15 @@ public class DragonForgeBlockEntity extends BlockEntity implements ImplementedIn
     }
 
 
+
+
+
+
+
     @Override
     public NbtCompound toInitialChunkDataNbt() {
         return createNbt();
     }
 
 
-    /*
-    @Override
-    public ItemStack removeStack(int slot) {
-        ItemStack stack = inventory.remove(slot);
-        markDirty();
-        return stack;
-    }
-
-     */
-
-
-    @Override
-    public void setStack(int slot, ItemStack stack) {
-        inventory.set(slot, stack);
-        //this.stack = stack;
-        markDirty();
-    }
-
-
-    public ItemStack getStack() {
-        return inventory.get(0);
-    }
 }

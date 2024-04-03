@@ -25,6 +25,9 @@
   "item.dragonrealm.dragon_jawbone_axe": "Dragon Bone Axe",
   "item.dragonrealm.dragon_scale_shovel": "Dragon Scale Shovel",
   "item.dragonrealm.dragon_hoe": "Dragon Hoe",
+  "item.dragonrealm.dragon_shovel": "Dragon Shovel",
+  "item.dragonrealm.dragon_axe": "Dragon Axe",
+  "item.dragonrealm.dragon_pickaxe": "Dragon Pickaxe",
 
   "item.dragonrealm.dragon_club": "Dragon Club",
   "item.dragonrealm.dragon_spear": "Dragon Spear",
@@ -47,6 +50,7 @@
   "item.dragonrealm.porcupine_spawn_egg": "Porcupine Spawn Egg",
 
   "block.dragonrealm.dragon_altar_block": "Dragon Altar",
-  "block.dragonrealm.quench_tank": "Quench Tank",
-  "block.dragonrealm.dragon_forge_block": "Dragon Forge"
+  "block.dragonrealm.quench_tank_block": "Quench Tank",
+  "block.dragonrealm.dragon_forge_block": "Dragon Forge",
+  "block.dragonrealm.smithing_anvil_block": "Smithing Anvil"
 }
