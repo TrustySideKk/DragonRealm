@@ -930,9 +930,9 @@
 			"scale": [0.5, 0.5, 0.5]
 		},
 		"gui": {
-			"rotation": [0, 40, 0],
-			"translation": [0, 1.25, 0],
-			"scale": [0.8, 0.8, 0.8]
+			"rotation": [21, 43, 0],
+			"translation": [0, 1, 0],
+			"scale": [0.7, 0.7, 0.7]
 		},
 		"fixed": {
 			"rotation": [-90, 90, 0],
