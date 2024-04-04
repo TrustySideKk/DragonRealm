@@ -2,8 +2,8 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [32, 32],
 	"textures": {
-		"1": "dragonrealm:block/dragon_forge",
-		"particle": "dragonrealm:block/dragon_forge"
+		"1": "dragonrealm:block/dragon_forge_block",
+		"particle": "dragonrealm:block/dragon_forge_block"
 	},
 	"elements": [
 		{

@@ -1,6 +1,8 @@
 package com.trustysidekick.dragonrealm.block.entity.renderer;
 
 import com.trustysidekick.dragonrealm.block.entity.SmithingAnvilBlockEntity;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.LightmapTextureManager;
 import net.minecraft.client.render.OverlayTexture;
@@ -16,6 +18,7 @@ import net.minecraft.util.math.RotationAxis;
 import net.minecraft.world.LightType;
 import net.minecraft.world.World;
 
+@Environment(EnvType.CLIENT)
 public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<SmithingAnvilBlockEntity> {
     public SmithingAnvilBlockEntityRenderer(BlockEntityRendererFactory.Context context) {
         //super();
@@ -116,6 +119,7 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
             itemRenderer.renderItem(entity.getStack(8), ModelTransformationMode.GUI, getLightLevel(entity.getWorld(), entity.getPos()), OverlayTexture.DEFAULT_UV, matrices, vertexConsumers, entity.getWorld(), 1);
             matrices.pop();
         }
+
 
     }
 

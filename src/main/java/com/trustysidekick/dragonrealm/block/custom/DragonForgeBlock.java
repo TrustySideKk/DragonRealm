@@ -4,6 +4,7 @@ import com.mojang.serialization.MapCodec;
 import com.trustysidekick.dragonrealm.block.entity.ImplementedInventory;
 import com.trustysidekick.dragonrealm.block.entity.ModBlockEntities;
 import com.trustysidekick.dragonrealm.block.entity.DragonForgeBlockEntity;
+import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
@@ -73,6 +74,8 @@ public class DragonForgeBlock extends BlockWithEntity implements BlockEntityProv
     }
 
 
+
+
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (world.isClient) {
@@ -81,8 +84,7 @@ public class DragonForgeBlock extends BlockWithEntity implements BlockEntityProv
 
         if (!world.isClient) {
             BlockEntity blockEntity = world.getBlockEntity(pos);
-            if (blockEntity instanceof ImplementedInventory) {
-                ImplementedInventory inventoryBlockEntity = (ImplementedInventory) blockEntity;
+            if (blockEntity instanceof ImplementedInventory inventoryBlockEntity) {
 
                 if (inventoryBlockEntity.isEmpty()) {
                     if (!player.getStackInHand(hand).isEmpty()) {
@@ -90,6 +92,7 @@ public class DragonForgeBlock extends BlockWithEntity implements BlockEntityProv
                         inventoryBlockEntity.setStack(0, new ItemStack(heldItem.getItem(), 1));
                         player.getInventory().getMainHandStack().decrement(1);
                         inventoryBlockEntity.markDirty();
+                        blockEntity.markDirty();
                     }
                 } else {
                     if (player.getStackInHand(hand).isEmpty()) {
@@ -101,6 +104,7 @@ public class DragonForgeBlock extends BlockWithEntity implements BlockEntityProv
                         }
                         inventoryBlockEntity.getStack(0).decrement(1);
                         inventoryBlockEntity.markDirty();
+                        blockEntity.markDirty();
                     }
                 }
             }

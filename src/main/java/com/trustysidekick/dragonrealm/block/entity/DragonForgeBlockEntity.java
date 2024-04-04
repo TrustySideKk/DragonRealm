@@ -3,6 +3,7 @@ package com.trustysidekick.dragonrealm.block.entity;
 import com.trustysidekick.dragonrealm.block.custom.DragonForgeBlock;
 import com.trustysidekick.dragonrealm.entity.custom.DragonWhelpEntity;
 import com.trustysidekick.dragonrealm.item.ModItems;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.Entity;
@@ -28,6 +29,7 @@ import java.util.List;
 public class DragonForgeBlockEntity extends BlockEntity implements ImplementedInventory {
     private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(1,ItemStack.EMPTY);
     public int progress = 0;
+    private int test = 0;
     private boolean foundDragon;
 
 
@@ -57,63 +59,73 @@ public class DragonForgeBlockEntity extends BlockEntity implements ImplementedIn
         if (world.isClient) { return; }
 
         //if (!world.isClient) {
-            if (!inventory.get(0).isEmpty() && inventory.get(0).getItem() != ModItems.SEARING_IRON_INGOT) {
+        if (!inventory.get(0).isEmpty() && inventory.get(0).getItem() != ModItems.SEARING_IRON_INGOT) {
 
-                Box box = new Box(pos.getX() + 5, pos.getY() + 5, pos.getZ() + 5, pos.getX() - 5, pos.getY() - 5, pos.getZ() - 5);
-                List<Entity> nearbyEntities = world.getOtherEntities(null, box);
+            Box box = new Box(pos.getX() + 5, pos.getY() + 5, pos.getZ() + 5, pos.getX() - 5, pos.getY() - 5, pos.getZ() - 5);
+            List<Entity> nearbyEntities = world.getOtherEntities(null, box);
 
-                for (Entity entity : nearbyEntities) {
-                    if (entity instanceof DragonWhelpEntity && ((DragonWhelpEntity) entity).targetForge == this.getPos()) {
-                        foundDragon = true;
-                        this.markDirty();
-                        break;
-                    }
+            for (Entity entity : nearbyEntities) {
+                if (entity instanceof DragonWhelpEntity && ((DragonWhelpEntity) entity).targetForge == this.getPos()) {
+                    foundDragon = true;
+                    //this.markDirty();
+                    //break;
                 }
+            }
 
-                if (!foundDragon) {
-                    for (Entity entity : nearbyEntities) {
-                        if (entity instanceof DragonWhelpEntity) {
-                            if (((DragonWhelpEntity) entity).targetForge == null) {
-                                foundDragon = true;
-                                ((DragonWhelpEntity) entity).targetForge = this.getPos();
-                                this.markDirty();
-                                break;
-                            }
+            if (!foundDragon) {
+                for (Entity entity : nearbyEntities) {
+                    if (entity instanceof DragonWhelpEntity) {
+                        if (((DragonWhelpEntity) entity).targetForge == null) {
+                            foundDragon = true;
+                            ((DragonWhelpEntity) entity).targetForge = this.getPos();
+                            //this.markDirty();
+                            //break;
                         }
-                    }
-                } else {
-                    if (this.progress >= 160) {
-                        if (inventory.get(0).getItem() == Items.IRON_INGOT) {
-                            this.inventory.set(0, new ItemStack(ModItems.SEARING_IRON_INGOT, 1));
-                            this.markDirty();
-                        } else {
-                            this.removeStack(0, 1);
-                            this.markDirty();
-                        }
-
-                        this.getWorld().setBlockState(this.getPos(), state.with(DragonForgeBlock.BURNING, false));
-                        this.progress = 0;
-                        this.markDirty();
-                    } else {
-                        this.getWorld().setBlockState(this.getPos(), state.with(DragonForgeBlock.BURNING, true));
-                        this.progress++;
-                        this.markDirty();
                     }
                 }
             } else {
-                Box box = new Box(pos.getX() + 5, pos.getY() + 5, pos.getZ() + 5, pos.getX() - 5, pos.getY() - 5, pos.getZ() - 5);
-                List<Entity> nearbyEntities = world.getOtherEntities(null, box);
-
-                for (Entity entity : nearbyEntities) {
-                    if (entity instanceof DragonWhelpEntity) {
-                        foundDragon = false;
-                        ((DragonWhelpEntity) entity).targetForge = null;
-                        this.getWorld().setBlockState(this.getPos(), state.with(DragonForgeBlock.BURNING, false));
+                if (this.progress >= 160) {
+                    if (inventory.get(0).getItem() == Items.IRON_INGOT) {
+                        this.inventory.set(0, new ItemStack(ModItems.SEARING_IRON_INGOT, 1));
+                        this.markDirty();
+                    } else {
+                        this.removeStack(0, 1);
                         this.markDirty();
                     }
+
+                    this.getWorld().setBlockState(this.getPos(), state.with(DragonForgeBlock.BURNING, false));
+                    this.progress = 0;
+                    this.markDirty();
+                } else {
+                    this.getWorld().setBlockState(this.getPos(), state.with(DragonForgeBlock.BURNING, true));
+                    this.progress++;
+                    this.markDirty();
                 }
             }
+        } else {
+            Box box = new Box(pos.getX() + 5, pos.getY() + 5, pos.getZ() + 5, pos.getX() - 5, pos.getY() - 5, pos.getZ() - 5);
+            List<Entity> nearbyEntities = world.getOtherEntities(null, box);
+
+            for (Entity entity : nearbyEntities) {
+                if (entity instanceof DragonWhelpEntity) {
+                    foundDragon = false;
+                    ((DragonWhelpEntity) entity).targetForge = null;
+                    this.getWorld().setBlockState(this.getPos(), state.with(DragonForgeBlock.BURNING, false));
+                    this.markDirty();
+                }
+            }
+        }
         //}
+
+        if (test >= 30) {
+
+            System.out.println("Inventory: " + this.inventory);
+
+            test = 0;
+        } else {
+            test++;
+        }
+
     }
 
 
@@ -137,7 +149,8 @@ public class DragonForgeBlockEntity extends BlockEntity implements ImplementedIn
 
     @Override
     public void markDirty() {
-        world.updateListeners(pos, getCachedState(), getCachedState(), 3);
+        //world.updateListeners(pos, getCachedState(), getCachedState(), 3);
+        world.updateListeners(pos, getCachedState(), getCachedState(), Block.NOTIFY_LISTENERS);
         super.markDirty();
     }
 
@@ -149,23 +162,16 @@ public class DragonForgeBlockEntity extends BlockEntity implements ImplementedIn
         return BlockEntityUpdateS2CPacket.create(this);
     }
 
-
-
-
-
-
-
     @Override
     public NbtCompound toInitialChunkDataNbt() {
         return createNbt();
     }
 
+
+
+
     public ItemStack getRenderStack() {
-        if(this.getStack(0).isEmpty()) {
-            return this.getStack(0);
-        } else {
-            return this.getStack(0);
-        }
+        return this.getStack(0);
     }
 
 
