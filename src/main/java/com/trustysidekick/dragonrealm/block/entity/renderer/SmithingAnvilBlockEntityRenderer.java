@@ -36,7 +36,7 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
             matrices.translate(0.275f, 0.8f, 0.28f);
             matrices.scale(0.18f, 0.18f, 0.18f);
             matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(270));
-            itemRenderer.renderItem(entity.getStack(0), ModelTransformationMode.GUI, getLightLevel(entity.getWorld(), entity.getPos()), OverlayTexture.DEFAULT_UV, matrices, vertexConsumers, entity.getWorld(), 1);
+            itemRenderer.renderItem(entity.getStack(0), ModelTransformationMode.FIXED, getLightLevel(entity.getWorld(), entity.getPos()), OverlayTexture.DEFAULT_UV, matrices, vertexConsumers, entity.getWorld(), 1);
             matrices.pop();
         }
 
@@ -46,7 +46,7 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
             matrices.translate(0.49f, 0.8f, 0.28f);
             matrices.scale(0.18f, 0.18f, 0.18f);
             matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(270));
-            itemRenderer.renderItem(entity.getStack(1), ModelTransformationMode.GUI, getLightLevel(entity.getWorld(), entity.getPos()), OverlayTexture.DEFAULT_UV, matrices, vertexConsumers, entity.getWorld(), 1);
+            itemRenderer.renderItem(entity.getStack(1), ModelTransformationMode.FIXED, getLightLevel(entity.getWorld(), entity.getPos()), OverlayTexture.DEFAULT_UV, matrices, vertexConsumers, entity.getWorld(), 1);
             matrices.pop();
         }
 
@@ -56,7 +56,7 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
             matrices.translate(0.71f, 0.8f, 0.28f);
             matrices.scale(0.18f, 0.18f, 0.18f);
             matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(270));
-            itemRenderer.renderItem(entity.getStack(2), ModelTransformationMode.GUI, getLightLevel(entity.getWorld(), entity.getPos()), OverlayTexture.DEFAULT_UV, matrices, vertexConsumers, entity.getWorld(), 1);
+            itemRenderer.renderItem(entity.getStack(2), ModelTransformationMode.FIXED, getLightLevel(entity.getWorld(), entity.getPos()), OverlayTexture.DEFAULT_UV, matrices, vertexConsumers, entity.getWorld(), 1);
             matrices.pop();
         }
 
@@ -66,7 +66,7 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
             matrices.translate(0.275f, 0.8f, 0.5f);
             matrices.scale(0.18f, 0.18f, 0.18f);
             matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(270));
-            itemRenderer.renderItem(entity.getStack(3), ModelTransformationMode.GUI, getLightLevel(entity.getWorld(), entity.getPos()), OverlayTexture.DEFAULT_UV, matrices, vertexConsumers, entity.getWorld(), 1);
+            itemRenderer.renderItem(entity.getStack(3), ModelTransformationMode.FIXED, getLightLevel(entity.getWorld(), entity.getPos()), OverlayTexture.DEFAULT_UV, matrices, vertexConsumers, entity.getWorld(), 1);
             matrices.pop();
         }
 
@@ -76,7 +76,7 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
             matrices.translate(0.49f, 0.8f, 0.5f);
             matrices.scale(0.18f, 0.18f, 0.18f);
             //matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(270));
-            itemRenderer.renderItem(entity.getStack(4), ModelTransformationMode.GUI, getLightLevel(entity.getWorld(), entity.getPos()), OverlayTexture.DEFAULT_UV, matrices, vertexConsumers, entity.getWorld(), 1);
+            itemRenderer.renderItem(entity.getStack(4), ModelTransformationMode.FIXED, getLightLevel(entity.getWorld(), entity.getPos()), OverlayTexture.DEFAULT_UV, matrices, vertexConsumers, entity.getWorld(), 1);
             matrices.pop();
         }
 
@@ -86,7 +86,7 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
             matrices.translate(0.71f, 0.8f, 0.5f);
             matrices.scale(0.18f, 0.18f, 0.18f);
             matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(270));
-            itemRenderer.renderItem(entity.getStack(5), ModelTransformationMode.GUI, getLightLevel(entity.getWorld(), entity.getPos()), OverlayTexture.DEFAULT_UV, matrices, vertexConsumers, entity.getWorld(), 1);
+            itemRenderer.renderItem(entity.getStack(5), ModelTransformationMode.FIXED, getLightLevel(entity.getWorld(), entity.getPos()), OverlayTexture.DEFAULT_UV, matrices, vertexConsumers, entity.getWorld(), 1);
             matrices.pop();
         }
 
@@ -96,7 +96,7 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
             matrices.translate(0.275f, 0.8f, 0.72f);
             matrices.scale(0.18f, 0.18f, 0.18f);
             matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(270));
-            itemRenderer.renderItem(entity.getStack(6), ModelTransformationMode.GUI, getLightLevel(entity.getWorld(), entity.getPos()), OverlayTexture.DEFAULT_UV, matrices, vertexConsumers, entity.getWorld(), 1);
+            itemRenderer.renderItem(entity.getStack(6), ModelTransformationMode.FIXED, getLightLevel(entity.getWorld(), entity.getPos()), OverlayTexture.DEFAULT_UV, matrices, vertexConsumers, entity.getWorld(), 1);
             matrices.pop();
         }
 
@@ -106,7 +106,7 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
             matrices.translate(0.49f, 0.8f, 0.72f);
             matrices.scale(0.18f, 0.18f, 0.18f);
             matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(270));
-            itemRenderer.renderItem(entity.getStack(7), ModelTransformationMode.GUI, getLightLevel(entity.getWorld(), entity.getPos()), OverlayTexture.DEFAULT_UV, matrices, vertexConsumers, entity.getWorld(), 1);
+            itemRenderer.renderItem(entity.getStack(7), ModelTransformationMode.FIXED, getLightLevel(entity.getWorld(), entity.getPos()), OverlayTexture.DEFAULT_UV, matrices, vertexConsumers, entity.getWorld(), 1);
             matrices.pop();
         }
 
@@ -116,7 +116,7 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
             matrices.translate(0.71f, 0.8f, 0.72f);
             matrices.scale(0.18f, 0.18f, 0.18f);
             matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(270));
-            itemRenderer.renderItem(entity.getStack(8), ModelTransformationMode.GUI, getLightLevel(entity.getWorld(), entity.getPos()), OverlayTexture.DEFAULT_UV, matrices, vertexConsumers, entity.getWorld(), 1);
+            itemRenderer.renderItem(entity.getStack(8), ModelTransformationMode.FIXED, getLightLevel(entity.getWorld(), entity.getPos()), OverlayTexture.DEFAULT_UV, matrices, vertexConsumers, entity.getWorld(), 1);
             matrices.pop();
         }
 
