@@ -1,17 +1,22 @@
 package com.trustysidekick.dragonrealm.block.entity;
 
+import com.trustysidekick.dragonrealm.block.custom.SmithingAnvilBlock;
+import com.trustysidekick.dragonrealm.item.ModItems;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventories;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
+import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -40,9 +45,28 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements Implemented
     }
 
     public void tick(World world, BlockPos pos, BlockState state) {
-        if (world.isClient) { return; }
-/*
-        if (tick >= 20) {
+        //if (world.isClient) { return; }
+
+        int strike = world.getBlockState(pos).get(SmithingAnvilBlock.STRIKE);
+        //System.out.println("Server Strike: " + world.getBlockState(pos).get(SmithingAnvilBlock.STRIKE));
+        if (strike == 5) {
+            ImplementedInventory inventory = (SmithingAnvilBlockEntity) world.getBlockEntity(pos);
+
+            if (canCraftDragonChestplate()) {
+                //inventory.getStack(0).decrement(1);
+                //inventory.setStack(0, new ItemStack(Items.AIR));
+                inventory.clear();
+                inventory.setStack(4, new ItemStack(ModItems.DRAGON_CHESTPLATE));
+                //world.spawnEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(ModItems.DRAGON_CHESTPLATE)));
+                world.setBlockState(pos, world.getBlockState(pos).with(SmithingAnvilBlock.STRIKE, 0));
+                inventory.markDirty();
+            } else {
+                world.setBlockState(pos, world.getBlockState(pos).with(SmithingAnvilBlock.STRIKE, 0));
+            }
+        }
+
+
+        if (tick >= 30) {
 
 
             System.out.println("Slot 1: " + inventory.get(0));
@@ -59,7 +83,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements Implemented
         } else {
             tick++;
         }
-        */
+
 
     }
 
@@ -98,6 +122,14 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements Implemented
 
     public ItemStack getRenderStack(int slot) {
         return this.getStack(slot);
+    }
+
+    public boolean canCraftDragonChestplate (){
+        if (  this.getStack(0).getItem() == ModItems.DRAGON_INGOT && this.getStack(2).getItem() == ModItems.DRAGON_INGOT && this.getStack(3).getItem() == ModItems.DRAGON_INGOT && this.getStack(4).getItem() == ModItems.DRAGON_INGOT && this.getStack(5).getItem() == ModItems.DRAGON_INGOT && this.getStack(6).getItem() == ModItems.DRAGON_INGOT && this.getStack(7).getItem() == ModItems.DRAGON_INGOT && this.getStack(8).getItem() == ModItems.DRAGON_INGOT) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 

@@ -7,6 +7,7 @@ import com.trustysidekick.dragonrealm.block.custom.SmithingAnvilBlock;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
@@ -15,9 +16,9 @@ import net.minecraft.util.Identifier;
 
 public class ModBlocks {
 
-    public static final Block DRAGON_FORGE_BLOCK = registerBlock("dragon_forge_block", new DragonForgeBlock(FabricBlockSettings.create().nonOpaque()));
-    public static final Block QUENCH_TANK_BLOCK = registerBlock("quench_tank_block", new QuenchTankBlock(FabricBlockSettings.create().nonOpaque()));
-    public static final Block SMITHING_ANVIL_BLOCK = registerBlock("smithing_anvil_block", new SmithingAnvilBlock(FabricBlockSettings.create().nonOpaque()));
+    public static final Block DRAGON_FORGE_BLOCK = registerBlock("dragon_forge_block", new DragonForgeBlock(FabricBlockSettings.create().strength(2f).nonOpaque()));
+    public static final Block QUENCH_TANK_BLOCK = registerBlock("quench_tank_block", new QuenchTankBlock(FabricBlockSettings.create().strength(2f).nonOpaque()));
+    public static final Block SMITHING_ANVIL_BLOCK = registerBlock("smithing_anvil_block", new SmithingAnvilBlock(FabricBlockSettings.create().strength(2f).nonOpaque()));
 
 
     private static Block registerBlock(String name, Block block) {

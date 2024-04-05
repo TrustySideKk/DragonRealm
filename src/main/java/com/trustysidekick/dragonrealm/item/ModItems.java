@@ -16,7 +16,7 @@ public class ModItems {
     // ITEMS
     public static final Item DRAGON_HORN_TORCH = registerItem("dragon_horn_torch", new Item(new FabricItemSettings()));
     public static final Item DRAGON_BACKPACK = registerItem("dragon_backpack", new Item(new FabricItemSettings().maxCount(1)));
-    public static final Item DRAGON_INGOT = registerItem("dragon_ingot", new Item(new FabricItemSettings()));
+    public static final Item DRAGON_INGOT = registerItem("dragon_ingot", new DragonIngotItem(new FabricItemSettings()));
     public static final Item SEARING_IRON_INGOT = registerItem("searing_iron_ingot", new SearingIronIngot(new FabricItemSettings()));
     public static final Item DRAGON_HEAD = registerItem("dragon_head", new Item(new FabricItemSettings()));
     public static final Item DRAGON_TALON = registerItem("dragon_talon", new Item(new FabricItemSettings()));

@@ -11,7 +11,13 @@ import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.state.State;
+import net.minecraft.state.StateManager;
+import net.minecraft.state.property.BooleanProperty;
+import net.minecraft.state.property.IntProperty;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ItemScatterer;
@@ -25,9 +31,11 @@ import org.jetbrains.annotations.Nullable;
 
 public class SmithingAnvilBlock extends BlockWithEntity implements BlockEntityProvider {
     private static final VoxelShape SHAPE = SmithingAnvilBlock.createCuboidShape(0, 0, 0, 16, 12.5, 16);
+    public static final IntProperty STRIKE = IntProperty.of("strike", 0, 5);
 
     public SmithingAnvilBlock(Settings settings) {
         super(settings);
+        setDefaultState(getDefaultState().with(STRIKE, 0));
     }
 
     @Override
@@ -43,67 +51,59 @@ public class SmithingAnvilBlock extends BlockWithEntity implements BlockEntityPr
 
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-        if (world.isClient) {
-            return ActionResult.SUCCESS;
-        }
+        BlockEntity blockEntity = world.getBlockEntity(pos);
+        if (blockEntity instanceof SmithingAnvilBlockEntity) {
+            ImplementedInventory inventory = (SmithingAnvilBlockEntity) blockEntity;
 
-        if (!world.isClient) {
-            BlockEntity blockEntity = world.getBlockEntity(pos);
-            if (blockEntity instanceof SmithingAnvilBlockEntity) {
-                ImplementedInventory inventory = (SmithingAnvilBlockEntity) blockEntity;
+            if (!player.isSneaking() && hit.getSide() == Direction.UP && player.getStackInHand(hand).getItem() != Items.STICK) {
+                double hitX = hit.getPos().getX() - pos.getX();
+                double hitZ = hit.getPos().getZ() - pos.getZ();
 
+                int finalX = -1;
+                int finalZ = -1;
+                int slot;
 
+                if (hitX >= 0.21 && hitX <= 0.35) {
+                    finalX = 0;
+                } else if (hitX >= 0.42 && hitX <= 0.57) {
+                    finalX = 1;
+                } else if (hitX >= 0.65 && hitX <= 0.79) {
+                    finalX = 2;
+                }
 
-                if (!player.isSneaking() && hit.getSide() == Direction.UP) {
-                    double hitX = hit.getPos().getX() - pos.getX();
-                    double hitZ = hit.getPos().getZ() - pos.getZ();
+                if (hitZ >= 0.21 && hitZ <= 0.35) {
+                    finalZ = 0;
+                } else if (hitZ >= 0.42 && hitZ <= 0.57) {
+                    finalZ = 1;
+                } else if (hitZ >= 0.65 && hitZ <= 0.79) {
+                    finalZ = 2;
+                }
 
-                    int finalX = -1;
-                    int finalZ = -1;
-                    int slot;
+                if (finalX != -1 && finalZ != -1) {
+                    slot = finalX + finalZ * 3;
 
-                    if (hitX >= 0.21 && hitX <= 0.35) {
-                        finalX = 0;
-                    } else if (hitX >= 0.42 && hitX <= 0.57) {
-                        finalX = 1;
-                    } else if (hitX >= 0.65 && hitX <= 0.79) {
-                        finalX = 2;
-                    }
-
-                    if (hitZ >= 0.21 && hitZ <= 0.35) {
-                        finalZ = 0;
-                    } else if (hitZ >= 0.42 && hitZ <= 0.57) {
-                        finalZ = 1;
-                    } else if (hitZ >= 0.65 && hitZ <= 0.79) {
-                        finalZ = 2;
-                    }
-
-                    System.out.println("HitX: " + hitX);
-                    System.out.println("HitZ: " + hitZ);
-
-                    if (finalX != -1 && finalZ != -1) {
-                        slot = finalX + finalZ * 3;
-
-                        if (!player.getStackInHand(hand).isEmpty()) {
-                            if (inventory.getStack(slot).isEmpty()) {
-                                inventory.setStack(slot, new ItemStack(player.getStackInHand(hand).getItem(), 1));
-                                player.getInventory().getMainHandStack().decrement(1);
-                                inventory.markDirty();
-                            }
-                        } else {
-                            ItemStack extractedItem = inventory.getStack(slot);
-                            if (!player.getInventory().insertStack(extractedItem)) {
-                                player.getInventory().offerOrDrop(extractedItem);
-                            }
-                            inventory.getStack(slot).decrement(1);
+                    if (!player.getStackInHand(hand).isEmpty()) {
+                        if (inventory.getStack(slot).isEmpty()) {
+                            inventory.setStack(slot, new ItemStack(player.getStackInHand(hand).getItem(), 1));
+                            player.getInventory().getMainHandStack().decrement(1);
                             inventory.markDirty();
                         }
+                    } else {
+                        ItemStack extractedItem = inventory.getStack(slot);
+                        if (!player.getInventory().insertStack(extractedItem)) {
+                            player.getInventory().offerOrDrop(extractedItem);
+                        }
+                        inventory.getStack(slot).decrement(1);
+                        inventory.markDirty();
                     }
                 }
             }
+
         }
         return ActionResult.SUCCESS;
     }
+
+
 
 
     @Nullable
@@ -134,5 +134,13 @@ public class SmithingAnvilBlock extends BlockWithEntity implements BlockEntityPr
             super.onStateReplaced(state, world, pos, newState, moved);
         }
     }
+
+
+    @Override
+    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+        builder.add(STRIKE);
+    }
+
+
 
 }
