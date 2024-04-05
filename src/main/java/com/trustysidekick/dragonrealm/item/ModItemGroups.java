@@ -71,6 +71,8 @@ public class ModItemGroups {
                         entries.add(ModBlocks.DRAGON_FORGE_BLOCK);
                         entries.add(ModBlocks.QUENCH_TANK_BLOCK);
                         entries.add(ModBlocks.SMITHING_ANVIL_BLOCK);
+                        entries.add(ModBlocks.IMBUEMENT_ALTAR_BLOCK);
+                        entries.add(ModBlocks.IMBUEMENT_PEDESTAL_BLOCK);
 
 
                     }).build());

@@ -1,9 +1,7 @@
 package com.trustysidekick.dragonrealm.block;
 
 import com.trustysidekick.dragonrealm.DragonRealm;
-import com.trustysidekick.dragonrealm.block.custom.DragonForgeBlock;
-import com.trustysidekick.dragonrealm.block.custom.QuenchTankBlock;
-import com.trustysidekick.dragonrealm.block.custom.SmithingAnvilBlock;
+import com.trustysidekick.dragonrealm.block.custom.*;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
@@ -18,7 +16,8 @@ public class ModBlocks {
     public static final Block DRAGON_FORGE_BLOCK = registerBlock("dragon_forge_block", new DragonForgeBlock(FabricBlockSettings.create().nonOpaque()));
     public static final Block QUENCH_TANK_BLOCK = registerBlock("quench_tank_block", new QuenchTankBlock(FabricBlockSettings.create().nonOpaque()));
     public static final Block SMITHING_ANVIL_BLOCK = registerBlock("smithing_anvil_block", new SmithingAnvilBlock(FabricBlockSettings.create().nonOpaque()));
-
+    public static final Block IMBUEMENT_ALTAR_BLOCK = registerBlock("imbuement_altar_block", new ImbuementAltarBlock(FabricBlockSettings.create().nonOpaque()));
+    public static final Block IMBUEMENT_PEDESTAL_BLOCK = registerBlock("imbuement_pedestal_block", new ImbuementPedestalBlock(FabricBlockSettings.create().nonOpaque()));
 
     private static Block registerBlock(String name, Block block) {
         registerBlockItem(name, block);

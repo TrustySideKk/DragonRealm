@@ -49,7 +49,8 @@
 
   "item.dragonrealm.porcupine_spawn_egg": "Porcupine Spawn Egg",
 
-  "block.dragonrealm.dragon_altar_block": "Dragon Altar",
+  "block.dragonrealm.imbuement_altar_block": "Imbuement Altar",
+  "block.dragonrealm.imbuement_pedestal_block": "Imbuement Pedestal",
   "block.dragonrealm.quench_tank_block": "Quench Tank",
   "block.dragonrealm.dragon_forge_block": "Dragon Forge",
   "block.dragonrealm.smithing_anvil_block": "Smithing Anvil"

@@ -2,6 +2,8 @@ package com.trustysidekick.dragonrealm;
 
 import com.trustysidekick.dragonrealm.block.entity.ModBlockEntities;
 import com.trustysidekick.dragonrealm.block.entity.renderer.DragonForgeBlockEntityRenderer;
+import com.trustysidekick.dragonrealm.block.entity.renderer.ImbuementAltarBlockEntityRenderer;
+import com.trustysidekick.dragonrealm.block.entity.renderer.ImbuementPedestalBlockEntityRenderer;
 import com.trustysidekick.dragonrealm.block.entity.renderer.SmithingAnvilBlockEntityRenderer;
 import com.trustysidekick.dragonrealm.entity.ModEntities;
 import com.trustysidekick.dragonrealm.entity.client.*;
@@ -16,6 +18,8 @@ public class DragonRealmClient implements ClientModInitializer {
     public void onInitializeClient(){
         BlockEntityRendererFactories.register(ModBlockEntities.DRAGON_FORGE_BLOCK_ENTITY, DragonForgeBlockEntityRenderer::new);
         BlockEntityRendererFactories.register(ModBlockEntities.SMITHING_ANVIL_BLOCK_ENTITY, SmithingAnvilBlockEntityRenderer::new);
+        BlockEntityRendererFactories.register(ModBlockEntities.IMBUEMENT_ALTAR_BLOCK_ENTITY, ImbuementAltarBlockEntityRenderer::new);
+        BlockEntityRendererFactories.register(ModBlockEntities.IMBUEMENT_PEDESTAL_BLOCK_ENTITY, ImbuementPedestalBlockEntityRenderer::new);
 
         EntityRendererRegistry.register(ModEntities.PORCUPINE, PorcupineRenderer::new);
         EntityModelLayerRegistry.registerModelLayer(ModModelLayers.PORCUPINE, PorcupineModel::getTexturedModelData);
