@@ -15,6 +15,8 @@ import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.item.Items;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,7 +56,9 @@ public class DragonRealm implements ModInitializer {
 						if (strike < 5) {
 							strike++;
 							world.setBlockState(pos, world.getBlockState(pos).with(SmithingAnvilBlock.STRIKE, strike));
+
 						}
+						world.playSound(null, pos, SoundEvents.BLOCK_ANVIL_LAND, SoundCategory.BLOCKS, 10.0f, 1.0f);
 						return ActionResult.SUCCESS;
 					}
 

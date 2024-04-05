@@ -10,6 +10,7 @@ import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.Inventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
@@ -25,7 +26,7 @@ import org.jetbrains.annotations.Nullable;
 
 @Environment(EnvType.CLIENT)
 public class SmithingAnvilBlockEntity extends BlockEntity implements ImplementedInventory {
-    private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(9, ItemStack.EMPTY);
+    private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(10, ItemStack.EMPTY);
     private int tick = 0;
 
     public SmithingAnvilBlockEntity(BlockPos pos, BlockState state) {
@@ -53,11 +54,35 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements Implemented
             ImplementedInventory inventory = (SmithingAnvilBlockEntity) world.getBlockEntity(pos);
 
             if (canCraftDragonChestplate()) {
-                //inventory.getStack(0).decrement(1);
-                //inventory.setStack(0, new ItemStack(Items.AIR));
                 inventory.clear();
                 inventory.setStack(4, new ItemStack(ModItems.DRAGON_CHESTPLATE));
-                //world.spawnEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(ModItems.DRAGON_CHESTPLATE)));
+                world.setBlockState(pos, world.getBlockState(pos).with(SmithingAnvilBlock.STRIKE, 0));
+                inventory.markDirty();
+            } else {
+                world.setBlockState(pos, world.getBlockState(pos).with(SmithingAnvilBlock.STRIKE, 0));
+            }
+
+            if (canCraftDragonHelmet()) {
+                inventory.clear();
+                inventory.setStack(4, new ItemStack(ModItems.DRAGON_HELMET));
+                world.setBlockState(pos, world.getBlockState(pos).with(SmithingAnvilBlock.STRIKE, 0));
+                inventory.markDirty();
+            } else {
+                world.setBlockState(pos, world.getBlockState(pos).with(SmithingAnvilBlock.STRIKE, 0));
+            }
+
+            if (canCraftDragonLeggings()) {
+                inventory.clear();
+                inventory.setStack(4, new ItemStack(ModItems.DRAGON_LEGGINGS));
+                world.setBlockState(pos, world.getBlockState(pos).with(SmithingAnvilBlock.STRIKE, 0));
+                inventory.markDirty();
+            } else {
+                world.setBlockState(pos, world.getBlockState(pos).with(SmithingAnvilBlock.STRIKE, 0));
+            }
+
+            if (canCraftDragonBoots()) {
+                inventory.clear();
+                inventory.setStack(4, new ItemStack(ModItems.DRAGON_BOOTS));
                 world.setBlockState(pos, world.getBlockState(pos).with(SmithingAnvilBlock.STRIKE, 0));
                 inventory.markDirty();
             } else {
@@ -125,7 +150,39 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements Implemented
     }
 
     public boolean canCraftDragonChestplate (){
-        if (  this.getStack(0).getItem() == ModItems.DRAGON_INGOT && this.getStack(2).getItem() == ModItems.DRAGON_INGOT && this.getStack(3).getItem() == ModItems.DRAGON_INGOT && this.getStack(4).getItem() == ModItems.DRAGON_INGOT && this.getStack(5).getItem() == ModItems.DRAGON_INGOT && this.getStack(6).getItem() == ModItems.DRAGON_INGOT && this.getStack(7).getItem() == ModItems.DRAGON_INGOT && this.getStack(8).getItem() == ModItems.DRAGON_INGOT) {
+        if (     (this.getStack(0).getItem() == ModItems.DRAGON_INGOT && this.getStack(1).getItem() == Items.AIR && this.getStack(2).getItem() == ModItems.DRAGON_INGOT && this.getStack(3).getItem() == ModItems.DRAGON_INGOT && this.getStack(4).getItem() == ModItems.DRAGON_INGOT && this.getStack(5).getItem() == ModItems.DRAGON_INGOT && this.getStack(6).getItem() == ModItems.DRAGON_INGOT && this.getStack(7).getItem() == ModItems.DRAGON_INGOT && this.getStack(8).getItem() == ModItems.DRAGON_INGOT) || (this.getStack(0).getItem() == ModItems.DRAGON_INGOT && this.getStack(1).getItem() == ModItems.DRAGON_INGOT && this.getStack(2).getItem() == ModItems.DRAGON_INGOT && this.getStack(3).getItem() == ModItems.DRAGON_INGOT && this.getStack(4).getItem() == ModItems.DRAGON_INGOT && this.getStack(5).getItem() == Items.AIR && this.getStack(6).getItem() == ModItems.DRAGON_INGOT && this.getStack(7).getItem() == ModItems.DRAGON_INGOT && this.getStack(8).getItem() == ModItems.DRAGON_INGOT) || (this.getStack(0).getItem() == ModItems.DRAGON_INGOT && this.getStack(1).getItem() == ModItems.DRAGON_INGOT && this.getStack(2).getItem() == ModItems.DRAGON_INGOT && this.getStack(3).getItem() == ModItems.DRAGON_INGOT && this.getStack(4).getItem() == ModItems.DRAGON_INGOT && this.getStack(5).getItem() == ModItems.DRAGON_INGOT && this.getStack(6).getItem() == ModItems.DRAGON_INGOT && this.getStack(7).getItem() == Items.AIR && this.getStack(8).getItem() == ModItems.DRAGON_INGOT) || (this.getStack(0).getItem() == ModItems.DRAGON_INGOT && this.getStack(1).getItem() == ModItems.DRAGON_INGOT && this.getStack(2).getItem() == ModItems.DRAGON_INGOT && this.getStack(3).getItem() == Items.AIR && this.getStack(4).getItem() == ModItems.DRAGON_INGOT && this.getStack(5).getItem() == ModItems.DRAGON_INGOT && this.getStack(6).getItem() == ModItems.DRAGON_INGOT && this.getStack(7).getItem() == ModItems.DRAGON_INGOT && this.getStack(8).getItem() == ModItems.DRAGON_INGOT)    ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean canCraftDragonHelmet (){
+        if (     (this.getStack(0).getItem() == ModItems.DRAGON_INGOT && this.getStack(1).getItem() == ModItems.DRAGON_INGOT && this.getStack(2).getItem() == ModItems.DRAGON_INGOT && this.getStack(3).getItem() == ModItems.DRAGON_INGOT && this.getStack(4).getItem() == Items.AIR && this.getStack(5).getItem() == ModItems.DRAGON_INGOT && this.getStack(6).getItem() == Items.AIR && this.getStack(7).getItem() == Items.AIR && this.getStack(8).getItem() == Items.AIR)     ||     (this.getStack(0).getItem() == Items.AIR && this.getStack(1).getItem() == Items.AIR && this.getStack(2).getItem() == Items.AIR && this.getStack(3).getItem() == ModItems.DRAGON_INGOT && this.getStack(4).getItem() == ModItems.DRAGON_INGOT && this.getStack(5).getItem() == ModItems.DRAGON_INGOT && this.getStack(6).getItem() == ModItems.DRAGON_INGOT && this.getStack(7).getItem() == Items.AIR && this.getStack(8).getItem() == ModItems.DRAGON_INGOT)     ||     (this.getStack(0).getItem() == Items.AIR && this.getStack(1).getItem() == ModItems.DRAGON_INGOT && this.getStack(2).getItem() == ModItems.DRAGON_INGOT && this.getStack(3).getItem() == Items.AIR && this.getStack(4).getItem() == Items.AIR && this.getStack(5).getItem() == ModItems.DRAGON_INGOT && this.getStack(6).getItem() == Items.AIR && this.getStack(7).getItem() == ModItems.DRAGON_INGOT && this.getStack(8).getItem() == ModItems.DRAGON_INGOT)     ||     (this.getStack(0).getItem() == ModItems.DRAGON_INGOT && this.getStack(1).getItem() == ModItems.DRAGON_INGOT && this.getStack(2).getItem() == Items.AIR && this.getStack(3).getItem() == Items.AIR && this.getStack(4).getItem() == ModItems.DRAGON_INGOT && this.getStack(5).getItem() == Items.AIR && this.getStack(6).getItem() == ModItems.DRAGON_INGOT && this.getStack(7).getItem() == ModItems.DRAGON_INGOT && this.getStack(8).getItem() == Items.AIR)     ||     (this.getStack(0).getItem() == Items.AIR && this.getStack(1).getItem() == Items.AIR && this.getStack(2).getItem() == Items.AIR && this.getStack(3).getItem() == ModItems.DRAGON_INGOT && this.getStack(4).getItem() == Items.AIR && this.getStack(5).getItem() == ModItems.DRAGON_INGOT && this.getStack(6).getItem() == ModItems.DRAGON_INGOT && this.getStack(7).getItem() == ModItems.DRAGON_INGOT && this.getStack(8).getItem() == ModItems.DRAGON_INGOT)     ||     (this.getStack(0).getItem() == ModItems.DRAGON_INGOT && this.getStack(1).getItem() == Items.AIR && this.getStack(2).getItem() == ModItems.DRAGON_INGOT && this.getStack(3).getItem() == ModItems.DRAGON_INGOT && this.getStack(4).getItem() == ModItems.DRAGON_INGOT && this.getStack(5).getItem() == ModItems.DRAGON_INGOT && this.getStack(6).getItem() == Items.AIR && this.getStack(7).getItem() == Items.AIR && this.getStack(8).getItem() == Items.AIR)     ||     (this.getStack(0).getItem() == ModItems.DRAGON_INGOT && this.getStack(1).getItem() == ModItems.DRAGON_INGOT && this.getStack(2).getItem() == Items.AIR && this.getStack(3).getItem() == ModItems.DRAGON_INGOT && this.getStack(4).getItem() == Items.AIR && this.getStack(5).getItem() == Items.AIR && this.getStack(6).getItem() == ModItems.DRAGON_INGOT && this.getStack(7).getItem() == ModItems.DRAGON_INGOT && this.getStack(8).getItem() == Items.AIR)     ||     (this.getStack(0).getItem() == Items.AIR && this.getStack(1).getItem() == ModItems.DRAGON_INGOT && this.getStack(2).getItem() == ModItems.DRAGON_INGOT && this.getStack(3).getItem() == Items.AIR && this.getStack(4).getItem() == ModItems.DRAGON_INGOT && this.getStack(5).getItem() == Items.AIR && this.getStack(6).getItem() == Items.AIR && this.getStack(7).getItem() == ModItems.DRAGON_INGOT && this.getStack(8).getItem() == ModItems.DRAGON_INGOT)     ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean canCraftDragonLeggings (){
+        if (     (this.getStack(0).getItem() == ModItems.DRAGON_INGOT && this.getStack(1).getItem() == ModItems.DRAGON_INGOT && this.getStack(2).getItem() == ModItems.DRAGON_INGOT && this.getStack(3).getItem() == ModItems.DRAGON_INGOT && this.getStack(4).getItem() == Items.AIR && this.getStack(5).getItem() == ModItems.DRAGON_INGOT && this.getStack(6).getItem() == ModItems.DRAGON_INGOT && this.getStack(7).getItem() == Items.AIR && this.getStack(8).getItem() == ModItems.DRAGON_INGOT)     ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean canCraftDragonBoots (){
+        if (     (this.getStack(0).getItem() == ModItems.DRAGON_INGOT && this.getStack(1).getItem() == Items.AIR && this.getStack(2).getItem() == ModItems.DRAGON_INGOT && this.getStack(3).getItem() == ModItems.DRAGON_INGOT && this.getStack(4).getItem() == Items.AIR && this.getStack(5).getItem() == ModItems.DRAGON_INGOT && this.getStack(6).getItem() == Items.AIR && this.getStack(7).getItem() == Items.AIR && this.getStack(8).getItem() == Items.AIR) || (this.getStack(0).getItem() == Items.AIR && this.getStack(1).getItem() == Items.AIR && this.getStack(2).getItem() == Items.AIR && this.getStack(3).getItem() == ModItems.DRAGON_INGOT && this.getStack(4).getItem() == Items.AIR && this.getStack(5).getItem() == ModItems.DRAGON_INGOT && this.getStack(6).getItem() == ModItems.DRAGON_INGOT && this.getStack(7).getItem() == Items.AIR && this.getStack(8).getItem() == ModItems.DRAGON_INGOT)     ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean canCraftDragonBlock (){
+        if (     (this.getStack(0).getItem() == ModItems.DRAGON_INGOT && this.getStack(1).getItem() == ModItems.DRAGON_INGOT && this.getStack(2).getItem() == ModItems.DRAGON_INGOT && this.getStack(3).getItem() == ModItems.DRAGON_INGOT && this.getStack(4).getItem() == ModItems.DRAGON_INGOT && this.getStack(5).getItem() == ModItems.DRAGON_INGOT && this.getStack(6).getItem() == ModItems.DRAGON_INGOT && this.getStack(7).getItem() == ModItems.DRAGON_INGOT && this.getStack(8).getItem() == ModItems.DRAGON_INGOT)     ) {
             return true;
         } else {
             return false;
