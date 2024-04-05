@@ -4,7 +4,6 @@ import com.mojang.serialization.MapCodec;
 import com.trustysidekick.dragonrealm.block.entity.ImplementedInventory;
 import com.trustysidekick.dragonrealm.block.entity.ModBlockEntities;
 import com.trustysidekick.dragonrealm.block.entity.DragonForgeBlockEntity;
-import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
@@ -74,38 +73,30 @@ public class DragonForgeBlock extends BlockWithEntity implements BlockEntityProv
     }
 
 
-
-
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-        if (world.isClient) {
-            return ActionResult.SUCCESS;
-        }
+        BlockEntity blockEntity = world.getBlockEntity(pos);
+        if (blockEntity instanceof ImplementedInventory) {
+            ImplementedInventory inventoryBlockEntity = (ImplementedInventory) blockEntity;
 
-        if (!world.isClient) {
-            BlockEntity blockEntity = world.getBlockEntity(pos);
-            if (blockEntity instanceof ImplementedInventory inventoryBlockEntity) {
-
-                if (inventoryBlockEntity.isEmpty()) {
-                    if (!player.getStackInHand(hand).isEmpty()) {
-                        ItemStack heldItem = player.getStackInHand(hand);
-                        inventoryBlockEntity.setStack(0, new ItemStack(heldItem.getItem(), 1));
-                        player.getInventory().getMainHandStack().decrement(1);
-                        inventoryBlockEntity.markDirty();
-                        blockEntity.markDirty();
+            if (inventoryBlockEntity.isEmpty()) {
+                if (!player.getStackInHand(hand).isEmpty()) {
+                    ItemStack heldItem = player.getStackInHand(hand);
+                    inventoryBlockEntity.setStack(0, new ItemStack(heldItem.getItem(), 1));
+                    player.getInventory().getMainHandStack().decrement(1);
+                    inventoryBlockEntity.markDirty();
+                    blockEntity.markDirty();
+                }
+            } else {
+                if (player.getStackInHand(hand).isEmpty()) {
+                    ItemStack extractedItem = inventoryBlockEntity.getStack(0);
+                    ((DragonForgeBlockEntity) blockEntity).progress = 0;
+                    if (!player.getInventory().insertStack(extractedItem)) {
+                        player.getInventory().offerOrDrop(extractedItem);
                     }
-                } else {
-                    if (player.getStackInHand(hand).isEmpty()) {
-                        ItemStack extractedItem = inventoryBlockEntity.getStack(0);
-                        ((DragonForgeBlockEntity) blockEntity).progress = 0;
-                        if (!player.getInventory().insertStack(extractedItem)) {
-                            //player.dropItem(extractedItem, false);
-                            player.getInventory().offerOrDrop(extractedItem);
-                        }
-                        inventoryBlockEntity.getStack(0).decrement(1);
-                        inventoryBlockEntity.markDirty();
-                        blockEntity.markDirty();
-                    }
+                    inventoryBlockEntity.getStack(0).decrement(1);
+                    inventoryBlockEntity.markDirty();
+                    blockEntity.markDirty();
                 }
             }
         }

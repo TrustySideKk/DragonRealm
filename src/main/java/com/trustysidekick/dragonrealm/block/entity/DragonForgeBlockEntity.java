@@ -58,7 +58,6 @@ public class DragonForgeBlockEntity extends BlockEntity implements ImplementedIn
     public void tick(World world, BlockPos pos, BlockState state) {
         if (world.isClient) { return; }
 
-        //if (!world.isClient) {
         if (!inventory.get(0).isEmpty() && inventory.get(0).getItem() != ModItems.SEARING_IRON_INGOT) {
 
             Box box = new Box(pos.getX() + 5, pos.getY() + 5, pos.getZ() + 5, pos.getX() - 5, pos.getY() - 5, pos.getZ() - 5);
@@ -67,8 +66,6 @@ public class DragonForgeBlockEntity extends BlockEntity implements ImplementedIn
             for (Entity entity : nearbyEntities) {
                 if (entity instanceof DragonWhelpEntity && ((DragonWhelpEntity) entity).targetForge == this.getPos()) {
                     foundDragon = true;
-                    //this.markDirty();
-                    //break;
                 }
             }
 
@@ -78,8 +75,6 @@ public class DragonForgeBlockEntity extends BlockEntity implements ImplementedIn
                         if (((DragonWhelpEntity) entity).targetForge == null) {
                             foundDragon = true;
                             ((DragonWhelpEntity) entity).targetForge = this.getPos();
-                            //this.markDirty();
-                            //break;
                         }
                     }
                 }
@@ -115,17 +110,6 @@ public class DragonForgeBlockEntity extends BlockEntity implements ImplementedIn
                 }
             }
         }
-        //}
-
-        if (test >= 30) {
-
-            System.out.println("Inventory: " + this.inventory);
-
-            test = 0;
-        } else {
-            test++;
-        }
-
     }
 
 
@@ -149,8 +133,7 @@ public class DragonForgeBlockEntity extends BlockEntity implements ImplementedIn
 
     @Override
     public void markDirty() {
-        //world.updateListeners(pos, getCachedState(), getCachedState(), 3);
-        world.updateListeners(pos, getCachedState(), getCachedState(), Block.NOTIFY_LISTENERS);
+        world.updateListeners(pos, getCachedState(), getCachedState(), 3);
         super.markDirty();
     }
 
