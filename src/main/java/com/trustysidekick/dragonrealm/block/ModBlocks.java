@@ -13,11 +13,11 @@ import net.minecraft.util.Identifier;
 
 public class ModBlocks {
 
-    public static final Block DRAGON_FORGE_BLOCK = registerBlock("dragon_forge_block", new DragonForgeBlock(FabricBlockSettings.create().nonOpaque()));
-    public static final Block QUENCH_TANK_BLOCK = registerBlock("quench_tank_block", new QuenchTankBlock(FabricBlockSettings.create().nonOpaque()));
-    public static final Block SMITHING_ANVIL_BLOCK = registerBlock("smithing_anvil_block", new SmithingAnvilBlock(FabricBlockSettings.create().nonOpaque()));
-    public static final Block IMBUEMENT_ALTAR_BLOCK = registerBlock("imbuement_altar_block", new ImbuementAltarBlock(FabricBlockSettings.create().nonOpaque()));
-    public static final Block IMBUEMENT_PEDESTAL_BLOCK = registerBlock("imbuement_pedestal_block", new ImbuementPedestalBlock(FabricBlockSettings.create().nonOpaque()));
+    public static final Block DRAGON_FORGE_BLOCK = registerBlock("dragon_forge_block", new DragonForgeBlock(FabricBlockSettings.create().strength(2f).nonOpaque()));
+    public static final Block QUENCH_TANK_BLOCK = registerBlock("quench_tank_block", new QuenchTankBlock(FabricBlockSettings.create().strength(2f).nonOpaque()));
+    public static final Block SMITHING_ANVIL_BLOCK = registerBlock("smithing_anvil_block", new SmithingAnvilBlock(FabricBlockSettings.create().strength(2f).nonOpaque()));
+    public static final Block IMBUEMENT_ALTAR_BLOCK = registerBlock("imbuement_altar_block", new ImbuementAltarBlock(FabricBlockSettings.create().strength(2f).nonOpaque()));
+    public static final Block IMBUEMENT_PEDESTAL_BLOCK = registerBlock("imbuement_pedestal_block", new ImbuementPedestalBlock(FabricBlockSettings.create().strength(2f).nonOpaque()));
 
     private static Block registerBlock(String name, Block block) {
         registerBlockItem(name, block);
