@@ -10,7 +10,7 @@ import net.minecraft.util.math.MathHelper;
 
 public class DragonWhelpModel<T extends DragonWhelpEntity> extends SinglePartEntityModel<T> {
 	private final ModelPart dragonwhelp;
-	private final ModelPart head;
+	public static ModelPart head;
 
 	public DragonWhelpModel(ModelPart root) {
 		this.dragonwhelp = root.getChild("root");

@@ -2,10 +2,13 @@ package com.trustysidekick.dragonrealm.entity.ai;
 
 import com.trustysidekick.dragonrealm.block.custom.DragonForgeBlock;
 import com.trustysidekick.dragonrealm.block.entity.DragonForgeBlockEntity;
+import com.trustysidekick.dragonrealm.entity.client.DragonWhelpModel;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
+
 import java.util.EnumSet;
 
 

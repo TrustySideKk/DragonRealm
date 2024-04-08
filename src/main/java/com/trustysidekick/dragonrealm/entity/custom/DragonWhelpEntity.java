@@ -189,10 +189,15 @@ public class DragonWhelpEntity extends AnimalEntity {
         //BlockPos targetBlockPos = targetBlock;
         //BlockPos topSurfaceBlockPos = this.getWorld().getTopPosition(Heightmap.Type.MOTION_BLOCKING, targetBlock);
 
+        //TODO ***potential fire-breathing head position, need to test this***
+        Vec3d mouthPos = new Vec3d(DragonWhelpModel.head.getChild("jaw_lower").getTransform().pivotX,
+                DragonWhelpModel.head.getChild("jaw_lower").getTransform().pivotY,
+                DragonWhelpModel.head.getChild("jaw_lower").getTransform().pivotZ);
 
         // Calculate the direction vector from the entity's head position to the target block's top surface
         //Vec3d direction = new Vec3d(topSurfaceBlockPos.getX() - this.getX(), topSurfaceBlockPos.getY() - this.getEyeY(), topSurfaceBlockPos.getZ() - this.getZ()).normalize();
         Vec3d direction = new Vec3d(targetBlock.getX() - this.getPos().getX(), targetBlock.getY() - this.getEyePos().getY(), targetBlock.getZ() - this.getPos().getZ()).normalize();
+    //    Vec3d direction = new Vec3d(targetBlock.getX() - mouthPos.x, targetBlock.getY() - mouthPos.y, targetBlock.getZ() - mouthPos.z).normalize();
 
         // Calculate the yaw and pitch angles based on the direction vector
         double yaw = Math.toDegrees(Math.atan2(-direction.x, direction.z)); // Yaw is based on X and Z components
@@ -227,8 +232,9 @@ public class DragonWhelpEntity extends AnimalEntity {
             double offsetZ = random.nextGaussian() * 0.007;
             //this.getWorld().addParticle(ParticleTypes.FLAME, headPos.x, headPos.y, headPos.z, velocity.x + offsetX, velocity.y + offsetY, velocity.z + offsetZ);
             SmallFireballEntity fireball = new SmallFireballEntity(this.getWorld(), headPos.x, headPos.y - 58.5, headPos.z, velocity.x + offsetX, velocity.y + offsetY, velocity.z + offsetZ);
+    //        SmallFireballEntity fireball = new SmallFireballEntity(this.getWorld(), mouthPos.getX(), mouthPos.getY(), mouthPos.getZ(), velocity.x + offsetX, velocity.y + offsetY, velocity.z + offsetZ);
             this.getWorld().spawnEntity(fireball);
-
+            //System.out.println("Fireball spawned: " + mouthPos.getX() + ", " + mouthPos.getY() + ", " + mouthPos.getZ());
         }
 
 
