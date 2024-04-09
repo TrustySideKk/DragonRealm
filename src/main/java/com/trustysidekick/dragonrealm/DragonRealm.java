@@ -12,12 +12,19 @@ import com.trustysidekick.dragonrealm.item.ModItemGroups;
 import com.trustysidekick.dragonrealm.item.ModItems;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
+import net.fabricmc.fabric.api.event.player.UseEntityCallback;
+import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
+import net.minecraft.util.TypedActionResult;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.math.Direction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,12 +58,11 @@ public class DragonRealm implements ModInitializer {
 
 			if (!world.isClient) {
 				if (player != null && entity instanceof SmithingAnvilBlockEntity) {
-					if (player.getStackInHand(hand).getItem() == Items.STICK) {
+					if (player.getStackInHand(hand).getItem() == Items.STICK && direction == Direction.UP) {
 						int strike = world.getBlockState(pos).get(SmithingAnvilBlock.STRIKE);
 						if (strike < 5) {
 							strike++;
 							world.setBlockState(pos, world.getBlockState(pos).with(SmithingAnvilBlock.STRIKE, strike));
-
 						}
 						world.playSound(null, pos, SoundEvents.BLOCK_ANVIL_LAND, SoundCategory.BLOCKS, 10.0f, 1.0f);
 						return ActionResult.SUCCESS;
@@ -67,6 +73,23 @@ public class DragonRealm implements ModInitializer {
 			return ActionResult.PASS; // Return ActionResult.PASS if you want to continue with default block attack behavior
 		});
 
+		// Right-click dragon using a bottle
+		UseEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
+			if (entity instanceof DragonWhelpEntity) {
+				if (player != null && player.getStackInHand(hand).getItem() == Items.GLASS_BOTTLE) {
+					if (((DragonWhelpEntity) entity).getHealth() < ((DragonWhelpEntity) entity).getMaxHealth()) {
+						int bloodDraw = ((DragonWhelpEntity)entity).getBloodDraw();
+						if (bloodDraw > 0) {
+							((DragonWhelpEntity) entity).setBloodDraw(bloodDraw - 1);
+							player.getInventory().getMainHandStack().decrement(1);
+							player.getInventory().offerOrDrop(new ItemStack(ModItems.DRAGON_BLOOD));
+						}
+					}
+					return ActionResult.SUCCESS; // Return SUCCESS if the interaction was handled
+				}
+			}
+			return ActionResult.PASS; // Return PASS to allow normal interaction
+		});
 
 
 	}

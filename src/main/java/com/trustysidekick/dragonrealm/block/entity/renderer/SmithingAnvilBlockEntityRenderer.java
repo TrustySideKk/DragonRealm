@@ -35,32 +35,45 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
             matrices.push();
             if (i == 0) {
                 matrices.translate(0.275f, 0.8f, 0.28f);
+                matrices.scale(0.18f, 0.18f, 0.18f);
             }
             if (i == 1) {
                 matrices.translate(0.49f, 0.8f, 0.28f);
+                matrices.scale(0.18f, 0.18f, 0.18f);
             }
             if (i == 2) {
                 matrices.translate(0.71f, 0.8f, 0.28f);
+                matrices.scale(0.18f, 0.18f, 0.18f);
             }
             if (i == 3) {
                 matrices.translate(0.275f, 0.8f, 0.5f);
+                matrices.scale(0.18f, 0.18f, 0.18f);
             }
             if (i == 4) {
                 matrices.translate(0.49f, 0.8f, 0.5f);
+                matrices.scale(0.18f, 0.18f, 0.18f);
             }
             if (i == 5) {
                 matrices.translate(0.71f, 0.8f, 0.5f);
+                matrices.scale(0.18f, 0.18f, 0.18f);
             }
             if (i == 6) {
                 matrices.translate(0.275f, 0.8f, 0.72f);
+                matrices.scale(0.18f, 0.18f, 0.18f);
             }
             if (i == 7) {
                 matrices.translate(0.49f, 0.8f, 0.72f);
+                matrices.scale(0.18f, 0.18f, 0.18f);
             }
             if (i == 8) {
                 matrices.translate(0.71f, 0.8f, 0.72f);
+                matrices.scale(0.18f, 0.18f, 0.18f);
             }
-            matrices.scale(0.18f, 0.18f, 0.18f);
+            if (i == 9) {
+                matrices.translate(0.5f, 0.8f, 0.5f);
+                matrices.scale(0.5f, 0.5f, 0.5f);
+            }
+
             matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(90));
             itemRenderer.renderItem(stack, ModelTransformationMode.FIXED, getLightLevel(entity.getWorld(), entity.getPos()), OverlayTexture.DEFAULT_UV, matrices, vertexConsumers, entity.getWorld(), 1);
             matrices.pop();

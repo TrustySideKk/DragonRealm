@@ -5,6 +5,7 @@ import com.trustysidekick.dragonrealm.entity.custom.DragonWhelpEntity;
 import com.trustysidekick.dragonrealm.item.ModItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.inventory.Inventories;
@@ -27,10 +28,9 @@ import java.util.List;
 
 
 public class DragonForgeBlockEntity extends BlockEntity implements ImplementedInventory {
-    private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(1,ItemStack.EMPTY);
-    public int progress = 0;
-    private int test = 0;
+    public final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(2,ItemStack.EMPTY);
     private boolean foundDragon;
+    private Entity targetDragon;
 
 
     public DragonForgeBlockEntity(BlockPos pos, BlockState state) {
@@ -43,7 +43,6 @@ public class DragonForgeBlockEntity extends BlockEntity implements ImplementedIn
     protected void writeNbt(NbtCompound nbt) {
         super.writeNbt(nbt);
         Inventories.writeNbt(nbt, inventory);
-        nbt.putInt("dragon_forge_block.progress", this.progress);
     }
 
 
@@ -51,64 +50,24 @@ public class DragonForgeBlockEntity extends BlockEntity implements ImplementedIn
     public void readNbt(NbtCompound nbt) {
         super.readNbt(nbt);
         Inventories.readNbt(nbt, inventory);
-        this.progress = nbt.getInt("dragon_forge_block.progress");
     }
 
 
     public void tick(World world, BlockPos pos, BlockState state) {
         if (world.isClient) { return; }
+        foundDragon = false;
 
-        if (!inventory.get(0).isEmpty() && inventory.get(0).getItem() != ModItems.SEARING_IRON_INGOT) {
+        Box box = new Box(pos.getX() + 5, pos.getY() + 5, pos.getZ() + 5, pos.getX() - 5, pos.getY() - 5, pos.getZ() - 5);
+        List<Entity> nearbyEntities = world.getOtherEntities(null, box);
 
-            Box box = new Box(pos.getX() + 5, pos.getY() + 5, pos.getZ() + 5, pos.getX() - 5, pos.getY() - 5, pos.getZ() - 5);
-            List<Entity> nearbyEntities = world.getOtherEntities(null, box);
-
-            for (Entity entity : nearbyEntities) {
-                if (entity instanceof DragonWhelpEntity && ((DragonWhelpEntity) entity).targetForge == this.getPos()) {
-                    foundDragon = true;
-                }
+        for (Entity entity : nearbyEntities) {
+            if (entity instanceof DragonWhelpEntity) {
+                foundDragon = true;
             }
+        }
 
-            if (!foundDragon) {
-                for (Entity entity : nearbyEntities) {
-                    if (entity instanceof DragonWhelpEntity) {
-                        if (((DragonWhelpEntity) entity).targetForge == null) {
-                            foundDragon = true;
-                            ((DragonWhelpEntity) entity).targetForge = this.getPos();
-                        }
-                    }
-                }
-            } else {
-                if (this.progress >= 160) {
-                    if (inventory.get(0).getItem() == Items.IRON_INGOT) {
-                        this.inventory.set(0, new ItemStack(ModItems.SEARING_IRON_INGOT, 1));
-                        this.markDirty();
-                    } else {
-                        this.removeStack(0, 1);
-                        this.markDirty();
-                    }
-
-                    this.getWorld().setBlockState(this.getPos(), state.with(DragonForgeBlock.BURNING, false));
-                    this.progress = 0;
-                    this.markDirty();
-                } else {
-                    this.getWorld().setBlockState(this.getPos(), state.with(DragonForgeBlock.BURNING, true));
-                    this.progress++;
-                    this.markDirty();
-                }
-            }
-        } else {
-            Box box = new Box(pos.getX() + 5, pos.getY() + 5, pos.getZ() + 5, pos.getX() - 5, pos.getY() - 5, pos.getZ() - 5);
-            List<Entity> nearbyEntities = world.getOtherEntities(null, box);
-
-            for (Entity entity : nearbyEntities) {
-                if (entity instanceof DragonWhelpEntity) {
-                    foundDragon = false;
-                    ((DragonWhelpEntity) entity).targetForge = null;
-                    this.getWorld().setBlockState(this.getPos(), state.with(DragonForgeBlock.BURNING, false));
-                    this.markDirty();
-                }
-            }
+        if (!foundDragon) {
+            targetDragon = null;
         }
     }
 
@@ -121,13 +80,13 @@ public class DragonForgeBlockEntity extends BlockEntity implements ImplementedIn
 
     @Override
     public boolean canInsert(int slot, ItemStack stack, @Nullable Direction side) {
-        return this.inventory.get(0).isEmpty();
+        return this.inventory.get(slot).isEmpty();
     }
 
 
     @Override
     public boolean canExtract(int slot, ItemStack stack, Direction side) {
-        return !this.inventory.get(0).isEmpty();
+        return !this.inventory.get(slot).isEmpty();
     }
 
 
@@ -153,9 +112,25 @@ public class DragonForgeBlockEntity extends BlockEntity implements ImplementedIn
 
 
 
-    public ItemStack getRenderStack() {
-        return this.getStack(0);
+    public ItemStack getRenderStack(int slot) {
+        return this.getStack(slot);
     }
 
+
+    public boolean isReady() {
+        if (this.inventory.get(0).getItem() != Items.AIR && this.inventory.get(0).getItem() != ModItems.SEARING_IRON_INGOT && (this.inventory.get(1).getItem() == Items.COAL && this.inventory.get(1).getCount() == 5)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public void setTargetDragon(Entity entity) {
+        targetDragon = entity;
+    }
+
+    public Entity getTargetDragon() {
+        return targetDragon;
+    }
 
 }

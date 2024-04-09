@@ -11,6 +11,7 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.util.ActionResult;
@@ -27,6 +28,7 @@ import org.jetbrains.annotations.Nullable;
 public class DragonForgeBlock extends BlockWithEntity implements BlockEntityProvider {
     private static final VoxelShape SHAPE = DragonForgeBlock.createCuboidShape(0, 0, 0, 16, 12, 16);
     public static final BooleanProperty BURNING = BooleanProperty.of("burning");
+
 
 
     public DragonForgeBlock(Settings settings) {
@@ -79,23 +81,41 @@ public class DragonForgeBlock extends BlockWithEntity implements BlockEntityProv
         if (blockEntity instanceof ImplementedInventory) {
             ImplementedInventory inventoryBlockEntity = (ImplementedInventory) blockEntity;
 
-            if (inventoryBlockEntity.isEmpty()) {
-                if (!player.getStackInHand(hand).isEmpty()) {
-                    ItemStack heldItem = player.getStackInHand(hand);
-                    inventoryBlockEntity.setStack(0, new ItemStack(heldItem.getItem(), 1));
-                    player.getInventory().getMainHandStack().decrement(1);
-                    inventoryBlockEntity.markDirty();
-                    blockEntity.markDirty();
+            if (!player.getStackInHand(hand).isEmpty()) {
+                ItemStack heldItem = player.getStackInHand(hand);
+
+                if (heldItem.getItem() == Items.COAL) {
+                    if (inventoryBlockEntity.getStack(1).getCount() <= 4) {
+                        int count = inventoryBlockEntity.getStack(1).getCount();
+                        inventoryBlockEntity.setStack(1, new ItemStack(heldItem.getItem(), count + 1));
+                        player.getInventory().getMainHandStack().decrement(1);
+                        blockEntity.markDirty();
+                    }
+                }
+
+                if (heldItem.getItem() != Items.COAL) {
+                    if (inventoryBlockEntity.getStack(0).isEmpty()) {
+                        inventoryBlockEntity.setStack(0, new ItemStack(heldItem.getItem(), 1));
+                        player.getInventory().getMainHandStack().decrement(1);
+                        blockEntity.markDirty();
+                    }
                 }
             } else {
-                if (player.getStackInHand(hand).isEmpty()) {
-                    ItemStack extractedItem = inventoryBlockEntity.getStack(0);
-                    ((DragonForgeBlockEntity) blockEntity).progress = 0;
-                    if (!player.getInventory().insertStack(extractedItem)) {
-                        player.getInventory().offerOrDrop(extractedItem);
+                ItemStack slot0 = inventoryBlockEntity.getStack(0);
+                ItemStack slot1 = inventoryBlockEntity.getStack(1);
+
+                if (!slot0.isEmpty()) {
+                    if (!player.getInventory().insertStack(slot0)) {
+                        player.getInventory().offerOrDrop(slot0);
                     }
                     inventoryBlockEntity.getStack(0).decrement(1);
-                    inventoryBlockEntity.markDirty();
+                    blockEntity.markDirty();
+                }
+                if (!slot1.isEmpty()) {
+                    if (!player.getInventory().insertStack(slot1)) {
+                        player.getInventory().offerOrDrop(slot1);
+                    }
+                    inventoryBlockEntity.getStack(1).decrement(1);
                     blockEntity.markDirty();
                 }
             }

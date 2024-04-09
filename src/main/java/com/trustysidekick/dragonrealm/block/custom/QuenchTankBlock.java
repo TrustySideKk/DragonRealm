@@ -40,88 +40,47 @@ public class QuenchTankBlock extends BlockWithEntity implements BlockEntityProvi
 
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-        if (!world.isClient) {
-            BlockEntity blockEntity = world.getBlockEntity(pos);
-            BlockState blockState = world.getBlockState(pos);
+        BlockEntity blockEntity = world.getBlockEntity(pos);
+        ImplementedInventory inventoryBlockEntity = (ImplementedInventory) blockEntity;
+        ItemStack heldItem = player.getStackInHand(hand);
+        BlockState blockState = world.getBlockState(pos);
 
-            if (player.getStackInHand(hand).isEmpty()) {
-                switch (blockState.get(TANK)) {
-                    case 0:
-                        break;
-                    case 1:
-                        break;
-                    case 2:
-                        break;
-                    case 3:
-                        break;
+        if (player.getStackInHand(hand).isEmpty()) {
+            if (!(inventoryBlockEntity.getStack(0).isEmpty())) {
+                if (!((QuenchTankBlockEntity)blockEntity).isQuenching) {
+                    player.getInventory().offerOrDrop(inventoryBlockEntity.getStack(0));
+                    inventoryBlockEntity.getStack(0).decrement(1);
+                    blockEntity.markDirty();
+                }
+            }
+        } else {
+            if (heldItem.getItem() == ModItems.SEARING_IRON_INGOT) {
+                if (inventoryBlockEntity.getStack(0).isEmpty()) {
+                    inventoryBlockEntity.setStack(0, new ItemStack(heldItem.getItem(), 1));
+                    heldItem.decrement(1);
+                    blockEntity.markDirty();
                 }
             }
 
             if (player.getStackInHand(hand).getItem() == ModItems.DRAGON_BLOOD) {
-                switch (blockState.get(TANK)) {
-                    case 0:
-                        world.setBlockState(pos, blockState.with(TANK, 1));
-                        if (!player.getInventory().insertStack(new ItemStack(Items.GLASS_BOTTLE, 1))) {
-                            player.dropItem(new ItemStack(Items.GLASS_BOTTLE, 1), false);
-                        }
-                        player.getStackInHand(hand).decrement(1);
-                        break;
-                    case 1:
-                        world.setBlockState(pos, blockState.with(TANK, 2));
-                        if (!player.getInventory().insertStack(new ItemStack(Items.GLASS_BOTTLE, 1))) {
-                            player.dropItem(new ItemStack(Items.GLASS_BOTTLE, 1), false);
-                        }
-                        player.getStackInHand(hand).decrement(1);
-                        break;
-                    case 2:
-                        world.setBlockState(pos, blockState.with(TANK, 3));
-                        if (!player.getInventory().insertStack(new ItemStack(Items.GLASS_BOTTLE, 1))) {
-                            player.dropItem(new ItemStack(Items.GLASS_BOTTLE, 1), false);
-                        }
-                        player.getStackInHand(hand).decrement(1);
-                        break;
-                    case 3:
-                        break;
+                if (inventoryBlockEntity.getStack(1).getCount() <= 2) {
+                    int count = inventoryBlockEntity.getStack(1).getCount();
+                    inventoryBlockEntity.setStack(1, new ItemStack(heldItem.getItem(), count + 1));
+                    world.setBlockState(pos, blockState.with(TANK, count + 1));
+                    player.getInventory().getMainHandStack().decrement(1);
+                    player.getInventory().offerOrDrop(new ItemStack(Items.GLASS_BOTTLE, 1));
+                    blockEntity.markDirty();
                 }
-
             }
 
-            if (player.getStackInHand(hand).getItem() == Items.GLASS_BOTTLE) {
-                switch (blockState.get(TANK)) {
-                    case 0:
-                        break;
-                    case 1:
-                        world.setBlockState(pos, blockState.with(TANK, 0));
-                        if (!player.getInventory().insertStack(new ItemStack(ModItems.DRAGON_BLOOD, 1))) {
-                            player.dropItem(new ItemStack(ModItems.DRAGON_BLOOD, 1), false);
-                        }
-                        player.getStackInHand(hand).decrement(1);
-                        break;
-                    case 2:
-                        world.setBlockState(pos, blockState.with(TANK, 1));
-                        if (!player.getInventory().insertStack(new ItemStack(ModItems.DRAGON_BLOOD, 1))) {
-                            player.dropItem(new ItemStack(ModItems.DRAGON_BLOOD, 1), false);
-                        }
-                        player.getStackInHand(hand).decrement(1);
-                        break;
-                    case 3:
-                        world.setBlockState(pos, blockState.with(TANK, 2));
-                        if (!player.getInventory().insertStack(new ItemStack(ModItems.DRAGON_BLOOD, 1))) {
-                            player.dropItem(new ItemStack(ModItems.DRAGON_BLOOD, 1), false);
-                        }
-                        player.getStackInHand(hand).decrement(1);
-                        break;
-                }
-
-            }
-
-            if (player.getStackInHand(hand).getItem() == ModItems.SEARING_IRON_INGOT) {
-                if (blockState.get(TANK) == 3) {
-                    world.setBlockState(pos, blockState.with(TANK, 0));
-                    if (!player.getInventory().insertStack(new ItemStack(ModItems.DRAGON_INGOT, 1))) {
-                        player.dropItem(new ItemStack(ModItems.DRAGON_INGOT, 1), false);
-                    }
-                    player.getStackInHand(hand).decrement(1);
+            if (heldItem.getItem() == Items.GLASS_BOTTLE) {
+                if (!inventoryBlockEntity.getStack(1).isEmpty()) {
+                    int count = inventoryBlockEntity.getStack(1).getCount();
+                    inventoryBlockEntity.getStack(1).decrement(1);
+                    player.getInventory().offerOrDrop(new ItemStack(ModItems.DRAGON_BLOOD, 1));
+                    world.setBlockState(pos, blockState.with(TANK, count - 1));
+                    heldItem.decrement(1);
+                    blockEntity.markDirty();
                 }
             }
         }

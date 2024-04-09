@@ -16,7 +16,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-@Environment(EnvType.CLIENT)
+//@Environment(EnvType.CLIENT)
 public class ImbuementAltarBlockEntity extends BlockEntity implements ImplementedInventory {
     private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(9, ItemStack.EMPTY);
     private int tick = 0;

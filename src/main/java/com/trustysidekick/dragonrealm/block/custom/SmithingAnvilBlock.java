@@ -56,39 +56,59 @@ public class SmithingAnvilBlock extends BlockWithEntity implements BlockEntityPr
             ImplementedInventory inventory = (SmithingAnvilBlockEntity) blockEntity;
 
             if (!player.isSneaking() && hit.getSide() == Direction.UP && player.getStackInHand(hand).getItem() != Items.STICK) {
-                double hitX = hit.getPos().getX() - pos.getX();
-                double hitZ = hit.getPos().getZ() - pos.getZ();
+                if (inventory.getStack(9).isEmpty()) {
+                    double hitX = hit.getPos().getX() - pos.getX();
+                    double hitZ = hit.getPos().getZ() - pos.getZ();
 
-                int finalX = -1;
-                int finalZ = -1;
-                int slot;
+                    int finalX = -1;
+                    int finalZ = -1;
+                    int slot;
 
-                if (hitX >= 0.21 && hitX <= 0.35) {
-                    finalX = 0;
-                } else if (hitX >= 0.42 && hitX <= 0.57) {
-                    finalX = 1;
-                } else if (hitX >= 0.65 && hitX <= 0.79) {
-                    finalX = 2;
-                }
+                    if (hitX >= 0.21 && hitX <= 0.35) {
+                        finalX = 0;
+                    } else if (hitX >= 0.42 && hitX <= 0.57) {
+                        finalX = 1;
+                    } else if (hitX >= 0.65 && hitX <= 0.79) {
+                        finalX = 2;
+                    }
 
-                if (hitZ >= 0.21 && hitZ <= 0.35) {
-                    finalZ = 0;
-                } else if (hitZ >= 0.42 && hitZ <= 0.57) {
-                    finalZ = 1;
-                } else if (hitZ >= 0.65 && hitZ <= 0.79) {
-                    finalZ = 2;
-                }
+                    if (hitZ >= 0.21 && hitZ <= 0.35) {
+                        finalZ = 0;
+                    } else if (hitZ >= 0.42 && hitZ <= 0.57) {
+                        finalZ = 1;
+                    } else if (hitZ >= 0.65 && hitZ <= 0.79) {
+                        finalZ = 2;
+                    }
 
-                if (finalX != -1 && finalZ != -1) {
-                    slot = finalX + finalZ * 3;
+                    if (finalX != -1 && finalZ != -1) {
+                        slot = finalX + finalZ * 3;
 
-                    if (!player.getStackInHand(hand).isEmpty()) {
-                        if (inventory.getStack(slot).isEmpty()) {
-                            inventory.setStack(slot, new ItemStack(player.getStackInHand(hand).getItem(), 1));
-                            player.getInventory().getMainHandStack().decrement(1);
+                        if (!player.getStackInHand(hand).isEmpty()) {
+                            if (inventory.getStack(slot).isEmpty()) {
+                                inventory.setStack(slot, new ItemStack(player.getStackInHand(hand).getItem(), 1));
+                                player.getInventory().getMainHandStack().decrement(1);
+                                world.setBlockState(pos, world.getBlockState(pos).with(SmithingAnvilBlock.STRIKE, 0));
+                                inventory.markDirty();
+                            }
+                        } else {
+                            ItemStack extractedItem = inventory.getStack(slot);
+                            if (!player.getInventory().insertStack(extractedItem)) {
+                                player.getInventory().offerOrDrop(extractedItem);
+                            }
+                            world.setBlockState(pos, world.getBlockState(pos).with(SmithingAnvilBlock.STRIKE, 0));
+                            inventory.getStack(slot).decrement(1);
                             inventory.markDirty();
                         }
-                    } else {
+                    }
+                } else {
+                    double hitX = hit.getPos().getX() - pos.getX();
+                    double hitZ = hit.getPos().getZ() - pos.getZ();
+
+                    int slot;
+
+                    if ((hitX >= 0.21 && hitX <= 0.79) && hitZ >= 0.21 && hitZ <= 0.79) {
+                        slot = 9;
+
                         ItemStack extractedItem = inventory.getStack(slot);
                         if (!player.getInventory().insertStack(extractedItem)) {
                             player.getInventory().offerOrDrop(extractedItem);
@@ -99,6 +119,11 @@ public class SmithingAnvilBlock extends BlockWithEntity implements BlockEntityPr
                 }
             }
 
+            if (player.getStackInHand(hand).getItem() == Items.STICK && inventory.isEmpty()) {
+                inventory.setStack(9, new ItemStack(player.getStackInHand(hand).getItem(), 1));
+                player.getInventory().getMainHandStack().decrement(1);
+                inventory.markDirty();
+            }
         }
         return ActionResult.SUCCESS;
     }

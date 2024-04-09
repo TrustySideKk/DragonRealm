@@ -6,6 +6,8 @@ import com.trustysidekick.dragonrealm.entity.ModEntities;
 import com.trustysidekick.dragonrealm.entity.ai.DragonForgeLookGoal;
 import com.trustysidekick.dragonrealm.entity.ai.DragonWhelpAttackGoal;
 import com.trustysidekick.dragonrealm.entity.client.DragonWhelpModel;
+import com.trustysidekick.dragonrealm.item.ModItems;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.model.ModelPart;
 import net.minecraft.entity.*;
@@ -40,27 +42,31 @@ import software.bernie.geckolib.core.animatable.GeoAnimatable;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class DragonWhelpEntity extends AnimalEntity {
 
     private static final TrackedData<Boolean> ATTACKING = DataTracker.registerData(DragonWhelpEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
-    public BlockPos targetForge;
     public final AnimationState idleAnimationState = new AnimationState();
     private int idleAnimationTimeout = 0;
     public final AnimationState attackAnimationState = new AnimationState();
     public int attackAnimationTimeout = 0;
     private Vec3d frozenMotion = Vec3d.ZERO;
+    private int bloodDraw;
+    private long stopTick;
+    private boolean foundForge;
+    private BlockEntity targetForge;
 
-
-    private static final float MAX_ROTATION_SPEED = 0.5f; // Adjust as needed
-    private float yawSpeed = 0.1f; // Adjust as needed
-    private float pitchSpeed = 0.1f; // Adjust as needed
 
     public DragonWhelpEntity(EntityType<? extends AnimalEntity> entityType, World world) {
         super(entityType, world);
+        this.bloodDraw = 3;
+        this.stopTick = 160;
+        this.foundForge = false;
     }
+
 
     private void setupAnimationStates() {
         if (this.idleAnimationTimeout <= 0) {
@@ -91,35 +97,73 @@ public class DragonWhelpEntity extends AnimalEntity {
     @Override
     public void tick() {
         super.tick();
+        if (this.getWorld().isClient) {
+            setupAnimationStates();
+        }
 
-        // Slow down the turn rate by limiting the rotation speed
-        //float newYaw = MathHelper.clamp(this.getYaw() + yawSpeed, -MAX_ROTATION_SPEED, MAX_ROTATION_SPEED);
-        //float newPitch = MathHelper.clamp(this.getPitch() + pitchSpeed, -MAX_ROTATION_SPEED, MAX_ROTATION_SPEED);
+        //Box area = new Box(this.getBlockPos()).expand(5, 5, 5);
+        BlockPos pos1 = this.getBlockPos().add(-5, -5, -5);
+        BlockPos pos2 = this.getBlockPos().add(5,5,5);
 
-        // Update entity rotation
-        //this.setRotation(newYaw, newPitch);
+        Iterable<BlockPos> blocksInRange = BlockPos.iterate(pos1,pos2);
+
+        for (BlockPos blockPos : blocksInRange) {
+            BlockEntity blockEntity = this.getWorld().getBlockEntity(blockPos);
+            if (blockEntity instanceof DragonForgeBlockEntity) {
+                if (!foundForge) {
+                    if (((DragonForgeBlockEntity) blockEntity).getTargetDragon() == null || ((DragonForgeBlockEntity) blockEntity).getTargetDragon() == this) {
+                        if (((DragonForgeBlockEntity) blockEntity).isReady()) {
+                            foundForge = true;
+                            ((DragonForgeBlockEntity) blockEntity).setTargetDragon(this);
+                            targetForge = blockEntity;
+                        }
+                    }
+                }
+            }
+        }
 
         if (targetForge != null) {
-            double diffX = Math.abs(this.getPos().getX()) - Math.abs(targetForge.getX());
-            double diffY = Math.abs(this.getPos().getY()) - Math.abs(targetForge.getY());
-            double diffZ = Math.abs(this.getPos().getZ()) - Math.abs(targetForge.getZ());
+            if (((DragonForgeBlockEntity) targetForge).isReady()) {
+                shootFireballAtBlock(targetForge.getPos());
 
-            if (diffX > Math.abs(5) || diffY > Math.abs(5) || diffZ > Math.abs(5)) {
-                targetForge = null;
-                frozenMotion = Vec3d.ZERO;
-            } else {
-                //faceBlock(targetForge);
-                shootFireballAtBlock(targetForge);
-                frozenMotion = getVelocity();
+                BlockPos targetPos = targetForge.getPos();
+                BlockState targetState = this.getWorld().getBlockState(targetPos);
+                BlockState setBurning = targetState.with(DragonForgeBlock.BURNING, true);
+                BlockState setNotBurning = targetState.with(DragonForgeBlock.BURNING, false);
+                this.getWorld().setBlockState(targetPos, setBurning);
+
+                stopTick--;
+                if (stopTick <= 0) {
+                    if (((DragonForgeBlockEntity) targetForge).inventory.get(0).getItem() == Items.IRON_INGOT) {
+                        ((DragonForgeBlockEntity) targetForge).inventory.set(0, new ItemStack(ModItems.SEARING_IRON_INGOT));
+                        ((DragonForgeBlockEntity) targetForge).inventory.set(1, new ItemStack(Items.AIR));
+                        ((DragonForgeBlockEntity) targetForge).setTargetDragon(null);
+                        this.getWorld().setBlockState(targetPos, setNotBurning);
+                        targetForge.markDirty();
+                        targetForge = null;
+                        foundForge = false;
+                    } else {
+                        ((DragonForgeBlockEntity) targetForge).inventory.set(0, new ItemStack(Items.AIR));
+                        ((DragonForgeBlockEntity) targetForge).setTargetDragon(null);
+                        this.getWorld().setBlockState(targetPos, setNotBurning);
+                        targetForge.markDirty();
+                        targetForge = null;
+                        foundForge = false;
+                    }
+                    stopTick = 160;
+                }
             }
-        } else {
-            frozenMotion = Vec3d.ZERO;
+        }
+
+        if (!foundForge) {
+            targetForge = null;
         }
     }
 
+
+
     @Override
     protected void initGoals() {
-        this.goalSelector.add(0, new DragonForgeLookGoal(this));
         this.goalSelector.add(1, new SwimGoal(this));
         this.goalSelector.add(2, new DragonWhelpAttackGoal(this, 1D, true));
         this.goalSelector.add(3, new AnimalMateGoal(this, 1.15D));
@@ -130,6 +174,7 @@ public class DragonWhelpEntity extends AnimalEntity {
         this.goalSelector.add(8, new LookAroundGoal(this));
         this.targetSelector.add(1, new RevengeGoal(this));
     }
+
 
     public static DefaultAttributeContainer.Builder createDragonWhelpAttributes() {
         return MobEntity.createMobAttributes()
@@ -185,24 +230,25 @@ public class DragonWhelpEntity extends AnimalEntity {
 
 
     public void shootFireballAtBlock(BlockPos targetBlock) {
-        // Assuming you have access to the world instance and the specified block position
-        //BlockPos targetBlockPos = targetBlock;
-        //BlockPos topSurfaceBlockPos = this.getWorld().getTopPosition(Heightmap.Type.MOTION_BLOCKING, targetBlock);
+        double diffX = Math.abs(this.getPos().getX()) - Math.abs(targetBlock.getX());
+        double diffY = Math.abs(this.getPos().getY()) - Math.abs(targetBlock.getY());
+        double diffZ = Math.abs(this.getPos().getZ()) - Math.abs(targetBlock.getZ());
 
-        //TODO ***potential fire-breathing head position, need to test this***
-        Vec3d mouthPos = new Vec3d(DragonWhelpModel.head.getChild("jaw_lower").getTransform().pivotX,
-                DragonWhelpModel.head.getChild("jaw_lower").getTransform().pivotY,
-                DragonWhelpModel.head.getChild("jaw_lower").getTransform().pivotZ);
 
         // Calculate the direction vector from the entity's head position to the target block's top surface
         //Vec3d direction = new Vec3d(topSurfaceBlockPos.getX() - this.getX(), topSurfaceBlockPos.getY() - this.getEyeY(), topSurfaceBlockPos.getZ() - this.getZ()).normalize();
         Vec3d direction = new Vec3d(targetBlock.getX() - this.getPos().getX(), targetBlock.getY() - this.getEyePos().getY(), targetBlock.getZ() - this.getPos().getZ()).normalize();
-    //    Vec3d direction = new Vec3d(targetBlock.getX() - mouthPos.x, targetBlock.getY() - mouthPos.y, targetBlock.getZ() - mouthPos.z).normalize();
+        //Vec3d direction = new Vec3d(targetBlock.getX() - mouthPos.getX(), targetBlock.getY() - mouthPos.getY(), targetBlock.getZ() - mouthPos.getZ()).normalize();
 
         // Calculate the yaw and pitch angles based on the direction vector
         double yaw = Math.toDegrees(Math.atan2(-direction.x, direction.z)); // Yaw is based on X and Z components
         double pitch = Math.toDegrees(Math.asin(-direction.y)); // Pitch is based on Y component
 
+        if (diffX > Math.abs(5) || diffY > Math.abs(5) || diffZ > Math.abs(5)) {
+            frozenMotion = Vec3d.ZERO;
+        } else {
+            frozenMotion = getVelocity();
+        }
 
         // Set the entity's rotation
         this.setYaw((float) yaw);
@@ -230,42 +276,19 @@ public class DragonWhelpEntity extends AnimalEntity {
             double offsetX = random.nextGaussian() * 0.007; // Randomize particle position
             double offsetY = random.nextGaussian() * 0.007;
             double offsetZ = random.nextGaussian() * 0.007;
-            //this.getWorld().addParticle(ParticleTypes.FLAME, headPos.x, headPos.y, headPos.z, velocity.x + offsetX, velocity.y + offsetY, velocity.z + offsetZ);
             SmallFireballEntity fireball = new SmallFireballEntity(this.getWorld(), headPos.x, headPos.y - 58.5, headPos.z, velocity.x + offsetX, velocity.y + offsetY, velocity.z + offsetZ);
-    //        SmallFireballEntity fireball = new SmallFireballEntity(this.getWorld(), mouthPos.getX(), mouthPos.getY(), mouthPos.getZ(), velocity.x + offsetX, velocity.y + offsetY, velocity.z + offsetZ);
             this.getWorld().spawnEntity(fireball);
-            //System.out.println("Fireball spawned: " + mouthPos.getX() + ", " + mouthPos.getY() + ", " + mouthPos.getZ());
+
         }
-
-
-
-
     }
-
-
-    public void faceBlock(BlockPos targetBlock) {
-        //TODO Make entity face block immediately.  Currently it faces it after the entity updates position (i.e. when touched).
-        Vec3d entityPos = getPos(); // Entity's position
-        Vec3d targetPos = new Vec3d(targetBlock.getX() + 0.5, targetBlock.getY() + 0.5, targetBlock.getZ() + 0.5); // Target block's center position
-
-        // Calculate direction vector from entity to target block
-        Vec3d direction = targetPos.subtract(entityPos).normalize();
-
-        // Calculate yaw and pitch from direction vector
-        double yaw = Math.toDegrees(Math.atan2(-direction.x, direction.z)); // Yaw is based on X and Z components
-        double pitch = Math.toDegrees(Math.asin(-direction.y)); // Pitch is based on Y component
-
-        // Set entity's rotation angles
-        setYaw((float) yaw);
-        setPitch((float) pitch);
-    }
-
 
 
     @Override
     public boolean isFireImmune() {
         return true;
     }
+
+
 
     @Override
     public Box getBoundingBox(EntityPose pose) {
@@ -299,6 +322,15 @@ public class DragonWhelpEntity extends AnimalEntity {
 
         return new Box(minX, minY, minZ, maxX, maxY, maxZ);
 
+    }
+
+
+    public int getBloodDraw() {
+        return bloodDraw;
+    }
+
+    public void setBloodDraw(int value) {
+        this.bloodDraw = value;
     }
 
 }
