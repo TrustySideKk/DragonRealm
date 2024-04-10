@@ -70,7 +70,7 @@ public class DragonRealm implements ModInitializer {
 
 				}
 			}
-			return ActionResult.PASS; // Return ActionResult.PASS if you want to continue with default block attack behavior
+			return ActionResult.PASS;
 		});
 
 		// Right-click dragon using a bottle
@@ -85,10 +85,10 @@ public class DragonRealm implements ModInitializer {
 							player.getInventory().offerOrDrop(new ItemStack(ModItems.DRAGON_BLOOD));
 						}
 					}
-					return ActionResult.SUCCESS; // Return SUCCESS if the interaction was handled
+					return ActionResult.SUCCESS;
 				}
 			}
-			return ActionResult.PASS; // Return PASS to allow normal interaction
+			return ActionResult.PASS;
 		});
 
 

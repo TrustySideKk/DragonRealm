@@ -49,7 +49,6 @@ public class QuenchTankBlockEntity extends BlockEntity implements ImplementedInv
         double particlePosX = (Math.random() * (0.3 + 0.3)) - 0.3;
         double particlePosZ = (Math.random() * (0.3 + 0.3)) - 0.3;
 
-
         if (inventory.get(0).getItem() == ModItems.SEARING_IRON_INGOT && inventory.get(1).getCount() == 3) {
             isQuenching = true;
             if (stopTick <= 0) {
@@ -99,12 +98,12 @@ public class QuenchTankBlockEntity extends BlockEntity implements ImplementedInv
 
     @Override
     public boolean canInsert(int slot, ItemStack stack, @Nullable Direction side) {
-        return this.inventory.get(slot).isEmpty();
+        return false;
     }
 
     @Override
     public boolean canExtract(int slot, ItemStack stack, Direction side) {
-        return this.inventory.get(slot).isEmpty();
+        return false;
     }
 
 
@@ -128,7 +127,4 @@ public class QuenchTankBlockEntity extends BlockEntity implements ImplementedInv
         world.updateListeners(pos, getCachedState(), getCachedState(), 3);
         super.markDirty();
     }
-
-
-
 }

@@ -80,13 +80,13 @@ public class DragonForgeBlockEntity extends BlockEntity implements ImplementedIn
 
     @Override
     public boolean canInsert(int slot, ItemStack stack, @Nullable Direction side) {
-        return this.inventory.get(slot).isEmpty();
+        return false;
     }
 
 
     @Override
     public boolean canExtract(int slot, ItemStack stack, Direction side) {
-        return !this.inventory.get(slot).isEmpty();
+        return false;
     }
 
 
@@ -132,5 +132,7 @@ public class DragonForgeBlockEntity extends BlockEntity implements ImplementedIn
     public Entity getTargetDragon() {
         return targetDragon;
     }
+
+
 
 }

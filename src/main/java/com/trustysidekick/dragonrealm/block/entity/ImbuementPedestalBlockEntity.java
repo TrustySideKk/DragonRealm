@@ -18,11 +18,12 @@ import org.jetbrains.annotations.Nullable;
 
 //@Environment(EnvType.CLIENT)
 public class ImbuementPedestalBlockEntity extends BlockEntity implements ImplementedInventory {
-    private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(9, ItemStack.EMPTY);
-    private int tick = 0;
+    private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(1, ItemStack.EMPTY);
+    public boolean isImbuing;
 
     public ImbuementPedestalBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.IMBUEMENT_PEDESTAL_BLOCK_ENTITY, pos, state);
+        isImbuing = false;
     }
 
     @Override
@@ -39,25 +40,6 @@ public class ImbuementPedestalBlockEntity extends BlockEntity implements Impleme
 
     public void tick(World world, BlockPos pos, BlockState state) {
         if (world.isClient) { return; }
-/*
-        if (tick >= 20) {
-
-
-            System.out.println("Slot 1: " + inventory.get(0));
-            System.out.println("Slot 2: " + inventory.get(1));
-            System.out.println("Slot 3: " + inventory.get(2));
-            System.out.println("Slot 4: " + inventory.get(3));
-            System.out.println("Slot 5: " + inventory.get(4));
-            System.out.println("Slot 6: " + inventory.get(5));
-            System.out.println("Slot 7: " + inventory.get(6));
-            System.out.println("Slot 8: " + inventory.get(7));
-            System.out.println("Slot 9: " + inventory.get(8));
-
-            tick = 0;
-        } else {
-            tick++;
-        }
-        */
 
     }
 
@@ -68,12 +50,12 @@ public class ImbuementPedestalBlockEntity extends BlockEntity implements Impleme
 
     @Override
     public boolean canInsert(int slot, ItemStack stack, Direction dir) {
-        return this.inventory.get(slot).isEmpty();
+        return false;
     }
 
     @Override
     public boolean canExtract(int slot, ItemStack stack, Direction dir) {
-        return !this.inventory.get(slot).isEmpty();
+        return false;
     }
 
     @Override

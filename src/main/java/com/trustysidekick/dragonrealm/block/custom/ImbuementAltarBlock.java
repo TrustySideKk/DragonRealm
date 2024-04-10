@@ -4,6 +4,8 @@ import com.mojang.serialization.MapCodec;
 import com.trustysidekick.dragonrealm.block.entity.ImplementedInventory;
 import com.trustysidekick.dragonrealm.block.entity.ModBlockEntities;
 import com.trustysidekick.dragonrealm.block.entity.ImbuementAltarBlockEntity;
+import com.trustysidekick.dragonrealm.block.entity.QuenchTankBlockEntity;
+import com.trustysidekick.dragonrealm.item.ModItems;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
@@ -42,65 +44,29 @@ public class ImbuementAltarBlock extends BlockWithEntity implements BlockEntityP
 
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-        if (world.isClient) {
-            return ActionResult.SUCCESS;
-        }
+        BlockEntity blockEntity = world.getBlockEntity(pos);
+        ImplementedInventory inventoryBlockEntity = (ImplementedInventory) blockEntity;
+        ItemStack heldItem = player.getStackInHand(hand);
+        BlockState blockState = world.getBlockState(pos);
 
-        if (!world.isClient) {
-            BlockEntity blockEntity = world.getBlockEntity(pos);
-            if (blockEntity instanceof ImbuementAltarBlockEntity) {
-                ImplementedInventory inventory = (ImbuementAltarBlockEntity) blockEntity;
-
-
-
-                if (!player.isSneaking() && hit.getSide() == Direction.UP) {
-                    double hitX = hit.getPos().getX() - pos.getX();
-                    double hitZ = hit.getPos().getZ() - pos.getZ();
-
-                    int finalX = -1;
-                    int finalZ = -1;
-                    int slot;
-
-                    if (hitX >= 0.21 && hitX <= 0.35) {
-                        finalX = 0;
-                    } else if (hitX >= 0.42 && hitX <= 0.57) {
-                        finalX = 1;
-                    } else if (hitX >= 0.65 && hitX <= 0.79) {
-                        finalX = 2;
-                    }
-
-                    if (hitZ >= 0.21 && hitZ <= 0.35) {
-                        finalZ = 0;
-                    } else if (hitZ >= 0.42 && hitZ <= 0.57) {
-                        finalZ = 1;
-                    } else if (hitZ >= 0.65 && hitZ <= 0.79) {
-                        finalZ = 2;
-                    }
-
-                    System.out.println("HitX: " + hitX);
-                    System.out.println("HitZ: " + hitZ);
-
-                    if (finalX != -1 && finalZ != -1) {
-                        slot = finalX + finalZ * 3;
-
-                        if (!player.getStackInHand(hand).isEmpty()) {
-                            if (inventory.getStack(slot).isEmpty()) {
-                                inventory.setStack(slot, new ItemStack(player.getStackInHand(hand).getItem(), 1));
-                                player.getInventory().getMainHandStack().decrement(1);
-                                inventory.markDirty();
-                            }
-                        } else {
-                            ItemStack extractedItem = inventory.getStack(slot);
-                            if (!player.getInventory().insertStack(extractedItem)) {
-                                player.getInventory().offerOrDrop(extractedItem);
-                            }
-                            inventory.getStack(slot).decrement(1);
-                            inventory.markDirty();
-                        }
-                    }
+        if (player.getStackInHand(hand).isEmpty()) {
+            if (!(inventoryBlockEntity.getStack(0).isEmpty())) {
+                if (!((ImbuementAltarBlockEntity) blockEntity).isImbuing) {
+                    player.getInventory().offerOrDrop(inventoryBlockEntity.getStack(0));
+                    inventoryBlockEntity.getStack(0).decrement(1);
+                    blockEntity.markDirty();
                 }
             }
+        } else {
+            if (inventoryBlockEntity.getStack(0).isEmpty()) {
+                inventoryBlockEntity.setStack(0, new ItemStack(heldItem.getItem(), 1));
+                heldItem.decrement(1);
+                blockEntity.markDirty();
+            }
         }
+
+
+
         return ActionResult.SUCCESS;
     }
 
@@ -108,7 +74,7 @@ public class ImbuementAltarBlock extends BlockWithEntity implements BlockEntityP
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-        return validateTicker(type, ModBlockEntities.SMITHING_ANVIL_BLOCK_ENTITY, (world1, pos, state1, blockEntity) -> blockEntity.tick(world1, pos, state1));
+        return validateTicker(type, ModBlockEntities.IMBUEMENT_ALTAR_BLOCK_ENTITY, (world1, pos, state1, blockEntity) -> blockEntity.tick(world1, pos, state1));
     }
 
     @Override

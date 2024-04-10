@@ -18,11 +18,14 @@ import org.jetbrains.annotations.Nullable;
 
 //@Environment(EnvType.CLIENT)
 public class ImbuementAltarBlockEntity extends BlockEntity implements ImplementedInventory {
-    private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(9, ItemStack.EMPTY);
-    private int tick = 0;
+    private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(1, ItemStack.EMPTY);
+    private int stopTick;
+    public boolean isImbuing;
 
     public ImbuementAltarBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.IMBUEMENT_ALTAR_BLOCK_ENTITY, pos, state);
+        this.stopTick = 160;
+        this.isImbuing = false;
     }
 
     @Override
@@ -39,25 +42,7 @@ public class ImbuementAltarBlockEntity extends BlockEntity implements Implemente
 
     public void tick(World world, BlockPos pos, BlockState state) {
         if (world.isClient) { return; }
-/*
-        if (tick >= 20) {
 
-
-            System.out.println("Slot 1: " + inventory.get(0));
-            System.out.println("Slot 2: " + inventory.get(1));
-            System.out.println("Slot 3: " + inventory.get(2));
-            System.out.println("Slot 4: " + inventory.get(3));
-            System.out.println("Slot 5: " + inventory.get(4));
-            System.out.println("Slot 6: " + inventory.get(5));
-            System.out.println("Slot 7: " + inventory.get(6));
-            System.out.println("Slot 8: " + inventory.get(7));
-            System.out.println("Slot 9: " + inventory.get(8));
-
-            tick = 0;
-        } else {
-            tick++;
-        }
-        */
 
     }
 
@@ -68,12 +53,12 @@ public class ImbuementAltarBlockEntity extends BlockEntity implements Implemente
 
     @Override
     public boolean canInsert(int slot, ItemStack stack, Direction dir) {
-        return this.inventory.get(slot).isEmpty();
+        return false;
     }
 
     @Override
     public boolean canExtract(int slot, ItemStack stack, Direction dir) {
-        return !this.inventory.get(slot).isEmpty();
+        return false;
     }
 
     @Override

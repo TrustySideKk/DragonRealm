@@ -28,6 +28,7 @@ import net.minecraft.item.Items;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
@@ -131,6 +132,8 @@ public class DragonWhelpEntity extends AnimalEntity {
                 BlockState setBurning = targetState.with(DragonForgeBlock.BURNING, true);
                 BlockState setNotBurning = targetState.with(DragonForgeBlock.BURNING, false);
                 this.getWorld().setBlockState(targetPos, setBurning);
+                this.getWorld().addParticle(ParticleTypes.LARGE_SMOKE, (targetPos.getX() + 0.5), targetPos.getY() + 0.75, (targetPos.getZ() + 0.5), 0.0, 0.0, 0.0);
+                this.getWorld().playSound(null, targetPos, SoundEvents.BLOCK_BLASTFURNACE_FIRE_CRACKLE, SoundCategory.BLOCKS, 10.0f, 1.0f);
 
                 stopTick--;
                 if (stopTick <= 0) {
