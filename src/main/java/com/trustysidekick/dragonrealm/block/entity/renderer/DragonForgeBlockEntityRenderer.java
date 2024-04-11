@@ -41,7 +41,7 @@ public class DragonForgeBlockEntityRenderer implements BlockEntityRenderer<Drago
         if (!slot0.isEmpty()) {
             matrices.push();
             // Render the iron ingot at the center
-            matrices.translate(0.5f, 0.8f, 0.5f);
+            matrices.translate(0.5f, 0.7f, 0.5f);
             matrices.scale(0.35f, 0.35f, 0.35f);
             matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(90));
             itemRenderer.renderItem(slot0, ModelTransformationMode.FIXED, getLightLevel(entity.getWorld(), entity.getPos()), OverlayTexture.DEFAULT_UV, matrices, vertexConsumers, entity.getWorld(), 1);
@@ -51,7 +51,8 @@ public class DragonForgeBlockEntityRenderer implements BlockEntityRenderer<Drago
         if (!slot1.isEmpty()) {
             if (slot1.getCount() == 1) {
                 matrices.push();
-                matrices.translate(0.5f, 0.75f, 0.7f);
+                //matrices.translate(0.5f, 0.75f, 0.7f);
+                matrices.translate(0.5f, 0.68f, 0.7f);
                 matrices.scale(0.35f, 0.35f, 0.35f);
                 matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(90));
                 itemRenderer.renderItem(slot1, ModelTransformationMode.FIXED, getLightLevel(entity.getWorld(), entity.getPos()), OverlayTexture.DEFAULT_UV, matrices, vertexConsumers, entity.getWorld(), 1);
@@ -59,13 +60,13 @@ public class DragonForgeBlockEntityRenderer implements BlockEntityRenderer<Drago
             }
             if (slot1.getCount() == 2) {
                 matrices.push();
-                matrices.translate(0.5f, 0.75f, 0.7f);
+                matrices.translate(0.5f, 0.68f, 0.7f);
                 matrices.scale(0.35f, 0.35f, 0.35f);
                 matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(90));
                 itemRenderer.renderItem(slot1, ModelTransformationMode.FIXED, getLightLevel(entity.getWorld(), entity.getPos()), OverlayTexture.DEFAULT_UV, matrices, vertexConsumers, entity.getWorld(), 1);
                 matrices.pop();
                 matrices.push();
-                matrices.translate(0.7f, 0.75f, 0.55f);
+                matrices.translate(0.7f, 0.68f, 0.55f);
                 matrices.scale(0.35f, 0.35f, 0.35f);
                 matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(90));
                 itemRenderer.renderItem(slot1, ModelTransformationMode.FIXED, getLightLevel(entity.getWorld(), entity.getPos()), OverlayTexture.DEFAULT_UV, matrices, vertexConsumers, entity.getWorld(), 1);
@@ -73,19 +74,19 @@ public class DragonForgeBlockEntityRenderer implements BlockEntityRenderer<Drago
             }
             if (slot1.getCount() == 3) {
                 matrices.push();
-                matrices.translate(0.5f, 0.75f, 0.7f);
+                matrices.translate(0.5f, 0.68f, 0.7f);
                 matrices.scale(0.35f, 0.35f, 0.35f);
                 matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(90));
                 itemRenderer.renderItem(slot1, ModelTransformationMode.FIXED, getLightLevel(entity.getWorld(), entity.getPos()), OverlayTexture.DEFAULT_UV, matrices, vertexConsumers, entity.getWorld(), 1);
                 matrices.pop();
                 matrices.push();
-                matrices.translate(0.7f, 0.75f, 0.55f);
+                matrices.translate(0.7f, 0.68f, 0.55f);
                 matrices.scale(0.35f, 0.35f, 0.35f);
                 matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(90));
                 itemRenderer.renderItem(slot1, ModelTransformationMode.FIXED, getLightLevel(entity.getWorld(), entity.getPos()), OverlayTexture.DEFAULT_UV, matrices, vertexConsumers, entity.getWorld(), 1);
                 matrices.pop();
                 matrices.push();
-                matrices.translate(0.6f, 0.75f, 0.3f);
+                matrices.translate(0.6f, 0.68f, 0.3f);
                 matrices.scale(0.35f, 0.35f, 0.35f);
                 matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(90));
                 itemRenderer.renderItem(slot1, ModelTransformationMode.FIXED, getLightLevel(entity.getWorld(), entity.getPos()), OverlayTexture.DEFAULT_UV, matrices, vertexConsumers, entity.getWorld(), 1);
@@ -93,25 +94,25 @@ public class DragonForgeBlockEntityRenderer implements BlockEntityRenderer<Drago
             }
             if (slot1.getCount() == 4) {
                 matrices.push();
-                matrices.translate(0.5f, 0.75f, 0.7f);
+                matrices.translate(0.5f, 0.68f, 0.7f);
                 matrices.scale(0.35f, 0.35f, 0.35f);
                 matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(90));
                 itemRenderer.renderItem(slot1, ModelTransformationMode.FIXED, getLightLevel(entity.getWorld(), entity.getPos()), OverlayTexture.DEFAULT_UV, matrices, vertexConsumers, entity.getWorld(), 1);
                 matrices.pop();
                 matrices.push();
-                matrices.translate(0.7f, 0.75f, 0.55f);
+                matrices.translate(0.7f, 0.68f, 0.55f);
                 matrices.scale(0.35f, 0.35f, 0.35f);
                 matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(90));
                 itemRenderer.renderItem(slot1, ModelTransformationMode.FIXED, getLightLevel(entity.getWorld(), entity.getPos()), OverlayTexture.DEFAULT_UV, matrices, vertexConsumers, entity.getWorld(), 1);
                 matrices.pop();
                 matrices.push();
-                matrices.translate(0.6f, 0.75f, 0.3f);
+                matrices.translate(0.6f, 0.68f, 0.3f);
                 matrices.scale(0.35f, 0.35f, 0.35f);
                 matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(90));
                 itemRenderer.renderItem(slot1, ModelTransformationMode.FIXED, getLightLevel(entity.getWorld(), entity.getPos()), OverlayTexture.DEFAULT_UV, matrices, vertexConsumers, entity.getWorld(), 1);
                 matrices.pop();
                 matrices.push();
-                matrices.translate(0.4f, 0.75f, 0.3f);
+                matrices.translate(0.4f, 0.68f, 0.3f);
                 matrices.scale(0.35f, 0.35f, 0.35f);
                 matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(90));
                 itemRenderer.renderItem(slot1, ModelTransformationMode.FIXED, getLightLevel(entity.getWorld(), entity.getPos()), OverlayTexture.DEFAULT_UV, matrices, vertexConsumers, entity.getWorld(), 1);
@@ -119,31 +120,31 @@ public class DragonForgeBlockEntityRenderer implements BlockEntityRenderer<Drago
             }
             if (slot1.getCount() == 5) {
                 matrices.push();
-                matrices.translate(0.5f, 0.75f, 0.7f);
+                matrices.translate(0.5f, 0.68f, 0.7f);
                 matrices.scale(0.35f, 0.35f, 0.35f);
                 matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(90));
                 itemRenderer.renderItem(slot1, ModelTransformationMode.FIXED, getLightLevel(entity.getWorld(), entity.getPos()), OverlayTexture.DEFAULT_UV, matrices, vertexConsumers, entity.getWorld(), 1);
                 matrices.pop();
                 matrices.push();
-                matrices.translate(0.7f, 0.75f, 0.55f);
+                matrices.translate(0.7f, 0.68f, 0.55f);
                 matrices.scale(0.35f, 0.35f, 0.35f);
                 matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(90));
                 itemRenderer.renderItem(slot1, ModelTransformationMode.FIXED, getLightLevel(entity.getWorld(), entity.getPos()), OverlayTexture.DEFAULT_UV, matrices, vertexConsumers, entity.getWorld(), 1);
                 matrices.pop();
                 matrices.push();
-                matrices.translate(0.6f, 0.75f, 0.3f);
+                matrices.translate(0.6f, 0.68f, 0.3f);
                 matrices.scale(0.35f, 0.35f, 0.35f);
                 matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(90));
                 itemRenderer.renderItem(slot1, ModelTransformationMode.FIXED, getLightLevel(entity.getWorld(), entity.getPos()), OverlayTexture.DEFAULT_UV, matrices, vertexConsumers, entity.getWorld(), 1);
                 matrices.pop();
                 matrices.push();
-                matrices.translate(0.4f, 0.75f, 0.3f);
+                matrices.translate(0.4f, 0.68f, 0.3f);
                 matrices.scale(0.35f, 0.35f, 0.35f);
                 matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(90));
                 itemRenderer.renderItem(slot1, ModelTransformationMode.FIXED, getLightLevel(entity.getWorld(), entity.getPos()), OverlayTexture.DEFAULT_UV, matrices, vertexConsumers, entity.getWorld(), 1);
                 matrices.pop();
                 matrices.push();
-                matrices.translate(0.3f, 0.75f, 0.55f);
+                matrices.translate(0.3f, 0.68f, 0.55f);
                 matrices.scale(0.35f, 0.35f, 0.35f);
                 matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(90));
                 itemRenderer.renderItem(slot1, ModelTransformationMode.FIXED, getLightLevel(entity.getWorld(), entity.getPos()), OverlayTexture.DEFAULT_UV, matrices, vertexConsumers, entity.getWorld(), 1);

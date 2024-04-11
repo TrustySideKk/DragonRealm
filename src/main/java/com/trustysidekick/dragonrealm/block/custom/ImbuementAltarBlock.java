@@ -27,6 +27,7 @@ import org.jetbrains.annotations.Nullable;
 public class ImbuementAltarBlock extends BlockWithEntity implements BlockEntityProvider {
     private static final VoxelShape SHAPE = ImbuementAltarBlock.createCuboidShape(0, 0, 0, 16, 14, 16);
 
+
     public ImbuementAltarBlock(Settings settings) {
         super(settings);
     }
@@ -44,6 +45,7 @@ public class ImbuementAltarBlock extends BlockWithEntity implements BlockEntityP
 
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+        boolean foundFullAltar = false;
         BlockEntity blockEntity = world.getBlockEntity(pos);
         ImplementedInventory inventoryBlockEntity = (ImplementedInventory) blockEntity;
         ItemStack heldItem = player.getStackInHand(hand);
@@ -58,15 +60,28 @@ public class ImbuementAltarBlock extends BlockWithEntity implements BlockEntityP
                 }
             }
         } else {
-            if (inventoryBlockEntity.getStack(0).isEmpty()) {
-                inventoryBlockEntity.setStack(0, new ItemStack(heldItem.getItem(), 1));
-                heldItem.decrement(1);
-                blockEntity.markDirty();
+
+            BlockPos altarBoxPos1 = pos.add(-14, -14, -14);
+            BlockPos altarBoxPos2 = pos.add(14, 14, 14);
+
+            Iterable<BlockPos> pedestalsInRange = BlockPos.iterate(altarBoxPos1, altarBoxPos2);
+
+            for (BlockPos blockPos : pedestalsInRange) {
+                BlockEntity altar = world.getBlockEntity(blockPos);
+                if (altar instanceof ImbuementAltarBlockEntity) {
+                    if (!(((ImplementedInventory) altar).getStack(0).isEmpty())) {
+                        foundFullAltar = true;
+                    }
+                }
+            }
+            if (!foundFullAltar) {
+                if (inventoryBlockEntity.getStack(0).isEmpty()) {
+                    inventoryBlockEntity.setStack(0, new ItemStack(heldItem.getItem(), 1));
+                    heldItem.decrement(1);
+                    blockEntity.markDirty();
+                }
             }
         }
-
-
-
         return ActionResult.SUCCESS;
     }
 

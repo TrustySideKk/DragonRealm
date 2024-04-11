@@ -53,6 +53,12 @@ public class ImbuementPedestalBlockEntityRenderer implements BlockEntityRenderer
                 itemRenderer.renderItem(slot0, ModelTransformationMode.FIXED, getLightLevel(entity.getWorld(), entity.getPos()), OverlayTexture.DEFAULT_UV, matrices, vertexConsumers, entity.getWorld(), 1);
             matrices.pop();
         }
+
+        //if () {
+
+        //}
+
+
     }
 
 
