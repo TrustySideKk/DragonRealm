@@ -61,9 +61,10 @@ public class ImbuementAltarBlockEntity extends BlockEntity implements Implemente
                 if (blockEntity instanceof ImbuementPedestalBlockEntity) {
                     ImplementedInventory inventoryBlockEntity = (ImplementedInventory) blockEntity;
                     ((ImbuementPedestalBlockEntity)blockEntity).isImbuing = true;
+                    ((ImbuementPedestalBlockEntity)blockEntity).targetAltar = this;
                     if (!inventoryBlockEntity.getStack(0).isEmpty()) {
 
-                        shootFireballAtBlock(this.getPos(), blockEntity.getPos());
+                        //shootFireballAtBlock(this.getPos(), blockEntity.getPos());
 
                         if (stopTick == 300) {
                             this.getWorld().addParticle(ParticleTypes.CRIMSON_SPORE, (blockEntity.getPos().getX() + 0.5), blockEntity.getPos().getY() + 0.75, (blockEntity.getPos().getZ() + 0.5), 0.0, 0.0, 0.0);
@@ -113,13 +114,15 @@ public class ImbuementAltarBlockEntity extends BlockEntity implements Implemente
                             this.isImbuing = false;
                             inventoryBlockEntity.markDirty();
                         }
+                    } else {
+                        ((ImbuementPedestalBlockEntity)blockEntity).isImbuing = false;
                     }
 
                 }
             }
             stopTick--;
         } else {
-            //this.isImbuing = false;
+            this.isImbuing = false;
 
             BlockPos pedestalBoxPos1 = this.getPos().add(-7, -7, -7);
             BlockPos pedestalBoxPos2 = this.getPos().add(7,7,7);
