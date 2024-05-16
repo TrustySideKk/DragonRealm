@@ -11,4 +11,7 @@ public class ModModelLayers {
 
     public static final EntityModelLayer DRAGONWHELP =
             new EntityModelLayer(new Identifier(DragonRealm.MOD_ID, "dragonwhelp"), "root");
+
+    public static final EntityModelLayer HIGHLAND_DRAGON =
+            new EntityModelLayer(new Identifier(DragonRealm.MOD_ID, "highlanddragon"), "root");
 }
