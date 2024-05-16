@@ -1,10 +1,8 @@
 package com.trustysidekick.dragonrealm.block.entity.renderer;
 
-import com.trustysidekick.dragonrealm.block.entity.ImbuementAltarBlockEntity;
 import com.trustysidekick.dragonrealm.block.entity.ImbuementPedestalBlockEntity;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.LightmapTextureManager;
 import net.minecraft.client.render.OverlayTexture;
@@ -22,6 +20,7 @@ import net.minecraft.world.World;
 
 @Environment(EnvType.CLIENT)
 public class ImbuementPedestalBlockEntityRenderer implements BlockEntityRenderer<ImbuementPedestalBlockEntity> {
+
     public ImbuementPedestalBlockEntityRenderer(BlockEntityRendererFactory.Context context) {
 
     }
@@ -31,8 +30,7 @@ public class ImbuementPedestalBlockEntityRenderer implements BlockEntityRenderer
         ItemRenderer itemRenderer = MinecraftClient.getInstance().getItemRenderer();
         ItemStack slot0 = entity.getRenderStack(0);
 
-
-        if (!slot0.isEmpty() && !entity.isImbuing) {
+        if (!slot0.isEmpty()) {
             // Update vertical offset and rotation angle based on time
             entity.renderYCurOffset += entity.renderYMaxSpeed;
             entity.renderRotationAngle += entity.renderRotationSpeed;
@@ -49,65 +47,6 @@ public class ImbuementPedestalBlockEntityRenderer implements BlockEntityRenderer
             matrices.scale(0.35f, 0.35f, 0.35f);
             itemRenderer.renderItem(slot0, ModelTransformationMode.FIXED, getLightLevel(entity.getWorld(), entity.getPos()), OverlayTexture.DEFAULT_UV, matrices, vertexConsumers, entity.getWorld(), 1);
             matrices.pop();
-        }
-
-        if (entity.isImbuing) {
-            // Update vertical offset and rotation angle based on time
-            entity.renderYCurOffset += entity.renderYMaxSpeed;
-            entity.renderRotationAngle += entity.renderRotationSpeed;
-            if (entity.renderYCurOffset > entity.renderYMaxOffset || entity.renderYCurOffset < -entity.renderYMaxOffset) {
-                // Reverse direction when reaching maximum offset
-                entity.renderYMaxSpeed *= -1;
-            }
-            // Find the altar block within range
-            BlockPos pedestalBoxPos1 = entity.getPos().add(-7, -7, -7);
-            BlockPos pedestalBoxPos2 = entity.getPos().add(7, 7, 7);
-            Iterable<BlockPos> AltarInRange = BlockPos.iterate(pedestalBoxPos1, pedestalBoxPos2);
-
-            for (BlockPos blockPos : AltarInRange) {
-                BlockEntity blockEntity = entity.getWorld().getBlockEntity(blockPos);
-                if (blockEntity instanceof ImbuementAltarBlockEntity) {
-                    if (!entity.renderImbuingStop) {
-                        entity.renderTotX = blockEntity.getPos().getX() - entity.getPos().getX();
-                        entity.renderTotY = blockEntity.getPos().getY() - entity.getPos().getY();
-                        entity.renderTotZ = blockEntity.getPos().getZ() - entity.getPos().getZ();
-                    }
-
-                    if (Math.abs(entity.renderDistX) < Math.abs(entity.renderTotX)) {
-                        entity.renderDistX = entity.renderDistX + entity.renderTotX/entity.renderImbuingSpeed;
-                    } else {
-                        entity.renderDistX = entity.renderTotX;
-                    }
-
-                    if (Math.abs(entity.renderDistY) < Math.abs(entity.renderTotY)) {
-                            entity.renderDistY = entity.renderDistY + entity.renderTotY/entity.renderImbuingSpeed;
-                    } else {
-                        entity.renderDistY = entity.renderTotY;
-                    }
-
-                    if (Math.abs(entity.renderDistZ) < Math.abs(entity.renderTotZ)) {
-                        entity.renderDistZ = entity.renderDistZ + entity.renderTotZ/entity.renderImbuingSpeed;
-                    } else {
-                        entity.renderDistZ = entity.renderTotZ;
-                    }
-
-                    if (entity.renderDistX == entity.renderTotX && entity.renderDistY == entity.renderTotY && entity.renderDistZ == entity.renderTotZ) {
-                        entity.renderImbuingStop = true;
-                    }
-
-                    matrices.push();
-                    matrices.translate(0.5 + entity.renderDistX, 1 + entity.renderDistY + entity.renderYCurOffset, 0.5 + entity.renderDistZ);
-                    matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(entity.renderRotationAngle));
-                    matrices.scale(0.35f, 0.35f, 0.35f);
-                    itemRenderer.renderItem(slot0, ModelTransformationMode.FIXED, getLightLevel(entity.getWorld(), entity.getPos()), OverlayTexture.DEFAULT_UV, matrices, vertexConsumers, entity.getWorld(), 1);
-                    matrices.pop();
-                }
-            }
-        } else {
-            entity.renderImbuingStop = false;
-            entity.renderDistX = 0;
-            entity.renderDistY = 0;
-            entity.renderDistZ = 0;
         }
     }
 

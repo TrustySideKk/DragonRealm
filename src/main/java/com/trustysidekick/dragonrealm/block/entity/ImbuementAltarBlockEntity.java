@@ -19,17 +19,29 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
 
-//@Environment(EnvType.CLIENT)
 public class ImbuementAltarBlockEntity extends BlockEntity implements ImplementedInventory {
-    private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(1, ItemStack.EMPTY);
+    private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(2, ItemStack.EMPTY);
     private int stopTick;
     public boolean isImbuing;
+    //public float renderYMaxOffset;
+    //public float renderYCurOffset;
+    //public float renderYMaxSpeed;
+    public float renderRotationAngle;
+    public float renderRotationSpeed;
+    public float renderImbuingSpeed;
+
 
 
     public ImbuementAltarBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.IMBUEMENT_ALTAR_BLOCK_ENTITY, pos, state);
-        this.stopTick = 300;
-        this.isImbuing = false;
+        stopTick = 300;
+        isImbuing = false;
+        //renderYMaxOffset = 0.1f;
+        //renderYMaxSpeed = 0.002f;
+        //renderYCurOffset = 0.0f;
+        renderRotationSpeed = 1.0f;
+        renderRotationAngle = 0.0f;
+        renderImbuingSpeed = 0.0f;
     }
 
     @Override
@@ -47,95 +59,13 @@ public class ImbuementAltarBlockEntity extends BlockEntity implements Implemente
     public void tick(World world, BlockPos pos, BlockState state) {
         //if (world.isClient) { return; }
 
-        if (!inventory.get(0).isEmpty()) {
-            //this.isImbuing = true;
+        //System.out.println("Imbue: " + isImbuing);
 
-            BlockPos pedestalBoxPos1 = this.getPos().add(-7, -7, -7);
-            BlockPos pedestalBoxPos2 = this.getPos().add(7,7,7);
-
-            Iterable<BlockPos> pedestalsInRange = BlockPos.iterate(pedestalBoxPos1,pedestalBoxPos2);
-
-            for (BlockPos blockPos : pedestalsInRange) {
-                BlockEntity blockEntity = this.getWorld().getBlockEntity(blockPos);
-
-                if (blockEntity instanceof ImbuementPedestalBlockEntity) {
-                    ImplementedInventory inventoryBlockEntity = (ImplementedInventory) blockEntity;
-                    ((ImbuementPedestalBlockEntity)blockEntity).isImbuing = true;
-                    ((ImbuementPedestalBlockEntity)blockEntity).targetAltar = this;
-                    if (!inventoryBlockEntity.getStack(0).isEmpty()) {
-
-                        //shootFireballAtBlock(this.getPos(), blockEntity.getPos());
-
-                        if (stopTick == 300) {
-                            this.getWorld().addParticle(ParticleTypes.CRIMSON_SPORE, (blockEntity.getPos().getX() + 0.5), blockEntity.getPos().getY() + 0.75, (blockEntity.getPos().getZ() + 0.5), 0.0, 0.0, 0.0);
-                            //this.getWorld().addParticle(ParticleTypes.FLAME, posX, posY, posZ, 0.0, 0.0, 0.0);
-
-                        }
-                        if (stopTick == 260) {
-                            //this.getWorld().addParticle(ParticleTypes.FLAME, (blockEntity.getPos().getX() + 0.5), blockEntity.getPos().getY() + 0.75, (blockEntity.getPos().getZ() + 0.5), 0.0, 0.0, 0.0);
-                            spawnParticlesFromAltarToPedestal(this.getPos(), blockEntity.getPos());
-                        }
-                        if (stopTick == 220) {
-                            this.getWorld().addParticle(ParticleTypes.FLAME, (blockEntity.getPos().getX() + 0.5), blockEntity.getPos().getY() + 0.75, (blockEntity.getPos().getZ() + 0.5), 0.0, 0.0, 0.0);
-                        }
-                        if (stopTick == 200) {
-                            this.getWorld().addParticle(ParticleTypes.FLAME, (blockEntity.getPos().getX() + 0.5), blockEntity.getPos().getY() + 0.75, (blockEntity.getPos().getZ() + 0.5), 0.0, 0.0, 0.0);
-                        }
-                        if (stopTick == 180) {
-                            this.getWorld().addParticle(ParticleTypes.FLAME, (blockEntity.getPos().getX() + 0.5), blockEntity.getPos().getY() + 0.75, (blockEntity.getPos().getZ() + 0.5), 0.0, 0.0, 0.0);
-                        }
-                        if (stopTick == 160) {
-                            this.getWorld().addParticle(ParticleTypes.FLAME, (blockEntity.getPos().getX() + 0.5), blockEntity.getPos().getY() + 0.75, (blockEntity.getPos().getZ() + 0.5), 0.0, 0.0, 0.0);
-                        }
-                        if (stopTick == 140) {
-                            this.getWorld().addParticle(ParticleTypes.FLAME, (blockEntity.getPos().getX() + 0.5), blockEntity.getPos().getY() + 0.75, (blockEntity.getPos().getZ() + 0.5), 0.0, 0.0, 0.0);
-                        }
-                        if (stopTick == 120) {
-                            this.getWorld().addParticle(ParticleTypes.FLAME, (blockEntity.getPos().getX() + 0.5), blockEntity.getPos().getY() + 0.75, (blockEntity.getPos().getZ() + 0.5), 0.0, 0.0, 0.0);
-                        }
-                        if (stopTick == 100) {
-                            this.getWorld().addParticle(ParticleTypes.FLAME, (blockEntity.getPos().getX() + 0.5), blockEntity.getPos().getY() + 0.75, (blockEntity.getPos().getZ() + 0.5), 0.0, 0.0, 0.0);
-                        }
-                        if (stopTick == 90) {
-                            this.getWorld().addParticle(ParticleTypes.FLAME, (blockEntity.getPos().getX() + 0.5), blockEntity.getPos().getY() + 0.75, (blockEntity.getPos().getZ() + 0.5), 0.0, 0.0, 0.0);
-                        }
-                        if (stopTick == 80) {
-                            this.getWorld().addParticle(ParticleTypes.FLAME, (blockEntity.getPos().getX() + 0.5), blockEntity.getPos().getY() + 0.75, (blockEntity.getPos().getZ() + 0.5), 0.0, 0.0, 0.0);
-                        }
-                        if (stopTick == 70) {
-                            this.getWorld().addParticle(ParticleTypes.FLAME, (blockEntity.getPos().getX() + 0.5), blockEntity.getPos().getY() + 0.75, (blockEntity.getPos().getZ() + 0.5), 0.0, 0.0, 0.0);
-                        }
-                        if (stopTick > 0 && stopTick <= 69) {
-                            this.getWorld().addParticle(ParticleTypes.FLAME, (blockEntity.getPos().getX() + 0.5), blockEntity.getPos().getY() + 0.75, (blockEntity.getPos().getZ() + 0.5), 0.0, 0.0, 0.0);
-                        }
-                        if (stopTick <= 0) {
-                            inventoryBlockEntity.getStack(0).decrement(1);
-                            stopTick = 300;
-                            this.isImbuing = false;
-                            inventoryBlockEntity.markDirty();
-                        }
-                    } else {
-                        ((ImbuementPedestalBlockEntity)blockEntity).isImbuing = false;
-                    }
-
-                }
-            }
-            stopTick--;
+        if (!inventory.get(0).isEmpty() && !inventory.get(1).isEmpty()) {
+            isImbuing = true;
         } else {
-            this.isImbuing = false;
-
-            BlockPos pedestalBoxPos1 = this.getPos().add(-7, -7, -7);
-            BlockPos pedestalBoxPos2 = this.getPos().add(7,7,7);
-
-            Iterable<BlockPos> blocksInRange = BlockPos.iterate(pedestalBoxPos1,pedestalBoxPos2);
-
-            for (BlockPos blockPos : blocksInRange) {
-                BlockEntity blockEntity = this.getWorld().getBlockEntity(blockPos);
-
-                if (blockEntity instanceof ImbuementPedestalBlockEntity) {
-                    ((ImbuementPedestalBlockEntity)blockEntity).isImbuing = false;
-                }
-            }
+            isImbuing = false;
+            renderImbuingSpeed = 0.0f;
         }
     }
 

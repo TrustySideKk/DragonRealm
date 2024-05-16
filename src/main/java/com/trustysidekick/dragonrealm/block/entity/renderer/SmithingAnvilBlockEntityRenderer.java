@@ -19,7 +19,7 @@ import net.minecraft.util.math.RotationAxis;
 import net.minecraft.world.LightType;
 import net.minecraft.world.World;
 
-@Environment(EnvType.CLIENT)
+//@Environment(EnvType.CLIENT)
 public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<SmithingAnvilBlockEntity> {
     public SmithingAnvilBlockEntityRenderer(BlockEntityRendererFactory.Context context) {
 

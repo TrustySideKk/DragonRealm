@@ -1,7 +1,6 @@
 package com.trustysidekick.dragonrealm.block.entity.renderer;
 
 import com.trustysidekick.dragonrealm.block.entity.DragonForgeBlockEntity;
-import com.trustysidekick.dragonrealm.block.entity.ImplementedInventory;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
@@ -13,12 +12,8 @@ import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.passive.PandaEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RotationAxis;
 import net.minecraft.world.LightType;
 import net.minecraft.world.World;
@@ -32,11 +27,8 @@ public class DragonForgeBlockEntityRenderer implements BlockEntityRenderer<Drago
     @Override
     public void render(DragonForgeBlockEntity entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
         ItemRenderer itemRenderer = MinecraftClient.getInstance().getItemRenderer();
-
         ItemStack slot0 = entity.getRenderStack(0);
         ItemStack slot1 = entity.getRenderStack(1);
-
-
 
         if (!slot0.isEmpty()) {
             matrices.push();

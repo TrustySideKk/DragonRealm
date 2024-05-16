@@ -2,8 +2,8 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [64, 64],
 	"textures": {
-		"0": "dragonrealm:item/dragonsmith_hammer",
-		"particle": "dragonrealm:item/dragonsmith_hammer"
+		"0": "dragonrealm:item/smithing_hammer",
+		"particle": "dragonrealm:item/smithing_hammer"
 	},
 	"elements": [
 		{

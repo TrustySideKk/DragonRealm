@@ -23,6 +23,8 @@ public class DragonRealmClient implements ClientModInitializer {
         EntityModelLayerRegistry.registerModelLayer(ModModelLayers.PORCUPINE, PorcupineModel::getTexturedModelData);
         EntityRendererRegistry.register(ModEntities.DRAGONWHELP, DragonWhelpRenderer::new);
         EntityModelLayerRegistry.registerModelLayer(ModModelLayers.DRAGONWHELP, DragonWhelpModel::getTexturedModelData);
+        EntityRendererRegistry.register(ModEntities.HIGHLAND_DRAGON, HighlandDragonRenderer::new);
+        EntityModelLayerRegistry.registerModelLayer(ModModelLayers.HIGHLAND_DRAGON, HighlandDragonModel::getTexturedModelData);
 
     }
 }

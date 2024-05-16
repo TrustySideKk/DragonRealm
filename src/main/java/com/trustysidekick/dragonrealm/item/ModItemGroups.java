@@ -37,6 +37,9 @@ public class ModItemGroups {
                         entries.add(ModItems.PORCUPINE_SPAWN_EGG);
                         //entries.add(ModItems.NULL_MATERIAL); // To not allow repair dragon horn/bone/scale tools.
                         entries.add(ModItems.DRAGON_BLOOD);
+                        entries.add(ModItems.ORE_CHUNK_IRON);
+                        entries.add(ModItems.ORE_CHUNK_GOLD);
+                        entries.add(ModItems.ORE_CHUNK_COPPER);
 
                         // TOOLS
                         entries.add(ModItems.DRAGON_PICKAXE);
@@ -46,6 +49,7 @@ public class ModItemGroups {
                         entries.add(ModItems.DRAGON_AXE);
                         entries.add(ModItems.DRAGON_SHOVEL);
                         entries.add(ModItems.DRAGON_HOE);
+                        entries.add(ModItems.SMITHING_HAMMER);
 
                         //WEAPONS
                         entries.add(ModItems.DRAGON_CLUB);

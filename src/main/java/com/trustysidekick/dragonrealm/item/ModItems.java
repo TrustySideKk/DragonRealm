@@ -1,6 +1,8 @@
 package com.trustysidekick.dragonrealm.item;
 
+import com.trustysidekick.dragonrealm.DragonIngotToolMaterial;
 import com.trustysidekick.dragonrealm.DragonRealm;
+import com.trustysidekick.dragonrealm.NullToolMaterial;
 import com.trustysidekick.dragonrealm.entity.ModEntities;
 import com.trustysidekick.dragonrealm.item.custom.*;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
@@ -34,22 +36,29 @@ public class ModItems {
     public static final Item DRAGON_STEAK = registerItem("dragon_steak", new Item(new FabricItemSettings()));
     public static final Item NULL_TOOL_MATERIAL = registerItem("null_tool_material", new Item(new FabricItemSettings()));
     public static final Item DRAGON_BLOOD = registerItem("dragon_blood", new DragonBloodItem(new FabricItemSettings().maxCount(1)));
+    public static final Item ORE_CHUNK_GOLD = registerItem("ore_chunk_gold", new Item(new FabricItemSettings()));
+    public static final Item ORE_CHUNK_IRON = registerItem("ore_chunk_iron", new Item(new FabricItemSettings()));
+    public static final Item ORE_CHUNK_COPPER = registerItem("ore_chunk_copper", new Item(new FabricItemSettings()));
+
 
     // TOOLS
-    public static final Item DRAGON_HORN_PICKAXE = registerItem("dragon_horn_pickaxe", new DragonHornPickaxeItem(ModToolMaterial.NULL_TOOL_MATERIAL, 1, -2.8f, new FabricItemSettings().maxCount(1)));
-    public static final Item DRAGON_JAWBONE_AXE = registerItem("dragon_jawbone_axe", new DragonJawboneAxeItem(ModToolMaterial.NULL_TOOL_MATERIAL, 5, -3.0f, new FabricItemSettings().maxCount(1)));
-    public static final Item DRAGON_SCALE_SHOVEL = registerItem("dragon_scale_shovel", new DragonScaleShovelItem(ModToolMaterial.NULL_TOOL_MATERIAL, 1.5f, -3.0f, new FabricItemSettings().maxCount(1)));
-    public static final Item DRAGON_PICKAXE = registerItem("dragon_pickaxe", new DragonPickaxeItem(ModToolMaterial.DRAGON_INGOT, 1, -2.8f, new FabricItemSettings().maxCount(1)));
-    public static final Item DRAGON_SHOVEL = registerItem("dragon_shovel", new DragonScaleShovelItem(ModToolMaterial.DRAGON_INGOT, 1.5f, -3.0f, new FabricItemSettings().maxCount(1)));
-    public static final Item DRAGON_AXE = registerItem("dragon_axe", new DragonPickaxeItem(ModToolMaterial.DRAGON_INGOT, 5, -3.0f, new FabricItemSettings().maxCount(1)));
-    public static final Item DRAGON_HOE = registerItem("dragon_hoe", new DragonHoeItem(ModToolMaterial.DRAGON_INGOT, -4, 0.0f, new FabricItemSettings().maxCount(1)));
+    public static final Item DRAGON_HORN_PICKAXE = registerItem("dragon_horn_pickaxe", new DragonHornPickaxeItem(NullToolMaterial.INSTANCE, 1, -2.8f, new FabricItemSettings().maxCount(1)));
+    public static final Item DRAGON_JAWBONE_AXE = registerItem("dragon_jawbone_axe", new DragonJawboneAxeItem(NullToolMaterial.INSTANCE, 5, -3.0f, new FabricItemSettings().maxCount(1)));
+    public static final Item DRAGON_SCALE_SHOVEL = registerItem("dragon_scale_shovel", new DragonScaleShovelItem(NullToolMaterial.INSTANCE, 1.5f, -3.0f, new FabricItemSettings().maxCount(1)));
+    public static final Item DRAGON_PICKAXE = registerItem("dragon_pickaxe", new DragonPickaxeItem(DragonIngotToolMaterial.INSTANCE, 1, -2.8f, new FabricItemSettings().maxCount(1)));
+    public static final Item DRAGON_SHOVEL = registerItem("dragon_shovel", new DragonShovelItem(DragonIngotToolMaterial.INSTANCE, 1.5f, -3.0f, new FabricItemSettings().maxCount(1)));
+    public static final Item DRAGON_AXE = registerItem("dragon_axe", new DragonAxeItem(DragonIngotToolMaterial.INSTANCE, 5, -3.0f, new FabricItemSettings().maxCount(1)));
+    public static final Item DRAGON_HOE = registerItem("dragon_hoe", new DragonHoeItem(DragonIngotToolMaterial.INSTANCE, -4, 0.0f, new FabricItemSettings().maxCount(1)));
+    public static final Item SMITHING_HAMMER = registerItem("smithing_hammer", new SmithingHammerItem(ModToolMaterial.DRAGON_INGOT, new FabricItemSettings()));
+
 
     // WEAPONS
     public static final Item DRAGON_CLUB = registerItem("dragon_club", new Item(new FabricItemSettings().maxCount(1)));
     public static final Item DRAGON_SPEAR = registerItem("dragon_spear", new Item(new FabricItemSettings().maxCount(1)));
     public static final Item DRAGON_BOW = registerItem("dragon_bow", new Item(new FabricItemSettings().maxCount(1)));
     public static final Item DRAGON_CROSSBOW = registerItem("dragon_crossbow", new Item(new FabricItemSettings().maxCount(1)));
-    public static final Item DRAGON_SWORD = registerItem("dragon_sword", new Item(new FabricItemSettings().maxCount(1)));
+    public static final Item DRAGON_SWORD = registerItem("dragon_sword", new DragonSwordItem(ModToolMaterial.DRAGON_INGOT, 1, 10, new FabricItemSettings()));
+    //public static final Item DRAGON_SWORD = registerItem("dragon_sword", new DragonSwordItem(ModToolMaterial.DRAGON_INGOT, 10, 10, new FabricItemSettings()));
     public static final Item DRAGON_SHIELD = registerItem("dragon_shield", new Item(new FabricItemSettings().maxCount(1)));
     public static final Item DRAGON_BATTLEAXE = registerItem("dragon_battleaxe", new Item(new FabricItemSettings().maxCount(1)));
 

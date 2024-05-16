@@ -508,7 +508,8 @@ public class HighlandDragonModel<T extends HighlandDragonEntity> extends SingleP
 		this.getPart().traverse().forEach(ModelPart::resetTransform);
 		//this.setHeadAngles(netHeadYaw, headPitch);
 
-		this.animateMovement(ModAnimations.DRAGONWHELP_WALK, limbAngle, limbDistance, 2f, 2.5f);
+		// TODO
+		//this.animateMovement(ModAnimations.DRAGONWHELP_WALK, limbAngle, limbDistance, 2f, 2.5f);
 
 		//this.updateAnimation(entity.idleAnimationState, ModAnimations.DRAGONWHELP_IDLE, ageInTicks, 1f);
 		//this.updateAnimation(entity.attackAnimationState, ModAnimations.DRAGONWHELP_ATTACKBITE, ageInTicks, 1f);

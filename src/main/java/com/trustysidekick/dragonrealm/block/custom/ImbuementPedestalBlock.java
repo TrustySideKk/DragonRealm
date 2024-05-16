@@ -25,12 +25,9 @@ import org.jetbrains.annotations.Nullable;
 
 public class ImbuementPedestalBlock extends BlockWithEntity implements BlockEntityProvider {
     private static final VoxelShape SHAPE = ImbuementPedestalBlock.createCuboidShape(0, 0, 0, 16, 14, 16);
-    public boolean isImbuing;
-
 
     public ImbuementPedestalBlock(Settings settings) {
         super(settings);
-        isImbuing = false;
     }
 
     @Override
@@ -46,29 +43,23 @@ public class ImbuementPedestalBlock extends BlockWithEntity implements BlockEnti
 
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-        ImbuementPedestalBlockEntity blockEntity = (ImbuementPedestalBlockEntity)world.getBlockEntity(pos);
-        ImplementedInventory inventoryBlockEntity = (ImplementedInventory) blockEntity;
+        ImplementedInventory inventoryBlockEntity = (ImbuementPedestalBlockEntity)world.getBlockEntity(pos);
         ItemStack heldItem = player.getStackInHand(hand);
-        BlockState blockState = world.getBlockState(pos);
-
-        if (!blockEntity.isImbuing) {
             if (player.getStackInHand(hand).isEmpty()) {
                 if (!(inventoryBlockEntity.getStack(0).isEmpty())) {
                     player.getInventory().offerOrDrop(inventoryBlockEntity.getStack(0));
                     inventoryBlockEntity.getStack(0).decrement(1);
-                    blockEntity.markDirty();
+                    inventoryBlockEntity.markDirty();
                 }
             } else {
                 if (inventoryBlockEntity.getStack(0).isEmpty()) {
                     inventoryBlockEntity.setStack(0, new ItemStack(heldItem.getItem(), 1));
                     heldItem.decrement(1);
-                    blockEntity.markDirty();
+                    inventoryBlockEntity.markDirty();
                 }
             }
-        }
         return ActionResult.SUCCESS;
     }
-
 
     @Nullable
     @Override

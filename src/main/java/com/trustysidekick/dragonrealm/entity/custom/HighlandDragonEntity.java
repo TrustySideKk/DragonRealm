@@ -108,7 +108,7 @@ implements Monster {
     private final PathMinHeap pathHeap = new PathMinHeap();
 
     public HighlandDragonEntity(EntityType<? extends HighlandDragonEntity> entityType, World world) {
-        super((EntityType<? extends MobEntity>) ModEntities.HIGHLAND_DRAGON, world);
+        super(ModEntities.HIGHLAND_DRAGON, world);
         this.head = new HighlandDragonPart(this, "head", 1.0f, 1.0f);
         this.neck = new HighlandDragonPart(this, "neck", 3.0f, 3.0f);
         this.body = new HighlandDragonPart(this, "body", 5.0f, 3.0f);

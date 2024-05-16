@@ -166,6 +166,8 @@ public class PorcupineEntity extends AnimalEntity {
         Random random = new Random();
         double ranSpread = -0.05 + random.nextFloat() * (0.05 - -0.05);
 
+
+
         Vec3d targetPosition = new Vec3d(targetBlock.getX() + 0.5, targetBlock.getY() + 0.5, targetBlock.getZ() + 0.5);
         Vec3d direction = targetPosition.subtract(getPos()).normalize();
 

@@ -1,23 +1,29 @@
 package com.trustysidekick.dragonrealm.block.custom;
 
 import com.mojang.serialization.MapCodec;
-import com.trustysidekick.dragonrealm.block.entity.DragonForgeBlockEntity;
 import com.trustysidekick.dragonrealm.block.entity.ImplementedInventory;
 import com.trustysidekick.dragonrealm.block.entity.ModBlockEntities;
 import com.trustysidekick.dragonrealm.block.entity.SmithingAnvilBlockEntity;
+import com.trustysidekick.dragonrealm.item.ModItems;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.damage.DamageSources;
+import net.minecraft.entity.damage.DamageType;
+import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.state.State;
+import net.minecraft.particle.ParticleTypes;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
-import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.IntProperty;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ItemScatterer;
@@ -29,13 +35,15 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Random;
+
 public class SmithingAnvilBlock extends BlockWithEntity implements BlockEntityProvider {
     private static final VoxelShape SHAPE = SmithingAnvilBlock.createCuboidShape(0, 0, 0, 16, 12.5, 16);
-    public static final IntProperty STRIKE = IntProperty.of("strike", 0, 5);
+    private int strike;
 
     public SmithingAnvilBlock(Settings settings) {
         super(settings);
-        setDefaultState(getDefaultState().with(STRIKE, 0));
+        strike = 0;
     }
 
     @Override
@@ -52,10 +60,12 @@ public class SmithingAnvilBlock extends BlockWithEntity implements BlockEntityPr
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         BlockEntity blockEntity = world.getBlockEntity(pos);
+        Random random = new Random();
+
         if (blockEntity instanceof SmithingAnvilBlockEntity) {
             ImplementedInventory inventory = (SmithingAnvilBlockEntity) blockEntity;
 
-            if (!player.isSneaking() && hit.getSide() == Direction.UP && player.getStackInHand(hand).getItem() != Items.STICK) {
+            if (!player.isSneaking() && hit.getSide() == Direction.UP && player.getStackInHand(hand).getItem() != ModItems.SMITHING_HAMMER) {
                 if (inventory.getStack(9).isEmpty()) {
                     double hitX = hit.getPos().getX() - pos.getX();
                     double hitZ = hit.getPos().getZ() - pos.getZ();
@@ -85,44 +95,126 @@ public class SmithingAnvilBlock extends BlockWithEntity implements BlockEntityPr
 
                         if (!player.getStackInHand(hand).isEmpty()) {
                             if (inventory.getStack(slot).isEmpty()) {
-                                inventory.setStack(slot, new ItemStack(player.getStackInHand(hand).getItem(), 1));
+                                inventory.setStack(slot, player.getStackInHand(hand).copy());
                                 player.getInventory().getMainHandStack().decrement(1);
-                                world.setBlockState(pos, world.getBlockState(pos).with(SmithingAnvilBlock.STRIKE, 0));
-                                inventory.markDirty();
+                                blockEntity.markDirty();
                             }
                         } else {
-                            ItemStack extractedItem = inventory.getStack(slot);
-                            if (!player.getInventory().insertStack(extractedItem)) {
-                                player.getInventory().offerOrDrop(extractedItem);
-                            }
-                            world.setBlockState(pos, world.getBlockState(pos).with(SmithingAnvilBlock.STRIKE, 0));
+                            player.getInventory().offerOrDrop(inventory.getStack(slot));
                             inventory.getStack(slot).decrement(1);
-                            inventory.markDirty();
+                            blockEntity.markDirty();
                         }
                     }
                 } else {
                     double hitX = hit.getPos().getX() - pos.getX();
                     double hitZ = hit.getPos().getZ() - pos.getZ();
-
                     int slot;
 
                     if ((hitX >= 0.21 && hitX <= 0.79) && hitZ >= 0.21 && hitZ <= 0.79) {
                         slot = 9;
-
                         ItemStack extractedItem = inventory.getStack(slot);
                         if (!player.getInventory().insertStack(extractedItem)) {
                             player.getInventory().offerOrDrop(extractedItem);
                         }
                         inventory.getStack(slot).decrement(1);
-                        inventory.markDirty();
+                        blockEntity.markDirty();
                     }
                 }
             }
 
-            if (player.getStackInHand(hand).getItem() == Items.STICK && inventory.isEmpty()) {
-                inventory.setStack(9, new ItemStack(player.getStackInHand(hand).getItem(), 1));
-                player.getInventory().getMainHandStack().decrement(1);
-                inventory.markDirty();
+            if (player.getStackInHand(hand).getItem() == ModItems.SMITHING_HAMMER && hit.getSide() == Direction.UP && inventory.getStack(9).isEmpty()) {
+                hammerAnvil(world, pos, player, hand);
+
+                for (int i = 0; i < 9; i++) {
+                    if (inventory.getStack(i).getItem() == Items.RAW_IRON) {
+                        int ranCount = random.nextInt(2 - 1 + 1) + 1;
+                        inventory.getStack(i).decrement(1);
+                        world.spawnEntity(new ItemEntity(world, pos.getX() + 0.5f, pos.getY() + 1.0f, pos.getZ() + 0.5f, new ItemStack(ModItems.ORE_CHUNK_IRON, ranCount)));
+                        ((SmithingAnvilBlockEntity)world.getBlockEntity(pos)).strike = 0;
+                        inventory.markDirty();
+                        break;
+                    }
+                    if (inventory.getStack(i).getItem() == Items.RAW_GOLD) {
+                        int ranCount = random.nextInt(2 - 1 + 1) + 1;
+                        inventory.getStack(i).decrement(1);
+                        world.spawnEntity(new ItemEntity(world, pos.getX() + 0.5f, pos.getY() + 1.0f, pos.getZ() + 0.5f, new ItemStack(ModItems.ORE_CHUNK_GOLD, ranCount)));
+                        ((SmithingAnvilBlockEntity)world.getBlockEntity(pos)).strike = 0;
+                        inventory.markDirty();
+                        break;
+                    }
+                    if (inventory.getStack(i).getItem() == Items.RAW_COPPER) {
+                        int ranCount = random.nextInt(2 - 1 + 1) + 1;
+                        inventory.getStack(i).decrement(1);
+                        world.spawnEntity(new ItemEntity(world, pos.getX() + 0.5f, pos.getY() + 1.0f, pos.getZ() + 0.5f, new ItemStack(ModItems.ORE_CHUNK_COPPER, ranCount)));
+                        ((SmithingAnvilBlockEntity)world.getBlockEntity(pos)).strike = 0;
+                        inventory.markDirty();
+                        break;
+                    }
+                    if (inventory.getStack(i).getItem() == Items.STONE) {
+                        inventory.getStack(i).decrement(1);
+                        world.spawnEntity(new ItemEntity(world, pos.getX() + 0.5f, pos.getY() + 1.0f, pos.getZ() + 0.5f, new ItemStack(Items.COBBLESTONE, 1)));
+                        ((SmithingAnvilBlockEntity)world.getBlockEntity(pos)).strike = 0;
+                        inventory.markDirty();
+                        break;
+                    }
+                    if (inventory.getStack(i).getItem() == Items.COBBLESTONE) {
+                        inventory.getStack(i).decrement(1);
+                        world.spawnEntity(new ItemEntity(world, pos.getX() + 0.5f, pos.getY() + 1.0f, pos.getZ() + 0.5f, new ItemStack(Items.GRAVEL, 1)));
+                        ((SmithingAnvilBlockEntity)world.getBlockEntity(pos)).strike = 0;
+                        inventory.markDirty();
+                        break;
+                    }
+                    if (inventory.getStack(i).getItem() == Items.GRAVEL) {
+                        inventory.getStack(i).decrement(1);
+                        world.spawnEntity(new ItemEntity(world, pos.getX() + 0.5f, pos.getY() + 1.0f, pos.getZ() + 0.5f, new ItemStack(Items.SAND, 1)));
+                        ((SmithingAnvilBlockEntity)world.getBlockEntity(pos)).strike = 0;
+                        inventory.markDirty();
+                        break;
+                    }
+                    if (inventory.getStack(i).getItem() == Items.DEEPSLATE) {
+                        inventory.getStack(i).decrement(1);
+                        world.spawnEntity(new ItemEntity(world, pos.getX() + 0.5f, pos.getY() + 1.0f, pos.getZ() + 0.5f, new ItemStack(Items.COBBLED_DEEPSLATE, 1)));
+                        ((SmithingAnvilBlockEntity)world.getBlockEntity(pos)).strike = 0;
+                        inventory.markDirty();
+                        break;
+                    }
+                }
+                if (validRecipeDragonChestplate(inventory)) {
+                    ((SmithingAnvilBlockEntity)world.getBlockEntity(pos)).strike++;
+                    if (((SmithingAnvilBlockEntity)world.getBlockEntity(pos)).strike++ >= 8) {
+                        inventory.clear();
+                        inventory.setStack(9, new ItemStack(ModItems.DRAGON_CHESTPLATE));
+                        ((SmithingAnvilBlockEntity)world.getBlockEntity(pos)).strike = 0;
+                        inventory.markDirty();
+                    }
+                }
+                if (validRecipeDragonHelmet(inventory)) {
+                    ((SmithingAnvilBlockEntity)world.getBlockEntity(pos)).strike++;
+                    if (((SmithingAnvilBlockEntity)world.getBlockEntity(pos)).strike++ >= 8) {
+                        inventory.clear();
+                        inventory.setStack(9, new ItemStack(ModItems.DRAGON_HELMET));
+                        ((SmithingAnvilBlockEntity)world.getBlockEntity(pos)).strike = 0;
+                        inventory.markDirty();
+                    }
+                }
+                if (validRecipeDragonLeggings(inventory)) {
+                    ((SmithingAnvilBlockEntity)world.getBlockEntity(pos)).strike++;
+                    if (((SmithingAnvilBlockEntity)world.getBlockEntity(pos)).strike++ >= 8) {
+                        inventory.clear();
+                        inventory.setStack(9, new ItemStack(ModItems.DRAGON_LEGGINGS));
+                        ((SmithingAnvilBlockEntity)world.getBlockEntity(pos)).strike = 0;
+                        inventory.markDirty();
+                    }
+                }
+                if (validRecipeDragonBoots(inventory)) {
+                    ((SmithingAnvilBlockEntity)world.getBlockEntity(pos)).strike++;
+                    if (((SmithingAnvilBlockEntity)world.getBlockEntity(pos)).strike++ >= 8) {
+                        inventory.clear();
+                        inventory.setStack(9, new ItemStack(ModItems.DRAGON_BOOTS));
+                        ((SmithingAnvilBlockEntity)world.getBlockEntity(pos)).strike = 0;
+                        inventory.markDirty();
+                    }
+                }
             }
         }
         return ActionResult.SUCCESS;
@@ -163,9 +255,49 @@ public class SmithingAnvilBlock extends BlockWithEntity implements BlockEntityPr
 
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-        builder.add(STRIKE);
+        //builder.add(STRIKE);
     }
 
+    public void hammerAnvil(World world, BlockPos pos, PlayerEntity player, Hand hand) {
+        Random random = new Random();
+        float ranSparkSpeedX = random.nextFloat(1 - -1 + 1) + -1;
+        float ranSparkSpeedY = random.nextFloat(1 - 0 + 1) + 0;
+        float ranSparkSpeedZ = random.nextFloat(1 - -1 + 1) + -1;
 
+        player.getStackInHand(hand).damage(20, player, (p) -> { p.sendToolBreakStatus(hand);});
+        world.playSound(null, pos, SoundEvents.BLOCK_ANVIL_LAND, SoundCategory.BLOCKS, 1.0f, 1.0f);
+        world.addParticle(ParticleTypes.ELECTRIC_SPARK, pos.getX() + 0.5f, pos.getY() + 0.75f, pos.getZ() + 0.5f, ranSparkSpeedX, ranSparkSpeedY, ranSparkSpeedZ);
+    }
 
+    private boolean validRecipeDragonChestplate(ImplementedInventory inventory){
+        if (     (inventory.getStack(0).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(1).getItem() == Items.AIR && inventory.getStack(2).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(3).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(4).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(5).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(6).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(7).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(8).getItem() == ModItems.DRAGON_INGOT) || (inventory.getStack(0).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(1).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(2).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(3).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(4).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(5).getItem() == Items.AIR && inventory.getStack(6).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(7).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(8).getItem() == ModItems.DRAGON_INGOT) || (inventory.getStack(0).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(1).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(2).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(3).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(4).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(5).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(6).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(7).getItem() == Items.AIR && inventory.getStack(8).getItem() == ModItems.DRAGON_INGOT) || (inventory.getStack(0).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(1).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(2).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(3).getItem() == Items.AIR && inventory.getStack(4).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(5).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(6).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(7).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(8).getItem() == ModItems.DRAGON_INGOT)    ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean validRecipeDragonHelmet(ImplementedInventory inventory){
+        if (     (inventory.getStack(0).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(1).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(2).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(3).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(4).getItem() == Items.AIR && inventory.getStack(5).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(6).getItem() == Items.AIR && inventory.getStack(7).getItem() == Items.AIR && inventory.getStack(8).getItem() == Items.AIR)     ||     (inventory.getStack(0).getItem() == Items.AIR && inventory.getStack(1).getItem() == Items.AIR && inventory.getStack(2).getItem() == Items.AIR && inventory.getStack(3).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(4).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(5).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(6).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(7).getItem() == Items.AIR && inventory.getStack(8).getItem() == ModItems.DRAGON_INGOT)     ||     (inventory.getStack(0).getItem() == Items.AIR && inventory.getStack(1).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(2).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(3).getItem() == Items.AIR && inventory.getStack(4).getItem() == Items.AIR && inventory.getStack(5).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(6).getItem() == Items.AIR && inventory.getStack(7).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(8).getItem() == ModItems.DRAGON_INGOT)     ||     (inventory.getStack(0).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(1).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(2).getItem() == Items.AIR && inventory.getStack(3).getItem() == Items.AIR && inventory.getStack(4).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(5).getItem() == Items.AIR && inventory.getStack(6).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(7).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(8).getItem() == Items.AIR)     ||     (inventory.getStack(0).getItem() == Items.AIR && inventory.getStack(1).getItem() == Items.AIR && inventory.getStack(2).getItem() == Items.AIR && inventory.getStack(3).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(4).getItem() == Items.AIR && inventory.getStack(5).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(6).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(7).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(8).getItem() == ModItems.DRAGON_INGOT)     ||     (inventory.getStack(0).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(1).getItem() == Items.AIR && inventory.getStack(2).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(3).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(4).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(5).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(6).getItem() == Items.AIR && inventory.getStack(7).getItem() == Items.AIR && inventory.getStack(8).getItem() == Items.AIR)     ||     (inventory.getStack(0).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(1).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(2).getItem() == Items.AIR && inventory.getStack(3).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(4).getItem() == Items.AIR && inventory.getStack(5).getItem() == Items.AIR && inventory.getStack(6).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(7).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(8).getItem() == Items.AIR)     ||     (inventory.getStack(0).getItem() == Items.AIR && inventory.getStack(1).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(2).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(3).getItem() == Items.AIR && inventory.getStack(4).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(5).getItem() == Items.AIR && inventory.getStack(6).getItem() == Items.AIR && inventory.getStack(7).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(8).getItem() == ModItems.DRAGON_INGOT)     ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean validRecipeDragonLeggings(ImplementedInventory inventory){
+        if (     (inventory.getStack(0).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(1).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(2).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(3).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(4).getItem() == Items.AIR && inventory.getStack(5).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(6).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(7).getItem() == Items.AIR && inventory.getStack(8).getItem() == ModItems.DRAGON_INGOT)     ||     (inventory.getStack(0).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(1).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(2).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(3).getItem() == Items.AIR && inventory.getStack(4).getItem() == Items.AIR && inventory.getStack(5).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(6).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(7).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(8).getItem() == ModItems.DRAGON_INGOT)     ||     (inventory.getStack(0).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(1).getItem() == Items.AIR && inventory.getStack(2).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(3).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(4).getItem() == Items.AIR && inventory.getStack(5).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(6).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(7).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(8).getItem() == ModItems.DRAGON_INGOT)     ||     (inventory.getStack(0).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(1).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(2).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(3).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(4).getItem() == Items.AIR && inventory.getStack(5).getItem() == Items.AIR && inventory.getStack(6).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(7).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(8).getItem() == ModItems.DRAGON_INGOT)     ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean validRecipeDragonBoots(ImplementedInventory inventory){
+        if (     (inventory.getStack(0).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(1).getItem() == Items.AIR && inventory.getStack(2).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(3).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(4).getItem() == Items.AIR && inventory.getStack(5).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(6).getItem() == Items.AIR && inventory.getStack(7).getItem() == Items.AIR && inventory.getStack(8).getItem() == Items.AIR)     ||     (inventory.getStack(0).getItem() == Items.AIR && inventory.getStack(1).getItem() == Items.AIR && inventory.getStack(2).getItem() == Items.AIR && inventory.getStack(3).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(4).getItem() == Items.AIR && inventory.getStack(5).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(6).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(7).getItem() == Items.AIR && inventory.getStack(8).getItem() == ModItems.DRAGON_INGOT)     ||     (inventory.getStack(0).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(1).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(2).getItem() == Items.AIR && inventory.getStack(3).getItem() == Items.AIR && inventory.getStack(4).getItem() == Items.AIR && inventory.getStack(5).getItem() == Items.AIR && inventory.getStack(6).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(7).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(8).getItem() == Items.AIR)     ||     (inventory.getStack(0).getItem() == Items.AIR && inventory.getStack(1).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(2).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(3).getItem() == Items.AIR && inventory.getStack(4).getItem() == Items.AIR && inventory.getStack(5).getItem() == Items.AIR && inventory.getStack(6).getItem() == Items.AIR && inventory.getStack(7).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(8).getItem() == ModItems.DRAGON_INGOT)     ||     (inventory.getStack(0).getItem() == Items.AIR && inventory.getStack(1).getItem() == Items.AIR && inventory.getStack(2).getItem() == Items.AIR && inventory.getStack(3).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(4).getItem() == Items.AIR && inventory.getStack(5).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(6).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(7).getItem() == Items.AIR && inventory.getStack(8).getItem() == ModItems.DRAGON_INGOT)     ||     (inventory.getStack(0).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(1).getItem() == Items.AIR && inventory.getStack(2).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(3).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(4).getItem() == Items.AIR && inventory.getStack(5).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(6).getItem() == Items.AIR && inventory.getStack(7).getItem() == Items.AIR && inventory.getStack(8).getItem() == Items.AIR)     ||     (inventory.getStack(0).getItem() == Items.AIR && inventory.getStack(1).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(2).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(3).getItem() == Items.AIR && inventory.getStack(4).getItem() == Items.AIR && inventory.getStack(5).getItem() == Items.AIR && inventory.getStack(6).getItem() == Items.AIR && inventory.getStack(7).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(8).getItem() == ModItems.DRAGON_INGOT)     ||     (inventory.getStack(0).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(1).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(2).getItem() == Items.AIR && inventory.getStack(3).getItem() == Items.AIR && inventory.getStack(4).getItem() == Items.AIR && inventory.getStack(5).getItem() == Items.AIR && inventory.getStack(6).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(7).getItem() == ModItems.DRAGON_INGOT && inventory.getStack(8).getItem() == Items.AIR)     ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

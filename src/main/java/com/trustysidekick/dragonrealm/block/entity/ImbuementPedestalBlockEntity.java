@@ -14,30 +14,16 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Random;
-
 public class ImbuementPedestalBlockEntity extends BlockEntity implements ImplementedInventory {
-    private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(1, ItemStack.EMPTY);
-    public boolean isImbuing;
-    public BlockEntity targetAltar;
-    public boolean renderImbuingStop;
-    public double renderDistX;
-    public double renderDistY;
-    public double renderDistZ;
-    public double renderTotX;
-    public double renderTotY;
-    public double renderTotZ;
-    public double renderImbuingSpeed;
     public float renderYMaxOffset;
     public float renderYCurOffset;
     public float renderYMaxSpeed;
     public float renderRotationAngle;
     public float renderRotationSpeed;
+    private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(1, ItemStack.EMPTY);
 
     public ImbuementPedestalBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.IMBUEMENT_PEDESTAL_BLOCK_ENTITY, pos, state);
-        isImbuing = false;
-        renderImbuingSpeed = new Random().nextDouble(500 - 250) + 250;
         renderYMaxOffset = 0.1f;
         renderYMaxSpeed = 0.002f;
         renderYCurOffset = 0.0f;
@@ -98,6 +84,5 @@ public class ImbuementPedestalBlockEntity extends BlockEntity implements Impleme
     public ItemStack getRenderStack(int slot) {
         return this.getStack(slot);
     }
-
 
 }
