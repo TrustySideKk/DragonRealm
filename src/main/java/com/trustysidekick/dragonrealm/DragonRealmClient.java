@@ -19,12 +19,14 @@ public class DragonRealmClient implements ClientModInitializer {
         BlockEntityRendererFactories.register(ModBlockEntities.IMBUEMENT_PEDESTAL_BLOCK_ENTITY, ImbuementPedestalBlockEntityRenderer::new);
         BlockEntityRendererFactories.register(ModBlockEntities.QUENCH_TANK_BLOCK_ENTITY, QuenchTankBlockRenderer::new);
 
-        EntityRendererRegistry.register(ModEntities.PORCUPINE, PorcupineRenderer::new);
         EntityModelLayerRegistry.registerModelLayer(ModModelLayers.PORCUPINE, PorcupineModel::getTexturedModelData);
-        EntityRendererRegistry.register(ModEntities.DRAGONWHELP, DragonWhelpRenderer::new);
+        EntityRendererRegistry.register(ModEntities.PORCUPINE, PorcupineRenderer::new);
+
         EntityModelLayerRegistry.registerModelLayer(ModModelLayers.DRAGONWHELP, DragonWhelpModel::getTexturedModelData);
-        EntityRendererRegistry.register(ModEntities.HIGHLAND_DRAGON, HighlandDragonRenderer::new);
+        EntityRendererRegistry.register(ModEntities.DRAGONWHELP, DragonWhelpRenderer::new);
+
         EntityModelLayerRegistry.registerModelLayer(ModModelLayers.HIGHLAND_DRAGON, HighlandDragonModel::getTexturedModelData);
+        EntityRendererRegistry.register(ModEntities.HIGHLAND_DRAGON, HighlandDragonRenderer::new);
 
     }
 }

@@ -8,6 +8,7 @@ import com.trustysidekick.dragonrealm.entity.custom.HighlandDragonPart;
 import com.google.common.collect.Lists;
 import com.mojang.logging.LogUtils;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.model.ModelPart;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.TargetPredicate;
 import net.minecraft.entity.ai.pathing.Path;
@@ -15,7 +16,7 @@ import net.minecraft.entity.ai.pathing.PathMinHeap;
 import net.minecraft.entity.ai.pathing.PathNode;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
-//import net.minecraft.entity.boss.dragon.HighlandDragonFight;
+//import com.trustysidekick.dragonrealm.entity.custom.HighlandDragonFight;
 import com.trustysidekick.dragonrealm.entity.custom.HighlandDragonPhase;
 import com.trustysidekick.dragonrealm.entity.custom.HighlandDragonPhaseType;
 import com.trustysidekick.dragonrealm.entity.custom.HighlandDragonPhaseManager;
@@ -75,14 +76,22 @@ implements Monster {
     public final double[][] segmentCircularBuffer = new double[64][3];
     public int latestSegment = -1;
     private final HighlandDragonPart[] parts;
-    public final HighlandDragonPart head;
-    private final HighlandDragonPart neck;
     private final HighlandDragonPart body;
-    private final HighlandDragonPart tail1;
-    private final HighlandDragonPart tail2;
-    private final HighlandDragonPart tail3;
-    private final HighlandDragonPart rightWing;
-    private final HighlandDragonPart leftWing;
+    public final HighlandDragonPart head;
+    private final HighlandDragonPart leg_left;
+    private final HighlandDragonPart foot2;
+    private final HighlandDragonPart leg_right;
+    private final HighlandDragonPart foot;
+    private final HighlandDragonPart neck;
+    private final HighlandDragonPart wing_right;
+    private final HighlandDragonPart arm_inner;
+    private final HighlandDragonPart arm_outer;
+    private final HighlandDragonPart wing_splines;
+    private final HighlandDragonPart wing_left;
+    private final HighlandDragonPart arm_inner2;
+    private final HighlandDragonPart arm_outer2;
+    private final HighlandDragonPart wing_splines2;
+    private final HighlandDragonPart tail;
     public float prevWingPosition;
     public float wingPosition;
     public boolean slowedDownByBlock;
@@ -112,12 +121,37 @@ implements Monster {
         this.head = new HighlandDragonPart(this, "head", 1.0f, 1.0f);
         this.neck = new HighlandDragonPart(this, "neck", 3.0f, 3.0f);
         this.body = new HighlandDragonPart(this, "body", 5.0f, 3.0f);
-        this.tail1 = new HighlandDragonPart(this, "tail", 2.0f, 2.0f);
-        this.tail2 = new HighlandDragonPart(this, "tail", 2.0f, 2.0f);
-        this.tail3 = new HighlandDragonPart(this, "tail", 2.0f, 2.0f);
-        this.rightWing = new HighlandDragonPart(this, "wing", 4.0f, 2.0f);
-        this.leftWing = new HighlandDragonPart(this, "wing", 4.0f, 2.0f);
-        this.parts = new HighlandDragonPart[]{this.head, this.neck, this.body, this.tail1, this.tail2, this.tail3, this.rightWing, this.leftWing};
+        this.leg_left = new HighlandDragonPart(this, "leg_left", 1.0f, 2.0f);
+        this.foot2 = new HighlandDragonPart(this, "foot2", 1.0f, 1.0f);
+        this.leg_right = new HighlandDragonPart(this, "leg_right", 1.0f, 1.0f);
+        this.foot = new HighlandDragonPart(this, "foot", 1.0f, 1.0f);
+        this.wing_right = new HighlandDragonPart(this, "wing_right", 4.0f, 3.0f);
+        this.arm_inner = new HighlandDragonPart(this, "arm_inner", 2.0f, 1.0f);
+        this.arm_outer = new HighlandDragonPart(this, "arm_outer", 2.0f, 1.0f);
+        this.wing_splines = new HighlandDragonPart(this, "wing_splines", 3.0f, 1.0f);
+        this.wing_left = new HighlandDragonPart(this, "wing_left", 4.0f, 3.0f);
+        this.arm_inner2 = new HighlandDragonPart(this, "arm_inner2", 2.0f, 1.0f);
+        this.arm_outer2 = new HighlandDragonPart(this, "arm_outer2", 2.0f, 1.0f);
+        this.wing_splines2 = new HighlandDragonPart(this, "wing_splines2", 3.0f, 1.0f);
+        this.tail = new HighlandDragonPart(this, "tail", 2.0f, 2.0f);
+        this.parts = new HighlandDragonPart[]{
+            this.head,
+            this.neck,
+            this.body,
+            this.leg_left,
+            this.foot2,
+            this.leg_right,
+            this.foot,
+            this.wing_right,
+            this.arm_inner,
+            this.arm_outer,
+            this.wing_splines,
+            this.wing_left,
+            this.arm_inner2,
+            this.arm_outer2,
+            this.wing_splines2,
+            this.tail
+        };
         this.setHealth(this.getMaxHealth());
         this.noClip = true;
         this.ignoreCameraFrustum = true;
@@ -286,11 +320,11 @@ implements Monster {
         float w = MathHelper.sin(v);
         float x = MathHelper.cos(v);
         this.movePart(this.body, w * 0.5f, 0.0, -x * 0.5f);
-        this.movePart(this.rightWing, x * 4.5f, 2.0, w * 4.5f);
-        this.movePart(this.leftWing, x * -4.5f, 2.0, w * -4.5f);
+        this.movePart(this.wing_right, x * 4.5f, 2.0, w * 4.5f);
+        this.movePart(this.wing_left, x * -4.5f, 2.0, w * -4.5f);
         if (!this.getWorld().isClient && this.hurtTime == 0) {
-            this.launchLivingEntities(this.getWorld().getOtherEntities(this, this.rightWing.getBoundingBox().expand(4.0, 2.0, 4.0).offset(0.0, -2.0, 0.0), EntityPredicates.EXCEPT_CREATIVE_OR_SPECTATOR));
-            this.launchLivingEntities(this.getWorld().getOtherEntities(this, this.leftWing.getBoundingBox().expand(4.0, 2.0, 4.0).offset(0.0, -2.0, 0.0), EntityPredicates.EXCEPT_CREATIVE_OR_SPECTATOR));
+            this.launchLivingEntities(this.getWorld().getOtherEntities(this, this.wing_right.getBoundingBox().expand(4.0, 2.0, 4.0).offset(0.0, -2.0, 0.0), EntityPredicates.EXCEPT_CREATIVE_OR_SPECTATOR));
+            this.launchLivingEntities(this.getWorld().getOtherEntities(this, this.wing_left.getBoundingBox().expand(4.0, 2.0, 4.0).offset(0.0, -2.0, 0.0), EntityPredicates.EXCEPT_CREATIVE_OR_SPECTATOR));
             this.damageLivingEntities(this.getWorld().getOtherEntities(this, this.head.getBoundingBox().expand(1.0), EntityPredicates.EXCEPT_CREATIVE_OR_SPECTATOR));
             this.damageLivingEntities(this.getWorld().getOtherEntities(this, this.neck.getBoundingBox().expand(1.0), EntityPredicates.EXCEPT_CREATIVE_OR_SPECTATOR));
         }
@@ -302,15 +336,15 @@ implements Monster {
         double[] ds = this.getSegmentProperties(5, 1.0f);
         for (ab = 0; ab < 3; ++ab) {
             HighlandDragonPart HighlandDragonPart = null;
-            if (ab == 0) {
-                HighlandDragonPart = this.tail1;
-            }
-            if (ab == 1) {
-                HighlandDragonPart = this.tail2;
-            }
-            if (ab == 2) {
-                HighlandDragonPart = this.tail3;
-            }
+//            if (ab == 0) {
+                HighlandDragonPart = this.tail;
+//            }
+//            if (ab == 1) {
+//                HighlandDragonPart = this.tail2;
+//            }
+//            if (ab == 2) {
+//                HighlandDragonPart = this.tail3;
+//            }
             double[] es = this.getSegmentProperties(12 + ab * 2, 1.0f);
             float ac = this.getYaw() * ((float)Math.PI / 180) + this.wrapYawChange(es[0] - ds[0]) * ((float)Math.PI / 180);
             n = MathHelper.sin(ac);
