@@ -25,9 +25,8 @@ public class ModEntities {
 
     //Highland Dragon can ...
     public static final EntityType<HighlandDragonEntity> HIGHLAND_DRAGON = Registry.register(Registries.ENTITY_TYPE,
-            new Identifier(DragonRealm.MOD_ID, "highlanddragon"),
-            FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, HighlandDragonEntity::new)
-                    .dimensions(EntityDimensions.fixed(3.0f,3.0f)).build());
+        //new Identifier(DragonRealm.MOD_ID, "highlanddragon"), FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, HighlandDragonEntity::new).dimensions(EntityDimensions.fixed(3.0f,3.0f)).build());
+        new Identifier(DragonRealm.MOD_ID, "highlanddragon"), FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, HighlandDragonEntity::new).build());
 
     public static final EntityType<DragonWhelpEntity> SCORCHWING = Registry.register(Registries.ENTITY_TYPE,
             new Identifier(DragonRealm.MOD_ID, "scorchwing"),

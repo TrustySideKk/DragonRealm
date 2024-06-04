@@ -13,8 +13,10 @@ import com.trustysidekick.dragonrealm.item.ModItems;
 import com.trustysidekick.dragonrealm.item.custom.DragonSwordItem;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents;
+import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.fabric.api.event.player.UseEntityCallback;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.passive.CowEntity;
@@ -54,7 +56,10 @@ public class DragonRealm implements ModInitializer {
 
 		FabricDefaultAttributeRegistry.register(ModEntities.PORCUPINE, PorcupineEntity.createPorcupineAttributes());
 		FabricDefaultAttributeRegistry.register(ModEntities.DRAGONWHELP, DragonWhelpEntity.createDragonWhelpAttributes());
+
+		//
 		FabricDefaultAttributeRegistry.register(ModEntities.HIGHLAND_DRAGON, HighlandDragonEntity.createHighlandDragonAttributes());
+		//
 
 
 		//// EVENTS ////
@@ -80,7 +85,6 @@ public class DragonRealm implements ModInitializer {
 				if (entity instanceof PlayerEntity) {
 					ItemStack stackInHand = ((PlayerEntity) entity).getStackInHand(((PlayerEntity) entity).getActiveHand());
 					if (stackInHand.getItem() == ModItems.DRAGON_SWORD) {
-						//((DragonSwordItem)stackInHand.getItem()).addCowKillModifier(stackInHand);
 						NbtCompound nbt = stackInHand.getOrCreateNbt();
 						int kills = nbt.getInt("kills");
 						kills = kills + 1;
@@ -88,6 +92,10 @@ public class DragonRealm implements ModInitializer {
 					}
 				}
 			}
+		});
+		AttackEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
+			//System.out.println("Health: " + ((LivingEntity) entity).getHealth());
+			return ActionResult.PASS;
 		});
 	}
 }

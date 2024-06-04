@@ -162,6 +162,14 @@ implements Monster {
     //    this.fight = fight;
     //}
 
+
+
+
+
+
+
+
+
     public void setFightOrigin(BlockPos fightOrigin) {
         this.fightOrigin = fightOrigin;
     }
@@ -240,7 +248,7 @@ implements Monster {
             this.getWorld().addParticle(ParticleTypes.EXPLOSION, this.getX() + (double)f, this.getY() + 2.0 + (double)g, this.getZ() + (double)h, 0.0, 0.0, 0.0);
             return;
         }
-        this.tickWithEndCrystals();
+        /////////////this.tickWithEndCrystals();
         Vec3d vec3d = this.getVelocity();
         float g = 0.2f / ((float)vec3d.horizontalLength() * 10.0f + 1.0f);
         this.wingPosition = this.phaseManager.getCurrent().isSittingOrHovering() ? (this.wingPosition += 0.1f) : (this.slowedDownByBlock ? (this.wingPosition += g * 0.5f) : (this.wingPosition += (g *= (float)Math.pow(2.0, vec3d.y))));
@@ -384,7 +392,7 @@ implements Monster {
 
     /**
      * Things to do every tick related to end crystals. The Highland Dragon:
-     * 
+     *
      * * Disconnects from its crystal if it is removed
      * * If it is connected to a crystal, then heals every 10 ticks
      * * With a 1 in 10 chance each tick, searches for the nearest crystal and connects to it if present

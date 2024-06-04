@@ -61,16 +61,16 @@ public class dragonStrikeEnchantment extends Enchantment {
 
     @Override
     public void onTargetDamaged(LivingEntity user, Entity target, int level) {
-        if(target instanceof LivingEntity) {
+        //if(target instanceof LivingEntity) {
             ItemStack stack = user.getMainHandStack();
             if (stack.getItem() == ModItems.DRAGON_SWORD) {
                 NbtCompound tag = stack.getOrCreateNbt();
-                int cowKill = tag.getInt("kills");
-                ((LivingEntity) target).addStatusEffect(new StatusEffectInstance(StatusEffects.INSTANT_DAMAGE, 1, cowKill));
-                System.out.println("Damage: " + ((LivingEntity) target).getDamageTracker().getDeathMessage());
+                float cowKill = tag.getInt("kills") * 0.5f;
+                //((LivingEntity) target).addStatusEffect(new StatusEffectInstance(StatusEffects.INSTANT_DAMAGE, 1, (int) cowKill));
+                target.damage(target.getDamageSources().generic(), user.getMainHandStack().getDamage() + cowKill);
             }
 
-        }
+        //}
 
         super.onTargetDamaged(user, target, level);
     }

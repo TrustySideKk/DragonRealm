@@ -10,14 +10,13 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
 
 public class HighlandDragonModel<T extends HighlandDragonEntity> extends SinglePartEntityModel<T> {
-	private final ModelPart root;
 	private final ModelPart body;
+	private final ModelPart neck;
 	public final ModelPart head;
 	private final ModelPart leg_left;
 	private final ModelPart foot2;
 	private final ModelPart leg_right;
 	private final ModelPart foot;
-	private final ModelPart neck;
 	private final ModelPart wing_right;
 	private final ModelPart arm_inner;
 	private final ModelPart arm_outer;
@@ -30,7 +29,6 @@ public class HighlandDragonModel<T extends HighlandDragonEntity> extends SingleP
 
 
 	public HighlandDragonModel(ModelPart root) {
-		this.root = root;
 		this.body = root.getChild("body");
 		this.neck = body.getChild("torso").getChild("neck");
 		this.head = neck.getChild("head");
@@ -40,12 +38,12 @@ public class HighlandDragonModel<T extends HighlandDragonEntity> extends SingleP
 		this.foot = body.getChild("torso").getChild("leg_right").getChild("foot");
 		this.wing_right = body.getChild("torso").getChild("wing_right");
 		this.arm_inner = body.getChild("torso").getChild("wing_right").getChild("arm_inner");
-		this.arm_outer = body.getChild("torso").getChild("wing_right").getChild("arm_outer");
-		this.wing_splines = body.getChild("torso").getChild("wing_right").getChild("wing_splines");
+		this.arm_outer = body.getChild("torso").getChild("wing_right").getChild("arm_inner").getChild("arm_outer");
+		this.wing_splines = body.getChild("torso").getChild("wing_right").getChild("arm_inner").getChild("arm_outer").getChild("wing_splines");
 		this.wing_left = body.getChild("torso").getChild("wing_left");
 		this.arm_inner2 = body.getChild("torso").getChild("wing_left").getChild("arm_inner2");
-		this.arm_outer2 = body.getChild("torso").getChild("wing_left").getChild("arm_outer2");
-		this.wing_splines2 = body.getChild("torso").getChild("wing_left").getChild("wing_splines2");
+		this.arm_outer2 = body.getChild("torso").getChild("wing_left").getChild("arm_inner2").getChild("arm_outer2");
+		this.wing_splines2 = body.getChild("torso").getChild("wing_left").getChild("arm_inner2").getChild("arm_outer2").getChild("wing_splines2");
 		this.tail = body.getChild("torso").getChild("tail");
 	}
 	public static TexturedModelData getTexturedModelData() {
